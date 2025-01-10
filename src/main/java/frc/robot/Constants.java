@@ -3,7 +3,7 @@ package frc.robot;
 import java.text.DecimalFormat;
 import java.util.Map;
 
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.configs.MagnetSensorConfigs.AbsoluteSensorDiscontinuityPoint;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -260,7 +260,7 @@ public final class Constants {
                                 new SwerveDriveKinematics(REL_POS2D_FL, REL_POS2D_FR, REL_POS2D_BL, REL_POS2D_BR);
 
         // Swerve Drive Constants which are independent of given modules and chassis:
-        public static final AbsoluteSensorRangeValue CANCODER_RANGE = AbsoluteSensorRangeValue.Unsigned_0To1;
+        public static final AbsoluteSensorDiscontinuityPointValue CANCODER_RANGE = AbsoluteSensorDiscontinuityPointValue.Unsigned_0To1;
 
         // Unit conversion factors. With Phoenix6, the gear ratios are handled by the
         // motor controllers, so that motor.getPosition() values (assuming sensor source is

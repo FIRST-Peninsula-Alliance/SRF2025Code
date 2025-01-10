@@ -11,7 +11,7 @@ import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.SparkBase.IdleMode;
+import com.revrobotics.spark.SparkBase.IdleMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -31,7 +31,7 @@ public class ClimbSubsystem extends SubsystemBase {
                                                             .withEnableFOC(true)
                                                             .withUpdateFreqHz(50); 
   private SparkMax m_elevatorMotor = new SparkMax(CC.ELEVATOR_NEO550_ID, MotorType.kBrushless);
-  //private SparkPIDController m_elevatorController;
+  //private SparkClosedLoopController m_elevatorController;
   RelativeEncoder m_integratedElevatorEncoder = m_elevatorMotor.getEncoder();
   private DigitalInput m_climberLimitSwitch = new DigitalInput(1);
   
@@ -43,7 +43,7 @@ public class ClimbSubsystem extends SubsystemBase {
   
   /** Creates a new ClimbSubsystem. */
   public ClimbSubsystem() {
-    //m_elevatorController = m_elevatorMotor.getPIDController();
+    //m_elevatorController = m_elevatorMotor.getClosedLoopController();
     configElevatorMotor();
     m_elevatorPosition = 0.0;
     configClimbMotor();

@@ -42,7 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
   // and at the end of the timeout the motor is stopped.
   private TalonFX m_shooterMotor = new TalonFX(SC.SHOOTER_FALCON_ID, Constants.CANIVORE_BUS_NAME);
   private SparkMax m_aimMotor = new SparkMax(SC.AIM_NEO550_ID, MotorType.kBrushless);
-  private SparkPIDController m_aimController = m_aimMotor.getPIDController() ;
+  private SparkClosedLoopController m_aimController = m_aimMotor.getClosedLoopController() ;
   private RelativeEncoder m_integratedAimEncoder = m_aimMotor.getEncoder();
   private double m_distantShotVoltageOut;     // Allows either a note pass, or a Speaker score,
                                               // to be dynamically differentiated

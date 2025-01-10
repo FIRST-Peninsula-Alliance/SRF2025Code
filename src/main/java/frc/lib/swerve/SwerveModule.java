@@ -28,12 +28,12 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 
-import com.revrobotics.frc.CANSparkMax;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 public class SwerveModule {
     public  int m_modNum;
@@ -43,9 +43,9 @@ public class SwerveModule {
     private double m_lastAngle;       // This is not used for control, rather it 
                                       // stores the last setpoint requested for a
                                       // given module, for data publishing purposes.
-    private final CANSparkMax m_steerMotor;
+    private final SparkMax m_steerMotor;
     private final RelativeEncoder m_integratedSteerEncoder;
-    private final SparkPIDController m_steerController;
+    private final SparkClosedLoopController m_steerController;
     private final CANcoder m_absWheelAngleCANcoder;
     private final TalonFX m_driveMotor;
     // Declare Phoenix6 control request objects for the Drive Motor:
@@ -97,9 +97,9 @@ public class SwerveModule {
         configAbsWheelAngleCANcoder();
 
         /* Angle Motor Config */
-        m_steerMotor = new CANSparkMax(m_moduleConstants.STEER_MOTOR_ID, 
+        m_steerMotor = new SparkMax(m_moduleConstants.STEER_MOTOR_ID, 
                                        MotorType.kBrushless);
-        m_steerController = m_steerMotor.getPIDController();
+        m_steerController = m_steerMotor.getClosedLoopController();
         m_integratedSteerEncoder = m_steerMotor.getEncoder();
         configSteerMotor();
 
@@ -151,7 +151,7 @@ public class SwerveModule {
         // We can now setReference in native units (deg) since Neo encoder is
         // configured to operate in degrees. No need to convert to NEO rev units
         // When this is called by module angle test routines, there is no "optimized" turn limit
-        m_steerController.setReference(desiredAngle, CANSparkBase.ControlType.kPosition);
+        m_steerController.setReference(desiredAngle, SparkBase.ControlType.kPosition);
         m_lastAngle = desiredAngle;
     }
 
@@ -166,7 +166,7 @@ public class SwerveModule {
     public void testSteerMotorRotation() {
         // this routime spins the steering motor slowly under percent output
         // to check that it is configured correctly (CCW Positive)
-        m_steerController.setReference(.2, CANSparkBase.ControlType.kDutyCycle);
+        m_steerController.setReference(.2, SparkBase.ControlType.kDutyCycle);
     }
 
     // getAngle2d returns the current swerve module direction as a Rotation2d value.
@@ -249,10 +249,10 @@ public class SwerveModule {
     }
 
     private void configAbsWheelAngleCANcoder(){ 
-        var magnetSensorConfigs = new MagnetSensorConfigs().withAbsoluteSensorRange(SDC.CANCODER_RANGE)
+        var magnetSensorConfigs = new MagnetSensorConfigs().withAbsoluteSensorDiscontinuityPoint(SDC.CANCODER_RANGE)
                                                            .withSensorDirection(SDC.CANCODER_DIR)
                                                            .withMagnetOffset(0.0);
-        var ccConfig = new CANcoderConfiguration().withMagnetSensor(magnetSensorConfigs);
+        var ccConfig = new CANcoderConfiguration().withMagnetSensor(magnetSensorConfigs );
         m_absWheelAngleCANcoder.getConfigurator().apply(ccConfig);
     }
 
@@ -282,7 +282,7 @@ public class SwerveModule {
         reportRevError(m_steerMotor.restoreFactoryDefaults());
         // Configure to send motor encoder position data frequently, but everything
         // else at a lower rate, to minimize can bus traffic.
-        //reportRevError(CANSparkMaxUtil.setCANSparkMaxBusUsage(m_steerMotor, Usage.kPositionOnly));
+        //reportRevError(SparkMaxUtil.setSparkMaxBusUsage(m_steerMotor, Usage.kPositionOnly));
         reportRevError(m_steerMotor.setSmartCurrentLimit(SDC.STEER_SMART_CURRENT_LIMIT));
         // setInverted returns void
         m_steerMotor.setInverted(SDC.STEER_MOTOR_INVERT);
