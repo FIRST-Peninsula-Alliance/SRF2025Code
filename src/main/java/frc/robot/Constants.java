@@ -7,7 +7,7 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -329,7 +329,7 @@ public final class Constants {
         public static final double MAX_STEER_CLOSED_LOOP_OUTPUT = 0.6;
 
         /* Default Motor Neutral Modes */
-        public static final CANSparkMax.IdleMode STEER_MOTOR_NEUTRAL_MODE = CANSparkMax.IdleMode.kCoast;
+        public static final SparkMax.IdleMode STEER_MOTOR_NEUTRAL_MODE = SparkMax.IdleMode.kCoast;
         public static final NeutralModeValue DRIVE_MOTOR_NEUTRAL_MODE = NeutralModeValue.Brake;
 
         // Swerve rotate speed and extent during a parade WAVE function

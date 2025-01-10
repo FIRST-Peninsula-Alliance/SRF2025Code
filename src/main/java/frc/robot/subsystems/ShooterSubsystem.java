@@ -14,11 +14,11 @@ import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -41,7 +41,7 @@ public class ShooterSubsystem extends SubsystemBase {
   // spike will occur (> 30 amps, typically 60) which event is used to start a 350 ms timer,
   // and at the end of the timeout the motor is stopped.
   private TalonFX m_shooterMotor = new TalonFX(SC.SHOOTER_FALCON_ID, Constants.CANIVORE_BUS_NAME);
-  private CANSparkMax m_aimMotor = new CANSparkMax(SC.AIM_NEO550_ID, MotorType.kBrushless);
+  private SparkMax m_aimMotor = new SparkMax(SC.AIM_NEO550_ID, MotorType.kBrushless);
   private SparkPIDController m_aimController = m_aimMotor.getPIDController() ;
   private RelativeEncoder m_integratedAimEncoder = m_aimMotor.getEncoder();
   private double m_distantShotVoltageOut;     // Allows either a note pass, or a Speaker score,
@@ -95,7 +95,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_isFarShot = false;
     //m_autoStartTime = 0;
     m_shooterStatus = ShooterState.IDLE;
-    // m_aimController.setReference(-(SC.MAX_AIM_POSITION+2), CANSparkMax.ControlType.kPosition);
+    // m_aimController.setReference(-(SC.MAX_AIM_POSITION+2), SparkMax.ControlType.kPosition);
     // m_startTime = System.currentTimeMillis();
   }
 
@@ -105,7 +105,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
    public void adjustShooterAim(double direction) {
     m_aimTargetPos += direction;
-    m_aimController.setReference(m_aimTargetPos, CANSparkMax.ControlType.kPosition);
+    m_aimController.setReference(m_aimTargetPos, SparkMax.ControlType.kPosition);
     //System.out.println("Shooter aim adjusted to "+m_aimTargetPos+" rotations");
    }
   
@@ -138,7 +138,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_aimIsReady = false;
     m_shooterWheelsUpToSpeed = false;
     m_shooterMotor.setControl(m_shooterRequest.withOutput(m_shooterVoltageOut));
-    m_aimController.setReference(m_aimTargetPos, CANSparkMax.ControlType.kPosition);
+    m_aimController.setReference(m_aimTargetPos, SparkMax.ControlType.kPosition);
     m_shooterStatus = ShooterState.PREPPING_TO_SHOOT;
     m_startTime = System.currentTimeMillis();
     if (LOGGING_ACTIVE) {
@@ -198,7 +198,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // when Autonomous ends.
     if (! RobotState.isAutonomous()) {
       m_shooterMotor.setControl(m_shooterRequest.withOutput(0.0));
-      m_aimController.setReference(SC.AIM_POSITION_NEAR_SHOT, CANSparkMax.ControlType.kPosition);
+      m_aimController.setReference(SC.AIM_POSITION_NEAR_SHOT, SparkMax.ControlType.kPosition);
     }
     m_shooterStatus = ShooterState.IDLE;
     if (LOGGING_ACTIVE) {
@@ -398,7 +398,7 @@ public class ShooterSubsystem extends SubsystemBase {
           m_integratedAimEncoder.setPosition(-2.0);
           // Then take the tension off the hardware stop
           m_aimTargetPos = SC.AIM_POSITION_NEAR_SHOT;
-          m_aimController.setReference(m_aimTargetPos, CANSparkMax.ControlType.kPosition);
+          m_aimController.setReference(m_aimTargetPos, SparkMax.ControlType.kPosition);
           // And change the shooter state to IDLE
           m_shooterStatus = ShooterState.IDLE;
         }

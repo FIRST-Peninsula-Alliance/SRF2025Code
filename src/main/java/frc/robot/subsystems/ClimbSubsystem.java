@@ -11,9 +11,9 @@ import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkBase.IdleMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -30,7 +30,7 @@ public class ClimbSubsystem extends SubsystemBase {
   private DutyCycleOut m_climbRequest = new DutyCycleOut(CC.CLIMBER_DUTY_CYCLE)
                                                             .withEnableFOC(true)
                                                             .withUpdateFreqHz(50); 
-  private CANSparkMax m_elevatorMotor = new CANSparkMax(CC.ELEVATOR_NEO550_ID, MotorType.kBrushless);
+  private SparkMax m_elevatorMotor = new SparkMax(CC.ELEVATOR_NEO550_ID, MotorType.kBrushless);
   //private SparkPIDController m_elevatorController;
   RelativeEncoder m_integratedElevatorEncoder = m_elevatorMotor.getEncoder();
   private DigitalInput m_climberLimitSwitch = new DigitalInput(1);

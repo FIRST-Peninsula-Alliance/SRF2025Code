@@ -8,7 +8,7 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkMax;
 
 // For reference, a Falcon500 has max rotational velocity of 6380 RPM +/- 10%. 
 
@@ -262,7 +262,7 @@ public final class NotableConstants {           // As in all these constants are
         // Shooter Aim Motor parameters
         public static final int AIM_NEO550_ID = 14;
         public static final boolean INVERT_AIM_NEO550 = false;
-        public static final CANSparkMax.IdleMode AIM_MOTOR_NEUTRAL_MODE = CANSparkMax.IdleMode.kBrake;
+        public static final SparkMax.IdleMode AIM_MOTOR_NEUTRAL_MODE = SparkMax.IdleMode.kBrake;
 
         public static final double AIM_KP = 0.1;
         public static final double AIM_KI = 0.0;
