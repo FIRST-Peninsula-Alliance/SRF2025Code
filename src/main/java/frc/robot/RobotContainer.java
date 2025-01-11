@@ -13,7 +13,7 @@ import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.MasterArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.ClimbSubsystem;
+// import frc.robot.subsystems.ClimbSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -25,7 +25,7 @@ public class RobotContainer {
     /* Subsystem local object handles */
     private SwerveSubsystem          m_swerveSubsystem;
     private MasterArmSubsystem       m_masterArmSubsystem;
-    private ClimbSubsystem           m_climbSubsystem;
+    // private ClimbSubsystem           m_climbSubsystem;
 
     private SwerveParkCmd            m_parkCmd;
 
@@ -54,7 +54,7 @@ public class RobotContainer {
 
         m_swerveSubsystem = new SwerveSubsystem();
         m_masterArmSubsystem = new MasterArmSubsystem();
-        m_climbSubsystem = new ClimbSubsystem();
+        // m_climbSubsystem = new ClimbSubsystem();
 
         m_swerveSubsystem.setDefaultCommand(
                 new DefaultDriveCmd(m_swerveSubsystem,
