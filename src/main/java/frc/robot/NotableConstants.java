@@ -4,11 +4,11 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+// import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig;
 
 // For reference, a Falcon500 has max rotational velocity of 6380 RPM +/- 10%. 
 
@@ -32,7 +32,7 @@ public final class NotableConstants {           // As in all these constants are
 
         public static final int MASTER_ARM_ENCODER_ID = 10;
         public static final double MASTER_ARM_ENCODER_MAGNET_OFFSET = -0.36813;
-        public static final AbsoluteSensorRangeValue MASTER_ARM_CANCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+        public static final int MASTER_ARM_CANCODER_RANGE = 1; // TODO: AbsoluteSensorRangeValue INNER_ARM_CANCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
         public static final SensorDirectionValue MASTER_ARM_CANCODER_DIR = SensorDirectionValue.CounterClockwise_Positive;
 
         // Setup for fused remote sensor, 1:1 on output shaft (possible with licensed Phoenix6 Pro)
@@ -109,7 +109,7 @@ public final class NotableConstants {           // As in all these constants are
         
         public static final int INNER_ARM_CANCODER_ID = 11;
         public static final double INNER_ARM_CANCODER_MAGNET_OFFSET = 0.21096;           // was 0.20593;     // was -0.0213;    // was -0.242625;
-        public static final AbsoluteSensorRangeValue INNER_ARM_CANCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+        public static final int INNER_ARM_CANCODER_RANGE = 1; //TODO: AbsoluteSensorRangeValue INNER_ARM_CANCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
         public static final SensorDirectionValue INNER_ARM_CANCODER_DIR = SensorDirectionValue.CounterClockwise_Positive;
 
         public static final double INNER_ARM_CANCODER_TO_AXLE_RATIO  = 20.0/18.0;        // Chain drive sprockets
@@ -262,7 +262,7 @@ public final class NotableConstants {           // As in all these constants are
         // Shooter Aim Motor parameters
         public static final int AIM_NEO550_ID = 14;
         public static final boolean INVERT_AIM_NEO550 = false;
-        public static final SparkMax.IdleMode AIM_MOTOR_NEUTRAL_MODE = SparkMax.IdleMode.kBrake;
+        public static final SparkBaseConfig.IdleMode AIM_MOTOR_NEUTRAL_MODE = SparkBaseConfig.IdleMode.kBrake;
 
         public static final double AIM_KP = 0.1;
         public static final double AIM_KI = 0.0;
