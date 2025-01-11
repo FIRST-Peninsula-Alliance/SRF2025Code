@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.NotableConstants.SC;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
-import frc.robot.subsystems.MasterArmSubsystem;
+// import frc.robot.subsystems.MasterArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 // import frc.robot.subsystems.ClimbSubsystem;
 
@@ -24,23 +24,13 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class RobotContainer {
     /* Subsystem local object handles */
     private SwerveSubsystem          m_swerveSubsystem;
-    private MasterArmSubsystem       m_masterArmSubsystem;
+    // private MasterArmSubsystem       m_masterArmSubsystem;
     // private ClimbSubsystem           m_climbSubsystem;
 
     private SwerveParkCmd            m_parkCmd;
 
     // Declare handles for choosable autonomous Commands
-    private JustScoreLeftAuto           m_justScoreLeftAuto;
-    private JustScoreCenterAuto         m_justScoreCenterAuto;
-    private JustScoreRightAuto          m_justScoreRightAuto;
-    private ScoreThenExitRedLeftAuto    m_scoreThenExitRedLeftAuto;
-    private ScoreThenExitRedRightAuto   m_scoreThenExitRedRightAuto;
-    private ScoreThenExitBlueLeftAuto   m_scoreThenExitBlueLeftAuto;
-    private ScoreThenExitBlueRightAuto  m_scoreThenExitBlueRightAuto;
-    private Score2NotesLeftAuto         m_score2NotesLeftAuto;
-    private Score2NotesCenterAuto       m_score2NotesCenterAuto;
-    private Score2NotesRightAuto        m_score2NotesRightAuto;
-    private ScoreMultipleNotesCenterAuto m_scoreMultipleNotesCenAuto;
+    // private JustScoreLeftAuto           m_justScoreLeftAuto;
 
     // Create sendable choosers for starting position and desired Auto routine
     private static SendableChooser<Command> m_autoRoutineChooser = new SendableChooser<>();
@@ -53,7 +43,7 @@ public class RobotContainer {
         m_xbox = new CommandXboxController(0);
 
         m_swerveSubsystem = new SwerveSubsystem();
-        m_masterArmSubsystem = new MasterArmSubsystem();
+        // m_masterArmSubsystem = new MasterArmSubsystem();
         // m_climbSubsystem = new ClimbSubsystem();
 
         m_swerveSubsystem.setDefaultCommand(
@@ -68,7 +58,7 @@ public class RobotContainer {
                                       () -> -m_xbox.getLeftX(),
                                       () -> -m_xbox.getRightX());
                     
-        m_scoreThenExitRedLeftAuto      = new ScoreThenExitRedLeftAuto(m_masterArmSubsystem,
+        /* m_scoreThenExitRedLeftAuto      = new ScoreThenExitRedLeftAuto(m_masterArmSubsystem,
                                                                        m_swerveSubsystem);
         m_scoreThenExitBlueLeftAuto     = new ScoreThenExitBlueLeftAuto(m_masterArmSubsystem,
                                                                         m_swerveSubsystem);
@@ -100,7 +90,7 @@ public class RobotContainer {
         m_autoRoutineChooser.addOption("Score Right, BLUE exit", m_scoreThenExitBlueRightAuto);
         m_autoRoutineChooser.addOption("Score Multiple Center", m_scoreMultipleNotesCenAuto);
         SmartDashboard.putData("Autonomous Selection:", m_autoRoutineChooser);
-
+*/
         configureButtonBindings();
     }
     
@@ -112,8 +102,8 @@ public class RobotContainer {
     }
 
     public void respondToBeingDisabled() {
-        m_masterArmSubsystem.stopWavingAtCrowd();
-        m_masterArmSubsystem.closeRecording();
+        // m_masterArmSubsystem.stopWavingAtCrowd();
+        // m_masterArmSubsystem.closeRecording();
     }
 
     /***********************************************
@@ -179,12 +169,12 @@ public class RobotContainer {
         ALT.and(m_xbox.rightBumper()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(.2)));
         m_xbox.rightBumper().onFalse(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(1.0)));
 
-        m_xbox.x().and(ALT.negate()).onTrue(new InstantCommand(()->m_masterArmSubsystem.cancelNoteAction()));
+        // m_xbox.x().and(ALT.negate()).onTrue(new InstantCommand(()->m_masterArmSubsystem.cancelNoteAction()));
         // Swerve park 
         ALT.and(m_xbox.x()).onTrue(m_parkCmd);
         
         // Note handling activities
-        m_xbox.b().onTrue(new InstantCommand(()->m_masterArmSubsystem.acquireNote()));
+        /* m_xbox.b().onTrue(new InstantCommand(()->m_masterArmSubsystem.acquireNote()));
         m_xbox.a().and(ALT.negate()).onTrue(new InstantCommand(()->m_masterArmSubsystem.prepForAmpScore()));
         ALT.and(m_xbox.a()).onTrue(new InstantCommand(()->m_masterArmSubsystem.prepForDistantSpeakerScore(SC.SHOOTER_VOLTAGE_OUT_PASS)));
         m_xbox.y().and(ALT.negate()).onTrue(new InstantCommand(()->m_masterArmSubsystem.prepForIndexedSpeakerScore()));
@@ -193,7 +183,7 @@ public class RobotContainer {
         m_xbox.rightTrigger(0.5).and(ALT.negate()).onTrue(new InstantCommand(()->m_masterArmSubsystem.scoreNote()));
         m_xbox.start().and(ALT.negate()).onTrue(new InstantCommand(()->m_masterArmSubsystem.stepPastDebugHold()));
         ALT.and(m_xbox.start()).onTrue(new WaveCmd(m_swerveSubsystem, m_masterArmSubsystem));
-        m_xbox.leftTrigger().and(ALT.negate()).onTrue(new InstantCommand(()->m_masterArmSubsystem.simulateNoteAcquired()));
+        m_xbox.leftTrigger().and(ALT.negate()).onTrue(new InstantCommand(()->m_masterArmSubsystem.simulateNoteAcquired())); */
     
         // Utilities for fine tuning various arm positions, can be used in extremis
         // during a match if pickup angles are not working.
@@ -231,28 +221,10 @@ public class RobotContainer {
         if (selectedAuto == null) {
             selectedAuto = new DoNothingCmd();
         }
-    
-        if ((selectedAuto == m_justScoreLeftAuto)
-            ||
-            (selectedAuto == m_scoreThenExitRedLeftAuto)
-            ||
-            (selectedAuto == m_scoreThenExitBlueLeftAuto)
-            ||
-            (selectedAuto == m_score2NotesLeftAuto)) {
-            m_swerveSubsystem.setGyro(60.0);
-        } else if ((selectedAuto == m_justScoreRightAuto)
-                   ||
-                   (selectedAuto == m_scoreThenExitRedRightAuto)
-                   ||
-                   (selectedAuto == m_scoreThenExitBlueRightAuto)
-                   ||
-                   (selectedAuto == m_score2NotesRightAuto)) {
-            m_swerveSubsystem.setGyro(300.0);
-        } 
         return selectedAuto;
     }
 
     public void teleopStart() {
-        m_masterArmSubsystem.teleopStart();
+        // m_masterArmSubsystem.teleopStart();
     }
 }
