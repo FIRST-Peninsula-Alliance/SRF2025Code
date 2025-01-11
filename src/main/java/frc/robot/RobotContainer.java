@@ -30,7 +30,7 @@ public class RobotContainer {
     private SwerveParkCmd            m_parkCmd;
 
     // Declare handles for choosable autonomous Commands
-    // private JustScoreLeftAuto           m_justScoreLeftAuto;
+    private TestSquareAuto           m_test_square_auto;
 
     // Create sendable choosers for starting position and desired Auto routine
     private static SendableChooser<Command> m_autoRoutineChooser = new SendableChooser<>();
