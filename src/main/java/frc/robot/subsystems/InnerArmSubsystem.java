@@ -307,8 +307,8 @@ public class InnerArmSubsystem extends SubsystemBase {
                                                   .withPeakForwardDutyCycle(IAC.INNER_ARM_OUTPUT_LIMIT_FACTOR)
                                                   .withPeakReverseDutyCycle(-IAC.INNER_ARM_OUTPUT_LIMIT_FACTOR);
     var currentLimitConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(IAC.INNER_ARM_CONT_CURRENT_LIMIT)
-                                                       .withSupplyCurrentThreshold(IAC.INNER_ARM_PEAK_CURRENT_LIMIT)
-                                                       .withSupplyTimeThreshold(IAC.INNER_ARM_PEAK_CURRENT_DURATION)
+                                                       .withSupplyCurrentLowerLimit(IAC.INNER_ARM_PEAK_CURRENT_LIMIT)
+                                                       .withSupplyCurrentLowerTime(IAC.INNER_ARM_PEAK_CURRENT_DURATION)
                                                        .withSupplyCurrentLimitEnable(IAC.INNER_ARM_ENABLE_CURRENT_LIMIT)
                                                        .withStatorCurrentLimit(IAC.INNER_ARM_STATOR_CURRENT_LIMIT)
                                                        .withStatorCurrentLimitEnable(IAC.INNER_ARM_ENABLE_STATOR_CURRENT_LIMIT);
@@ -361,7 +361,7 @@ public class InnerArmSubsystem extends SubsystemBase {
   }
     
   private void configInnerArmCANcoder() {
-    var magnetSensorConfigs = new MagnetSensorConfigs().withAbsoluteSensorRange(IAC.INNER_ARM_CANCODER_RANGE)
+    var magnetSensorConfigs = new MagnetSensorConfigs().withAbsoluteSensorDiscontinuityPoint(IAC.INNER_ARM_CANCODER_RANGE)
                                                        .withSensorDirection(IAC.INNER_ARM_CANCODER_DIR)
                                                        .withMagnetOffset(m_magnetOffset);
     var ccConfig = new CANcoderConfiguration().withMagnetSensor(magnetSensorConfigs);
