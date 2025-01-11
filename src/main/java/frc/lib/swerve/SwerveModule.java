@@ -289,38 +289,51 @@ public class SwerveModule {
         }
     }
 
-    private void configSteerMotor(){
-        reportRevError(m_steerMotor.configure(m_sparkBaseConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));// (m_steerMotor.restoreFactoryDefaults());
-        // Configure to send motor encoder position data frequently, but everything
-        // else at a lower rate, to minimize can bus traffic.
-        //reportRevError(SparkMaxUtil.setSparkMaxBusUsage(m_steerMotor, Usage.kPositionOnly));
+    private void configSteerMotor(){ //TODO: Steer motors are falcon 500s now, copy the structure of the drive motor fucntion.
+        var openLoopConfig = new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(0)
+                                                       .withVoltageOpenLoopRampPeriod(SDC.OPEN_LOOP_RAMP_PERIOD);
+                                                       //.withTorqueOpenLoopRampPeriod(0);
+        var closedLoopConfig = new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(0)
+                                                           .withVoltageClosedLoopRampPeriod(SDC.CLOSED_LOOP_RAMP_PERIOD)
+                                                           .withTorqueClosedLoopRampPeriod(0);
+        var feedbackConfig = new FeedbackConfigs().withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
+                                                  .withSensorToMechanismRatio(SDC.STEER_GEAR_RATIO)
+                                                  .withRotorToSensorRatio(1.0);
+        var motorOutputConfig = new MotorOutputConfigs().withNeutralMode(SDC.STEER_MOTOR_NEUTRAL_MODE)
+                                                        .withInverted(SDC.STEER_MOTOR_INVERT)
+                                                        .withPeakForwardDutyCycle(SDC.OUTPUT_ROTATE_LIMIT_FACTOR)
+                                                        .withPeakReverseDutyCycle(-SDC.OUTPUT_ROTATE_LIMIT_FACTOR);
+                                                        //.withDutyCycleNeutralDeadband(.001);
+        CurrentLimitsConfigs currentLimitConfig = new CurrentLimitsConfigs()
+                                                        .withSupplyCurrentLimit(SDC.STEER_SUPPLY_CURRENT_LIMIT)
+                                                        .withSupplyCurrentLowerLimit(SDC.STEER_SUPPLY_CURRENT_THRESHOLD) // TODO: Look here for unexpected behavior. Was .withSupplyCurrentThreshhold.
+                                                        .withSupplyCurrentLowerTime(SDC.STEER_SUPPLY_CURRENT_TIME_THRESHOLD) // TODO: Look here for unexpected behavior
+                                                        .withSupplyCurrentLimitEnable(SDC.STEER_ENABLE_SUPPLY_CURRENT_LIMIT)
+                                                        .withStatorCurrentLimit(SDC.STEER_STATOR_CURRENT_LIMIT)
+                                                        .withStatorCurrentLimitEnable(SDC.STEER_ENABLE_STATOR_CURRENT_LIMIT );
+        Slot0Configs pid0Configs = new Slot0Configs().withKP(SDC.STEER_KP)
+                                                     .withKI(SDC.STEER_KI)
+                                                     .withKD(SDC.STEER_KD)
+                                                     .withKS(SDC.STEER_KS)
+                                                     .withKV(SDC.STEER_KV)
+                                                     .withKA(SDC.STEER_KA)
+                                                     .withKG(SDC.STEER_KG);
+                                                    // .withGravityType(   );
+                                                    //    Elevator_Static if constant
+                                                    //    Arm_Cosign if variable. Sensor must be 0 when mechanism
+                                                    //                            is horiz, and sensor and Mechanism
+                                                    //                            position must be 1:1
+        var swerveDriveConfig = new TalonFXConfiguration().withFeedback(feedbackConfig)
+                                                          .withMotorOutput(motorOutputConfig)
+                                                          .withCurrentLimits(currentLimitConfig)
+                                                          .withOpenLoopRamps(openLoopConfig)
+                                                          .withClosedLoopRamps(closedLoopConfig)
+                                                          .withSlot0(pid0Configs);
+        StatusCode status = m_driveMotor.getConfigurator().apply(swerveDriveConfig);
 
-// TODO: Rev errors need conversion.
-        /*reportRevError(m_steerMotor.smartCurrentLimit(SDC.STEER_SMART_CURRENT_LIMIT)); // (m_steerMotor.setSmartCurrentLimit(SDC.STEER_SMART_CURRENT_LIMIT));
-        // //setInverted returns void
-        m_steerMotor.setInverted(SDC.STEER_MOTOR_INVERT);
-        reportRevError(m_steerMotor.setIdleMode(SDC.STEER_MOTOR_NEUTRAL_MODE));
-        //SKIP // m_closedLoopConfig.pidf(SDC.STEER_KP, SDC.STEER_KI, SDC.STEER_KD, SDC.STEER_KF);
-        reportRevError(m_steerController.setP(SDC.STEER_KP));
-        reportRevError(m_steerController.setI(SDC.STEER_KI));
-        reportRevError(m_steerController.setD(SDC.STEER_KD));
-        reportRevError(m_steerController.setFF(SDC.STEER_KF));
-        reportRevError(m_steerController.setOutputRange(SDC.MIN_STEER_CLOSED_LOOP_OUTPUT,
-                                                        SDC.MAX_STEER_CLOSED_LOOP_OUTPUT));
-        reportRevError(m_steerController.setFeedbackDevice(m_integratedSteerEncoder));
-        reportRevError(m_steerController.setPositionPIDWrappingEnabled(true));
-        reportRevError(m_steerController.setPositionPIDWrappingMinInput(0));
-        reportRevError(m_steerController.setPositionPIDWrappingMaxInput(360));
-        // Make integrated encoder read in native units of degrees
-        reportRevError(m_integratedSteerEncoder.setPositionConversionFactor(360.0/SDC.STEER_GEAR_RATIO));
-        reportRevError(m_steerMotor.enableVoltageCompensation(SDC.STEER_MOTOR_VOLTAGE_COMPENSATION));
-        //reportRevError(m_steerMotor.burnFlash());   // Do this durng development, but not
-                                                    // routinely, to preserve the life of the
-                                                    // flash memory. Is it even necessary, since
-                                                    // all registers (except ID?) are written 
-                                                    // via code on every bootup?
-        //SmartDashboard.putString("Steer Motor Setup", "Complete"); */
-        resetToAbsolute();
+        if (! status.isOK() ) {
+            SmartDashboard.putString("Failed to apply Steer configs in Mod "+m_modNum, " Error code: "+status.toString());
+        }
     }
 
     private void configDriveMotor(){

@@ -15,6 +15,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -275,16 +277,19 @@ public final class Constants {
         public static final double MPS_TO_TALONFX_RPS_FACTOR = 1.0 / WHEEL_CIRCUMFERENCE_M;
 
         // Current Limiting motor protection - same for both module types
-        // But different for NEO/SmartMAX:
-        public static final int  STEER_SMART_CURRENT_LIMIT     = 25;
-        public static final boolean STEER_ENABLE_CURRENT_LIMIT = true;
-        // and Falcon/FX:
         public static final double  DRIVE_SUPPLY_CURRENT_LIMIT          = 40.0;
         public static final double  DRIVE_SUPPLY_CURRENT_THRESHOLD      = 0.0;
         public static final double  DRIVE_SUPPLY_CURRENT_TIME_THRESHOLD = 0.1;
         public static final boolean DRIVE_ENABLE_SUPPLY_CURRENT_LIMIT   = true;
         public static final double  DRIVE_STATOR_CURRENT_LIMIT          = 45.0;
         public static final boolean DRIVE_ENABLE_STATOR_CURRENT_LIMIT   = true;
+
+        public static final double STEER_SUPPLY_CURRENT_LIMIT = 40.0;
+        public static final double STEER_SUPPLY_CURRENT_THRESHOLD = 0.0;
+        public static final double STEER_SUPPLY_CURRENT_TIME_THRESHOLD = 0.1;
+        public static final boolean STEER_ENABLE_SUPPLY_CURRENT_LIMIT = true;
+        public static final double STEER_STATOR_CURRENT_LIMIT = 45.0;
+        public static final boolean STEER_ENABLE_STATOR_CURRENT_LIMIT = true;
         
         // Voltage compensation
         public static final double STEER_MOTOR_VOLTAGE_COMPENSATION = 12.0;
@@ -309,6 +314,12 @@ public final class Constants {
         public static final double DRIVE_KA = (0.27 / 12);
         public static final double DRIVE_KG = 0.27;
         
+        // Steer motor characterization values.
+        public static final double STEER_KS = (0.32 /12);
+        public static final double STEER_KV = (1.51 /12);
+        public static final double STEER_KA = (0.27 /12);
+        public static final double STEER_KG = 0.27;
+
         // Swerve Profiling Values for Robot
         // Best if getten by characterizing the robot, but these values worked
         // tolerably well in 2023 as is. Used during Auto mode moves, which are
