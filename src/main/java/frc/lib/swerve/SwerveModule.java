@@ -37,6 +37,8 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig;
 
 public class SwerveModule {
     public  int m_modNum;
@@ -54,6 +56,8 @@ public class SwerveModule {
 
     private SparkBaseConfig m_sparkBaseConfig;
     private ResetMode m_sparkResetMode;
+    private SparkMaxConfig m_sparkMaxConfig = new SparkMaxConfig();
+    private ClosedLoopConfig m_closedLoopConfig = new ClosedLoopConfig();
 
     // Declare Phoenix6 control request objects for the Drive Motor:
     // Open loop control output to the drive motor is one shot DutyCycle, and must be 
@@ -291,11 +295,12 @@ public class SwerveModule {
         // else at a lower rate, to minimize can bus traffic.
         //reportRevError(SparkMaxUtil.setSparkMaxBusUsage(m_steerMotor, Usage.kPositionOnly));
 
-        // TODO: This needs conversion to new api.
-        reportRevError(m_steerMotor.smartCurrentLimit(SDC.STEER_SMART_CURRENT_LIMIT)); // (m_steerMotor.setSmartCurrentLimit(SDC.STEER_SMART_CURRENT_LIMIT));
-        // setInverted returns void
+// TODO: Rev errors need conversion.
+        /*reportRevError(m_steerMotor.smartCurrentLimit(SDC.STEER_SMART_CURRENT_LIMIT)); // (m_steerMotor.setSmartCurrentLimit(SDC.STEER_SMART_CURRENT_LIMIT));
+        // //setInverted returns void
         m_steerMotor.setInverted(SDC.STEER_MOTOR_INVERT);
         reportRevError(m_steerMotor.setIdleMode(SDC.STEER_MOTOR_NEUTRAL_MODE));
+        //SKIP // m_closedLoopConfig.pidf(SDC.STEER_KP, SDC.STEER_KI, SDC.STEER_KD, SDC.STEER_KF);
         reportRevError(m_steerController.setP(SDC.STEER_KP));
         reportRevError(m_steerController.setI(SDC.STEER_KI));
         reportRevError(m_steerController.setD(SDC.STEER_KD));
@@ -314,7 +319,7 @@ public class SwerveModule {
                                                     // flash memory. Is it even necessary, since
                                                     // all registers (except ID?) are written 
                                                     // via code on every bootup?
-        //SmartDashboard.putString("Steer Motor Setup", "Complete");
+        //SmartDashboard.putString("Steer Motor Setup", "Complete"); */
         resetToAbsolute();
     }
 
