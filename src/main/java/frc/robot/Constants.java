@@ -3,11 +3,12 @@ package frc.robot;
 import java.text.DecimalFormat;
 import java.util.Map;
 
-import com.ctre.phoenix6.configs.MagnetSensorConfigs.AbsoluteSensorDiscontinuityPoint;
+// import com.ctre.phoenix6.configs.MagnetSensorConfigs.AbsoluteSensorDiscontinuityPoint;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-import com.revrobotics.spark.SparkMax;
+// import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -260,7 +261,7 @@ public final class Constants {
                                 new SwerveDriveKinematics(REL_POS2D_FL, REL_POS2D_FR, REL_POS2D_BL, REL_POS2D_BR);
 
         // Swerve Drive Constants which are independent of given modules and chassis:
-        public static final AbsoluteSensorDiscontinuityPointValue CANCODER_RANGE = AbsoluteSensorDiscontinuityPointValue.Unsigned_0To1;
+        public static final int CANCODER_RANGE = 1; //TODO: AbsoluteSensorDiscontinuityPointValue CANCODER_RANGE = AbsoluteSensorDiscontinuityPointValue.Unsigned_0To1;
 
         // Unit conversion factors. With Phoenix6, the gear ratios are handled by the
         // motor controllers, so that motor.getPosition() values (assuming sensor source is
@@ -329,7 +330,7 @@ public final class Constants {
         public static final double MAX_STEER_CLOSED_LOOP_OUTPUT = 0.6;
 
         /* Default Motor Neutral Modes */
-        public static final SparkMax.IdleMode STEER_MOTOR_NEUTRAL_MODE = SparkMax.IdleMode.kCoast;
+        public static final SparkBaseConfig.IdleMode STEER_MOTOR_NEUTRAL_MODE = SparkBaseConfig.IdleMode.kCoast;
         public static final NeutralModeValue DRIVE_MOTOR_NEUTRAL_MODE = NeutralModeValue.Brake;
 
         // Swerve rotate speed and extent during a parade WAVE function

@@ -33,7 +33,10 @@ import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig;
 
 public class SwerveModule {
     public  int m_modNum;
@@ -48,6 +51,10 @@ public class SwerveModule {
     private final SparkClosedLoopController m_steerController;
     private final CANcoder m_absWheelAngleCANcoder;
     private final TalonFX m_driveMotor;
+
+    private SparkBaseConfig m_sparkBaseConfig;
+    private ResetMode m_sparkResetMode;
+
     // Declare Phoenix6 control request objects for the Drive Motor:
     // Open loop control output to the drive motor is one shot DutyCycle, and must be 
     // repeated every loop to avoid safety timeout
@@ -252,7 +259,7 @@ public class SwerveModule {
         var magnetSensorConfigs = new MagnetSensorConfigs().withAbsoluteSensorDiscontinuityPoint(SDC.CANCODER_RANGE)
                                                            .withSensorDirection(SDC.CANCODER_DIR)
                                                            .withMagnetOffset(0.0);
-        var ccConfig = new CANcoderConfiguration().withMagnetSensor(magnetSensorConfigs );
+        var ccConfig = new CANcoderConfiguration().withMagnetSensor(magnetSensorConfigs);
         m_absWheelAngleCANcoder.getConfigurator().apply(ccConfig);
     }
 
@@ -279,11 +286,13 @@ public class SwerveModule {
     }
 
     private void configSteerMotor(){
-        reportRevError(m_steerMotor.restoreFactoryDefaults());
+        reportRevError(m_steerMotor.configure(m_sparkBaseConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));// (m_steerMotor.restoreFactoryDefaults());
         // Configure to send motor encoder position data frequently, but everything
         // else at a lower rate, to minimize can bus traffic.
         //reportRevError(SparkMaxUtil.setSparkMaxBusUsage(m_steerMotor, Usage.kPositionOnly));
-        reportRevError(m_steerMotor.setSmartCurrentLimit(SDC.STEER_SMART_CURRENT_LIMIT));
+
+        // TODO: This needs conversion to new api.
+        reportRevError(m_steerMotor.smartCurrentLimit(SDC.STEER_SMART_CURRENT_LIMIT)); // (m_steerMotor.setSmartCurrentLimit(SDC.STEER_SMART_CURRENT_LIMIT));
         // setInverted returns void
         m_steerMotor.setInverted(SDC.STEER_MOTOR_INVERT);
         reportRevError(m_steerMotor.setIdleMode(SDC.STEER_MOTOR_NEUTRAL_MODE));
@@ -326,8 +335,8 @@ public class SwerveModule {
                                                         //.withDutyCycleNeutralDeadband(.001);
         CurrentLimitsConfigs currentLimitConfig = new CurrentLimitsConfigs()
                                                         .withSupplyCurrentLimit(SDC.DRIVE_SUPPLY_CURRENT_LIMIT)
-                                                        .withSupplyCurrentThreshold(SDC.DRIVE_SUPPLY_CURRENT_THRESHOLD)
-                                                        .withSupplyTimeThreshold(SDC.DRIVE_SUPPLY_CURRENT_TIME_THRESHOLD)
+                                                        .withSupplyCurrentLowerLimit(SDC.DRIVE_SUPPLY_CURRENT_THRESHOLD) // TODO: Look here for unexpected behavior. Was .withSupplyCurrentThreshhold.
+                                                        .withSupplyCurrentLowerTime(SDC.DRIVE_SUPPLY_CURRENT_TIME_THRESHOLD) // TODO: Look here for unexpected behavior
                                                         .withSupplyCurrentLimitEnable(SDC.DRIVE_ENABLE_SUPPLY_CURRENT_LIMIT)
                                                         .withStatorCurrentLimit(SDC.DRIVE_STATOR_CURRENT_LIMIT)
                                                         .withStatorCurrentLimitEnable(SDC.DRIVE_ENABLE_STATOR_CURRENT_LIMIT );
