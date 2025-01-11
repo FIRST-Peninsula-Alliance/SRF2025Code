@@ -330,4 +330,3 @@ public final class NotableConstants {           // As in all these constants are
         public static final double WINCH_SAFETY_THRESHOLD_CURRENT_LIMIT     = 40.0;
     }
 }
-
