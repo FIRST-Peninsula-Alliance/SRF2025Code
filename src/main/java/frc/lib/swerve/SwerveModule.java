@@ -289,7 +289,7 @@ public class SwerveModule {
         }
     }
 
-    private void configSteerMotor(){ //TODO: Steer motors are falcon 500s now, copy the structure of the drive motor fucntion.
+    private void configSteerMotor(){
         var openLoopConfig = new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(0)
                                                        .withVoltageOpenLoopRampPeriod(SDC.OPEN_LOOP_RAMP_PERIOD);
                                                        //.withTorqueOpenLoopRampPeriod(0);
