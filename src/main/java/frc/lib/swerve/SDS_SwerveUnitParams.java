@@ -32,7 +32,7 @@ public class SDS_SwerveUnitParams {
     public final double STEER_KD;
     public final double STEER_KF;
     public final InvertedValue DRIVE_MOTOR_INVERT;
-    public final boolean STEER_MOTOR_INVERT;
+    public final InvertedValue STEER_MOTOR_INVERT;
     public final SensorDirectionValue CANCODER_DIR;
 
     public SDS_SwerveUnitParams(double wheelDiameterM,
@@ -53,7 +53,7 @@ public class SDS_SwerveUnitParams {
                                 double steerKD,
                                 double steerKF, 
                                 InvertedValue driveMotorInvert, 
-                                boolean steerMotorInvert,
+                                InvertedValue steerMotorInvert,
                                 SensorDirectionValue canCoderDir) {
         WHEEL_DIAMETER_M = wheelDiameterM;
         WHEEL_CIRCUMFERENCE_M = wheelDiameterM * Math.PI;

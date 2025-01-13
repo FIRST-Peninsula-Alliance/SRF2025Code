@@ -146,7 +146,7 @@ public final class Constants {
             double steerKD = 0.0;
             double steerKF = 0.0;
             InvertedValue driveMotorInvert = InvertedValue.Clockwise_Positive;
-            boolean steerMotorInvert = false;
+            InvertedValue steerMotorInvert = InvertedValue.Clockwise_Positive; //TODO: Look here if steering is inverted
             SensorDirectionValue canCoderDir = SensorDirectionValue.CounterClockwise_Positive;
             return new SDS_SwerveUnitParams(wheelDiaM,
                                             relPos2D_FL,
@@ -193,7 +193,7 @@ public final class Constants {
             double steerKD = 0.0;
             double steerKF = 0.0;
             InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;   // Tsunami is inverted from Black Knight
-            boolean steerMotorInvert = true;
+            InvertedValue steerMotorInvert = InvertedValue.CounterClockwise_Positive; //TODO: Look here if steering is inverted
             SensorDirectionValue canCoderDir = SensorDirectionValue.CounterClockwise_Positive;
             
             return new SDS_SwerveUnitParams(wheelDiaM,
@@ -252,7 +252,7 @@ public final class Constants {
         public static final double STEER_KI = CHOOSEN_MODULE.STEER_KI;
         public static final double STEER_KD = CHOOSEN_MODULE.STEER_KD;
         public static final double STEER_KF = CHOOSEN_MODULE.STEER_KF;
-        public static final boolean STEER_MOTOR_INVERT = CHOOSEN_MODULE.STEER_MOTOR_INVERT;
+        public static final InvertedValue STEER_MOTOR_INVERT = CHOOSEN_MODULE.STEER_MOTOR_INVERT;
         public static final InvertedValue DRIVE_MOTOR_INVERT = CHOOSEN_MODULE.DRIVE_MOTOR_INVERT;
         public static final SensorDirectionValue CANCODER_DIR = CHOOSEN_MODULE.CANCODER_DIR;
         // Set Swerve Kinematics.  The order is always FL, FR, BL, and BR, 
@@ -341,7 +341,7 @@ public final class Constants {
         public static final double MAX_STEER_CLOSED_LOOP_OUTPUT = 0.6;
 
         /* Default Motor Neutral Modes */
-        public static final SparkBaseConfig.IdleMode STEER_MOTOR_NEUTRAL_MODE = SparkBaseConfig.IdleMode.kCoast;
+        public static final NeutralModeValue STEER_MOTOR_NEUTRAL_MODE = NeutralModeValue.Coast; // SparkBaseConfig.IdleMode.kCoast;
         public static final NeutralModeValue DRIVE_MOTOR_NEUTRAL_MODE = NeutralModeValue.Brake;
 
         // Swerve rotate speed and extent during a parade WAVE function

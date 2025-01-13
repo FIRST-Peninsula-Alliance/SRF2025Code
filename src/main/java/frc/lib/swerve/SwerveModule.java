@@ -299,7 +299,7 @@ public class SwerveModule {
         var feedbackConfig = new FeedbackConfigs().withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
                                                   .withSensorToMechanismRatio(SDC.STEER_GEAR_RATIO)
                                                   .withRotorToSensorRatio(1.0);
-        var motorOutputConfig = new MotorOutputConfigs().withNeutralMode(SDC.STEER_MOTOR_NEUTRAL_MODE)
+        MotorOutputConfigs motorOutputConfig = new MotorOutputConfigs().withNeutralMode(SDC.STEER_MOTOR_NEUTRAL_MODE)
                                                         .withInverted(SDC.STEER_MOTOR_INVERT)
                                                         .withPeakForwardDutyCycle(SDC.OUTPUT_ROTATE_LIMIT_FACTOR)
                                                         .withPeakReverseDutyCycle(-SDC.OUTPUT_ROTATE_LIMIT_FACTOR);
