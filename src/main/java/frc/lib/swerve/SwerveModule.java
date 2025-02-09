@@ -6,6 +6,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -25,6 +28,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 
@@ -40,6 +44,8 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 
+// TODO: Functions may still be named Neo, but they are updated for the TalonFX library.
+
 public class SwerveModule {
     public  int m_modNum;
     private SwerveModuleConstants m_moduleConstants;
@@ -48,9 +54,9 @@ public class SwerveModule {
     private double m_lastAngle;       // This is not used for control, rather it 
                                       // stores the last setpoint requested for a
                                       // given module, for data publishing purposes.
-    private final SparkMax m_steerMotor;
-    private final RelativeEncoder m_integratedSteerEncoder;
-    private final SparkClosedLoopController m_steerController;
+    private final TalonFX m_steerMotor;
+    // private final RelativeEncoder m_integratedSteerEncoder;
+    // private final SparkClosedLoopController m_steerController;
     private final CANcoder m_absWheelAngleCANcoder;
     private final TalonFX m_driveMotor;
 
@@ -68,11 +74,14 @@ public class SwerveModule {
     // per loop. The default update rate is 100 Hz, leave it as is and bump it every loop with updated
     // feed forward calculations.
     final VelocityVoltage m_driveClosedLoop = new VelocityVoltage(0.0);
+    final PositionVoltage m_steerClosedLoop = new PositionVoltage(0.0);
 
     private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(SDC.DRIVE_KS,
                                                                             SDC.DRIVE_KV,
                                                                             SDC.DRIVE_KA);
     private double m_velocityFeedForward;
+    private double m_positionFeedForward;
+
 
     // Entries for publishing module data.
     // Technically, the following member Entry variables do not need to be saved,
@@ -96,6 +105,7 @@ public class SwerveModule {
     private GenericEntry steerTempEntry;
 
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants) {
+
         m_modNum = moduleNumber;
         m_moduleConstants = moduleConstants;
         m_absAngleOffset2d = moduleConstants.ABS_ANG_OFFSET2D;
@@ -108,11 +118,12 @@ public class SwerveModule {
         configAbsWheelAngleCANcoder();
 
         /* Angle Motor Config */
-        m_steerMotor = new SparkMax(m_moduleConstants.STEER_MOTOR_ID, 
-                                       MotorType.kBrushless);
-        m_steerController = m_steerMotor.getClosedLoopController();
-        m_integratedSteerEncoder = m_steerMotor.getEncoder();
-        configSteerMotor();
+        m_steerMotor = new TalonFX(m_moduleConstants.STEER_MOTOR_ID);
+        configDriveMotor();
+
+        m_lastAngle = getState().angle.getDegrees();
+
+        setupModulePublishing();
 
         /* Drive Motor Config */
         m_driveMotor = new TalonFX(m_moduleConstants.DRIVE_MOTOR_ID);
@@ -162,8 +173,10 @@ public class SwerveModule {
         // We can now setReference in native units (deg) since Neo encoder is
         // configured to operate in degrees. No need to convert to NEO rev units
         // When this is called by module angle test routines, there is no "optimized" turn limit
-        m_steerController.setReference(desiredAngle, SparkBase.ControlType.kPosition);
-        m_lastAngle = desiredAngle;
+        // Drive using VelocityVoltage PID, using Falcon encoder units and default Slot0
+        m_steerClosedLoop.Position = desiredAngle * SDC.MPS_TO_TALONFX_RPS_FACTOR;
+        m_positionFeedForward = feedforward.calculate(desiredAngle);
+        m_steerMotor.setControl(m_steerClosedLoop.withFeedForward(m_velocityFeedForward));
     }
 
     public void testDriveMotorRotation() {
@@ -177,12 +190,19 @@ public class SwerveModule {
     public void testSteerMotorRotation() {
         // this routime spins the steering motor slowly under percent output
         // to check that it is configured correctly (CCW Positive)
-        m_steerController.setReference(.2, SparkBase.ControlType.kDutyCycle);
+        m_steerMotor.setControl(m_driveOpenLoop
+                                .withUpdateFreqHz(50)
+                                .withOutput(0.25));
     }
 
     // getAngle2d returns the current swerve module direction as a Rotation2d value.
     private Rotation2d getAngle2d() {
-        return Rotation2d.fromDegrees(m_integratedSteerEncoder.getPosition());
+        return convertToRotation2d(m_steerMotor.getPosition().getValueAsDouble() * 360.0);
+    }
+
+    private Rotation2d convertToRotation2d(double angleInDegrees) {
+        // Convert the angle from degrees to radians and create a Rotation2d object
+        return new Rotation2d(Math.toRadians(angleInDegrees));
     }
 
     // setNeoPosDeg is called from resetToAbsolute. The NEO encoder is now configured to 
@@ -190,13 +210,13 @@ public class SwerveModule {
     // reflecting the actual module direction (relative to the robot) upon initialization.
     // With the module aimed straight ahead, bevel gear to the left, the angle should be 0.0
     public void setNeoPosDeg(double angle) {
-        m_integratedSteerEncoder.setPosition(angle);
+        m_steerMotor.setPosition((angle/360)*2048); // add to constants
     }
 
     // getNeoPosDeg returns the current value of the Neo's integrated encoder (initialized 
     // at startup to the module's correct absolute direction) in degrees, in the range 0 to 360.
     public double getNeoPosDeg() {
-        return normalizeAngle0To360(m_integratedSteerEncoder.getPosition());
+        return normalizeAngle0To360(m_steerMotor.getPosition().getValueAsDouble()); // TODO: looks here for steering issues
     }
 
     public double normalizeAngle0To360(double angle) {
@@ -217,7 +237,7 @@ public class SwerveModule {
     }
 
     public double getRawNeoPos() {
-        return m_integratedSteerEncoder.getPosition();
+        return m_steerMotor.getPosition().getValueAsDouble();
     }
 
     public double getCANcoderDeg() {
@@ -256,7 +276,7 @@ public class SwerveModule {
         double CANcoderOnReset = getCANcoderDeg();
         double absModuleDegOnReset = CANcoderOnReset - m_absAngleOffset2d.getDegrees();
         //SmartDashboard.putString("Mod"+m_modNum+" CANcoder on Reset", F.df2.format(CANcoderOnReset));
-        setNeoPosDeg(absModuleDegOnReset);
+        setNeoPosDeg(absModuleDegOnReset); // TODO: sparkmax reference
     }
 
     private void configAbsWheelAngleCANcoder(){ 
@@ -429,12 +449,12 @@ public class SwerveModule {
         // CANcoder direction
         absCANcoderDegEntry.setString(F.df1.format(getCANcoderDeg()));
         // Current wheel direction
-        steerEncoderDegEntry.setString(F.df1.format(getNeoPosDeg()));
+        steerEncoderDegEntry.setString(F.df1.format(getNeoPosDeg())); 
         // Wheel direction (steer) setpoint
         steerSetpointDegEntry.setString(F.df1.format(normalizeAngle0To360(m_lastAngle)));
         //steerSetpointDegEntry.setString(F.df1.format(m_lastAngle));
         // SteerMotor PID applied ouutput    
-        steerPIDOutputEntry.setString(F.df2.format(m_steerMotor.getAppliedOutput()));
+        steerPIDOutputEntry.setString(F.df2.format(m_steerMotor.getMotorOutputStatus()));
         // Wheel Speed
         wheelCurrSpeedEntry.setString(F.df1.format(getVelocityMPS()));
         // Wheel position, meters
@@ -444,9 +464,9 @@ public class SwerveModule {
         // Wheel Temp
         wheelTempEntry.setString(F.df1.format(m_driveMotor.getDeviceTemp().getValueAsDouble()));
         // Steering Amps
-        steerAmpsEntry.setString(F.df1.format(m_steerMotor.getOutputCurrent()));
+        steerAmpsEntry.setString(F.df1.format(m_steerMotor.getSupplyCurrent().getValueAsDouble()));
         // Steering Temp
-        steerTempEntry.setString(F.df1.format(m_steerMotor.getMotorTemperature()));
+        steerTempEntry.setString(F.df1.format(m_steerMotor.getDeviceTemp().getValueAsDouble()));
     }
 
     public void stop() {
