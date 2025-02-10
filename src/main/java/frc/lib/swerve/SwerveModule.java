@@ -276,7 +276,7 @@ public class SwerveModule {
         double CANcoderOnReset = getCANcoderDeg();
         double absModuleDegOnReset = CANcoderOnReset - m_absAngleOffset2d.getDegrees();
         //SmartDashboard.putString("Mod"+m_modNum+" CANcoder on Reset", F.df2.format(CANcoderOnReset));
-        setNeoPosDeg(absModuleDegOnReset); // TODO: sparkmax reference
+        setNeoPosDeg(absModuleDegOnReset);
     }
 
     private void configAbsWheelAngleCANcoder(){ 
