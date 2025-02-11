@@ -515,4 +515,49 @@ public final class Constants {
         public static final double PIN_SERVO_MIN = 0.8;
 
     }
+
+    /*************************************************
+     * Elevator Constants 
+    **************************************************/
+    public static final class EC {
+        public static final int ELEVATOR_MOTOR_CAN_ID = 10;
+        public static final int ELEVATOR_CANCODER_ID = 10;
+
+        public static final int ELEVATOR_ARM_CANCODER_RANGE = 1;
+        public static final double ELEVATOR_ARM_CLOSED_LOOP_RAMP_PERIOD = 0.5;
+
+        public static final SensorDirectionValue ELEVATOR_ARM_CANCODER_DIR = SensorDirectionValue.CounterClockwise_Positive;
+        public static final double ELEVATOR_ARM_CANCODER_TO_AXLE_RATIO = 20.0/18.0;
+        public static final double ELEVATOR_ARM_ROTOR_TO_CANCODER_RATIO = 30;
+
+        public static final NeutralModeValue ELEVATOR_ARM_MOTOR_NEUTRAL_MODE = NeutralModeValue.Brake;
+        public static final InvertedValue ELEVATOR_ARM_MOTOR_INVERT = InvertedValue.Clockwise_Positive;
+
+        public static final double ELEVATOR_ARM_OUTPUT_LIMIT_FACTOR = 1.0;
+        public static final double ELEVATOR_ARM_CONT_CURRENT_LIMIT = 16.0;
+        public static final double ELEVATOR_ARM_PEAK_CURRENT_LIMIT = 36.0;
+        public static final double ELEVATOR_ARM_PEAK_CURRENT_DURATION = 0.1;
+        public static final boolean ELEVATOR_ARM_ENABLE_CURRENT_LIMIT = true;
+
+        public static final double ELEVATOR_ARM_KP = 40.0;
+        public static final double ELEVATOR_ARM_KI = 0.5;
+        public static final double ELEVATOR_ARM_KD = 0.1;
+        public static final double ELEVATOR_ARM_KS = 0.3;
+        public static final double ELEVATOR_ARM_KV = 4.0;
+        public static final double ELEVATOR_ARM_KA = 0.1;
+        public static final double ELEVATOR_ARM_KG = 0.5;
+
+        public static final double ELEVATOR_ARM_MOTION_MAGIC_VEL = 5.0;
+        public static final double ELEVATOR_ARM_MOTION_MAGIC_ACCEL = 8.0;
+        public static final double ELEVATOR_ARM_MOTION_MAGIC_JERK = 25.0;
+        public static final double ELEVATOR_ARM_MOTION_MAGIC_kA = 0.0;
+        public static final double ELEVATOR_ARM_MOTION_MAGIC_kV = 0.0;
+
+        public static final long ELEVATOR_ARM_SOURCE_POSITION = 0;
+        public static final long ELEVATOR_ARM_SCORE_POSITION = 0;
+
+        public static final double PIN_SERVO_MAX = 2.2;
+        public static final double PIN_SERVO_CENTER = 1.5;
+        public static final double PIN_SERVO_DEADBAND = 0.002;
+    }
 }

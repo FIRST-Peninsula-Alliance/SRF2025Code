@@ -69,7 +69,7 @@ public class CoralArmSubsystem extends SubsystemBase {
     }
   }
 
-  private void configCoralArmMotor() {
+ private void configCoralArmMotor() {
     var closedLoopConfig = new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(0)
                                                         .withVoltageClosedLoopRampPeriod(CAC.CORAL_ARM_CLOSED_LOOP_RAMP_PERIOD)
                                                         .withTorqueClosedLoopRampPeriod(0);
@@ -134,7 +134,7 @@ public class CoralArmSubsystem extends SubsystemBase {
 
   public void ScoreCoral() {
     m_pinServoMotor.setPosition(CAC.PIN_SERVO_POSITION);
-  }
+  } 
 
   @Override
   public void periodic() {
