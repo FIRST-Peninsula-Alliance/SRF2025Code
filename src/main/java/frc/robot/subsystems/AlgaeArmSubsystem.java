@@ -32,7 +32,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   /** Creates a new algaeArmSubsystem. */
   public final TalonFX m_algaeArmMotor;
   public final CANcoder m_algaeArmCANcoder; 
-  public final Servo m_pinServoMotor;
+  public final TalonFX m_pinServoMotor;
   private double m_algaeArmSetpoint;
   private final MotionMagicVoltage m_algaeArmMagicCtrl = new MotionMagicVoltage(0.0)
                                                                                 .withSlot(0)
@@ -42,11 +42,12 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   public AlgaeArmSubsystem() {
     m_algaeArmMotor = new TalonFX(AAC.ALGAE_MOTOR_CAN_ID);
     m_algaeArmCANcoder = new CANcoder(AAC.ALGAE_CANCODER_ID, Constants.CANIVORE_BUS_NAME);
-    m_pinServoMotor = new Servo(AAC.ALGAE_ARM_SERVO_CAN_ID);
+    m_pinServoMotor = new TalonFX(AAC.ALGAE_WHEEL_MOTOR_CAN_ID);
+    m_algaeArmCANcoder = new CANcoder(AAC.ALGAE_WHEEL_CANCODER_ID, Constants.CANIVORE_BUS_NAME);
 
-    configPinServoMotor(m_pinServoMotor, "Collector Pin Servo");
-    configalgaeArmCANcoder();
-    configalgaeArmMotor();
+    configAlgaeWheelMotor();
+    configAlgaeArmCANcoder();
+    configAlgaeArmMotor();
   }
 
   public void GoToPosition(double position) {
