@@ -32,6 +32,8 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   /** Creates a new algaeArmSubsystem. */
   public final TalonFX m_algaeArmMotor;
   public final CANcoder m_algaeArmCANcoder; 
+  public final TalonFX m_algaeWheelMotor;
+  public final CANcoder m_algaeWheelCANcoder;
   public final TalonFX m_pinServoMotor;
   private double m_algaeArmSetpoint;
   private final MotionMagicVoltage m_algaeArmMagicCtrl = new MotionMagicVoltage(0.0)
@@ -43,8 +45,8 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     m_algaeArmMotor = new TalonFX(AAC.ALGAE_MOTOR_CAN_ID);
     m_algaeArmCANcoder = new CANcoder(AAC.ALGAE_CANCODER_ID, Constants.CANIVORE_BUS_NAME);
     m_pinServoMotor = new TalonFX(AAC.ALGAE_WHEEL_MOTOR_CAN_ID);
-    m_algaeArmCANcoder = new CANcoder(AAC.ALGAE_WHEEL_CANCODER_ID, Constants.CANIVORE_BUS_NAME);
-
+    m_algaeWheelCANcoder = new CANcoder(AAC.ALGAE_WHEEL_CANCODER_ID, Constants.CANIVORE_BUS_NAME);
+    m_algaeWheelMotor = new TalonFX(AAC.ALGAE_WHEEL_MOTOR_CAN_ID);
     configAlgaeWheelMotor();
     configAlgaeArmCANcoder();
     configAlgaeArmMotor();
@@ -59,7 +61,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     return(m_algaeArmCANcoder.getAbsolutePosition().getValueAsDouble());
   }
 
-  private void configalgaeArmCANcoder() {
+  private void configAlgaeArmCANcoder() {
     var magnetSensorConfigs = new MagnetSensorConfigs().withAbsoluteSensorDiscontinuityPoint(AAC.ALGAE_ARM_CANCODER_RANGE)
                                                        .withSensorDirection(AAC.ALGAE_ARM_CANCODER_DIR)
                                                        .withMagnetOffset(m_magnetOffset);
@@ -70,7 +72,11 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     }
   }
 
-  private void configalgaeArmMotor() {
+  private void configAlgaeWheelMotor() {
+    //TODO: create configAlaeWheelMotor
+  }
+
+  private void configAlgaeArmMotor() {
     var closedLoopConfig = new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(0)
                                                         .withVoltageClosedLoopRampPeriod(AAC.ALGAE_ARM_CLOSED_LOOP_RAMP_PERIOD)
                                                         .withTorqueClosedLoopRampPeriod(0);
@@ -133,7 +139,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     GoToPosition(AAC.ALGAE_ARM_SCORE_POSITION);
   }
 
-  public void Scorealgae() {
+  public void ScoreAlgae() {
     m_pinServoMotor.setPosition(AAC.PIN_SERVO_POSITION);
   }
 
