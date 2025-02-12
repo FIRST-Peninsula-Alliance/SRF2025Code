@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CAC;
-import frc.robot.NotableConstants.IAC;
+//import frc.robot.NotableConstants.IAC;
 
 public class CoralArmSubsystem extends SubsystemBase {
   /** Creates a new CoralArmSubsystem. */
@@ -37,7 +37,7 @@ public class CoralArmSubsystem extends SubsystemBase {
   private final MotionMagicVoltage m_coralArmMagicCtrl = new MotionMagicVoltage(0.0)
                                                                                 .withSlot(0)
                                                                                 .withEnableFOC(true);
-  private double m_magnetOffset = IAC.INNER_ARM_CANCODER_MAGNET_OFFSET;
+  private double m_magnetOffset = CAC.CORAL_ARM_CANCODER_MAGNET_OFFSET;
 
   public CoralArmSubsystem() {
     m_coralArmMotor = new TalonFX(CAC.CORAL_MOTOR_CAN_ID);
@@ -65,7 +65,7 @@ public class CoralArmSubsystem extends SubsystemBase {
     var ccConfig = new CANcoderConfiguration().withMagnetSensor(magnetSensorConfigs);
     StatusCode status = m_coralArmCANcoder.getConfigurator().apply(ccConfig);
     if (! status.isOK() ) {
-      System.out.println("Failed to apply INNER_CANcoder configs. Error code: "+status.toString());
+      System.out.println("Failed to apply CORAL_CANcoder configs. Error code: "+status.toString());
     }
   }
 
@@ -107,7 +107,7 @@ public class CoralArmSubsystem extends SubsystemBase {
     StatusCode status = m_coralArmMotor.getConfigurator().apply(coralArmConfig);
 
     if (! status.isOK() ) {
-      System.out.println("Failed to apply INNER_ARM configs. Error code: "+status.toString());
+      System.out.println("Failed to apply CORAL_ARM configs. Error code: "+status.toString());
     }
   }
 

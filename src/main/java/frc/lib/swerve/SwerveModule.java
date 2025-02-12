@@ -6,8 +6,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.wpilibj.Encoder;
+//import edu.wpi.first.units.measure.Angle;
+//import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,11 +28,11 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.StatusCode;
-import com.ctre.phoenix6.StatusSignal;
+//import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 
-import com.revrobotics.spark.SparkMax;
+/*import com.revrobotics.spark.SparkMax;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -43,7 +43,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
-
+*/
 // TODO: Functions may still be named Neo, but they are updated for the TalonFX library.
 
 public class SwerveModule {
@@ -59,12 +59,12 @@ public class SwerveModule {
     // private final SparkClosedLoopController m_steerController;
     private final CANcoder m_absWheelAngleCANcoder;
     private final TalonFX m_driveMotor;
-
+/* 
     private SparkBaseConfig m_sparkBaseConfig;
     private ResetMode m_sparkResetMode;
     private SparkMaxConfig m_sparkMaxConfig = new SparkMaxConfig();
     private ClosedLoopConfig m_closedLoopConfig = new ClosedLoopConfig();
-
+*/
     // Declare Phoenix6 control request objects for the Drive Motor:
     // Open loop control output to the drive motor is one shot DutyCycle, and must be 
     // repeated every loop to avoid safety timeout
@@ -119,7 +119,7 @@ public class SwerveModule {
 
         /* Angle Motor Config */
         m_steerMotor = new TalonFX(m_moduleConstants.STEER_MOTOR_ID);
-        configDriveMotor();
+        configSteerMotor();
 
         m_lastAngle = getState().angle.getDegrees();
 
@@ -176,7 +176,7 @@ public class SwerveModule {
         // Drive using VelocityVoltage PID, using Falcon encoder units and default Slot0
         m_steerClosedLoop.Position = desiredAngle * SDC.MPS_TO_TALONFX_RPS_FACTOR;
         m_positionFeedForward = feedforward.calculate(desiredAngle);
-        m_steerMotor.setControl(m_steerClosedLoop.withFeedForward(m_velocityFeedForward));
+        m_steerMotor.setControl(m_steerClosedLoop.withFeedForward(m_positionFeedForward));
     }
 
     public void testDriveMotorRotation() {
@@ -302,13 +302,13 @@ public class SwerveModule {
      public void speedUpCancoderBusReports() {
         m_absWheelAngleCANcoder.getPosition().setUpdateFrequency(100);
      }
-*/
+
     private void reportRevError(REVLibError errorCode) {
         if (errorCode != REVLibError.kOk) {
             SmartDashboard.putString("Mod "+m_modNum+"RevLibError = ", errorCode.toString());
         }
     }
-
+*/
     private void configSteerMotor(){
         var openLoopConfig = new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(0)
                                                        .withVoltageOpenLoopRampPeriod(SDC.OPEN_LOOP_RAMP_PERIOD);

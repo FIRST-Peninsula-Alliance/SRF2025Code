@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 //import frc.robot.NotableConstants.SC;
-import frc.robot.autos.*;
+//import frc.robot.autos.*;
 import frc.robot.commands.*;
 // import frc.robot.subsystems.MasterArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -30,7 +30,7 @@ public class RobotContainer {
     private SwerveParkCmd            m_parkCmd;
 
     // Declare handles for choosable autonomous Commands
-    private TestSquareAuto           m_test_square_auto;
+    //private TestSquareAuto           m_test_square_auto;
 
     // Create sendable choosers for starting position and desired Auto routine
     private static SendableChooser<Command> m_autoRoutineChooser = new SendableChooser<>();
