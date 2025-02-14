@@ -30,6 +30,7 @@ public class ClimberSubsystem extends SubsystemBase {
   public final TalonFX m_winchMotor;
   public final Servo m_hingeLinearServoMotor;
   public final Servo m_hookServoMotor;
+  public final Servo m_springServoMotor;
   private DigitalInput m_climberLimitSwitch; 
   private DutyCycleOut m_climbRequest = new DutyCycleOut(CC.CLIMBER_DUTY_CYCLE)
                                                             .withEnableFOC(true)
@@ -41,10 +42,12 @@ public class ClimberSubsystem extends SubsystemBase {
     m_winchMotor = new TalonFX(CSC.WINCH_MOTOR_CAN_ID);
     m_hingeLinearServoMotor = new Servo(CSC.LINEAR_SERVO_CAN_ID);
     m_hookServoMotor = new Servo(CSC.HOOK_SERVO_CAN_ID);
+    m_springServoMotor = new Servo(CSC.SPRING_SERVO_CAN_ID);
     m_climberLimitSwitch = new DigitalInput(1);
 
     configLinearServoMotor(m_hingeLinearServoMotor, "Hinge Pin Servo");
     configHookServoMotor(m_hookServoMotor, "Climber Hook Servo");
+    configSpringServoMotor(m_springServoMotor, "Climber Gas Spring Servo");
     configWinchMotor();
   }
 
@@ -62,6 +65,19 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void configHookServoMotor(Servo servo, String servoName) {
+    servo.setPeriodMultiplier(PeriodMultiplier.k1X);
+    servo.enableDeadbandElimination(true);
+    //PWMConfigDataResult a = aGripServo.getRawBounds();
+    //String out = " Max "+a.max+" DB Max "+a.deadbandMax+
+    //             " Cen "+a.center+" DB Min "+a.deadbandMin+" Min "+a.min;
+    //SmartDashboard.putString(servoName, out);
+    //SmartDashboard.putNumber(servoName+"raw ", aGripServo.getRaw());
+    //SmartDashboard.putNumber(servoName+"pos ", aGripServo.getPosition());
+    SmartDashboard.putNumber(servoName+" spd ", servo.getSpeed());
+    SmartDashboard.putNumber(servoName+" deg ", servo.getAngle());
+  }
+
+  public void configSpringServoMotor(Servo servo, String servoName) {
     servo.setPeriodMultiplier(PeriodMultiplier.k1X);
     servo.enableDeadbandElimination(true);
     //PWMConfigDataResult a = aGripServo.getRawBounds();

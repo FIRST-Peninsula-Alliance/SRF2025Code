@@ -3,6 +3,7 @@ package frc.robot;
 import java.text.DecimalFormat;
 import java.util.Map;
 
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 // import com.ctre.phoenix6.configs.MagnetSensorConfigs.AbsoluteSensorDiscontinuityPoint;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -572,6 +573,12 @@ public final class Constants {
         public static final double ALGAE_WHEEL_PEAK_CURRENT_LIMIT = 36.0;
         public static final double ALGAE_WHEEL_PEAK_CURRENT_DURATION = 0.1;
         public static final boolean ALGAE_WHEEL_ENABLE_CURRENT_LIMIT = true;
+            public static final SupplyCurrentLimitConfiguration ALGAE_WHEEL_CURRENT_LIMIT = 
+            new SupplyCurrentLimitConfiguration(
+                ALGAE_WHEEL_ENABLE_CURRENT_LIMIT,                      // launchEnableCurrentLimit, 
+                ALGAE_WHEEL_CONT_CURRENT_LIMIT,                  // launchContinuousCurrentLimit,
+                ALGAE_WHEEL_PEAK_CURRENT_LIMIT,       // launchPeakCurrentLimit, 
+                ALGAE_WHEEL_PEAK_CURRENT_DURATION);        // launchPeakCurrentDuration);
 
         public static final double ALGAE_WHEEL_KP = 40.0;
         public static final double ALGAE_WHEEL_KI = 0.5;
@@ -580,6 +587,7 @@ public final class Constants {
         public static final double ALGAE_WHEEL_KV = 4.0;
         public static final double ALGAE_WHEEL_KA = 0.1;
         public static final double ALGAE_WHEEL_KG = 0.5;
+        public static final double ALGAE_WHEEL_KF = 0.0;
 
         public static final double ALGAE_WHEEL_MOTION_MAGIC_VEL = 5.0;
         public static final double ALGAE_WHEEL_MOTION_MAGIC_ACCEL = 8.0;
@@ -647,6 +655,7 @@ public final class Constants {
         public static final int WINCH_MOTOR_CAN_ID = 15;
         public static final int LINEAR_SERVO_CAN_ID = 16;
         public static final int HOOK_SERVO_CAN_ID = 17;
+        public static final int SPRING_SERVO_CAN_ID = 18;
 
         public static final double WINCH_CLOSED_LOOP_RAMP_PERIOD = 0.5;
         public static final double WINCH_CANCODER_TO_AXLE_RATIO = 20/18;

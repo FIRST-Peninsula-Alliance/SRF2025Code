@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -24,7 +26,7 @@ import frc.robot.Constants.AAC;
 public class AlgaeArmSubsystem extends SubsystemBase {
   /** Creates a new algaeArmSubsystem. */
   public final TalonFX m_algaeArmMotor; 
-  public final TalonFX m_algaeWheelMotor;
+  public final TalonSRX m_algaeWheelMotor;
   private double m_algaeArmSetpoint;
   private final MotionMagicVoltage m_algaeArmMagicCtrl = new MotionMagicVoltage(0.0)
                                                                                 .withSlot(0)
@@ -32,7 +34,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
 
   public AlgaeArmSubsystem() {
     m_algaeArmMotor = new TalonFX(AAC.ALGAE_MOTOR_CAN_ID);
-    m_algaeWheelMotor = new TalonFX(AAC.ALGAE_WHEEL_MOTOR_CAN_ID);
+    m_algaeWheelMotor = new TalonSRX(AAC.ALGAE_WHEEL_MOTOR_CAN_ID);
     configAlgaeWheelMotor();
     configAlgaeArmMotor();
   }
@@ -43,45 +45,16 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   }
 
   private void configAlgaeWheelMotor() {
-    var closedLoopConfig = new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(0)
-                                                        .withVoltageClosedLoopRampPeriod(AAC.ALGAE_WHEEL_CLOSED_LOOP_RAMP_PERIOD)
-                                                        .withTorqueClosedLoopRampPeriod(0);
-    var feedbackConfig = new FeedbackConfigs().withFeedbackSensorSource(FeedbackSensorSourceValue.FusedCANcoder)
-                                              .withFeedbackRemoteSensorID(AAC.ALGAE_WHEEL_MOTOR_CAN_ID)
-                                              .withSensorToMechanismRatio(AAC.ALGAE_WHEEL_CANCODER_TO_AXLE_RATIO)
-                                              .withRotorToSensorRatio(AAC.ALGAE_WHEEL_ROTOR_TO_CANCODER_RATIO);
-    var motorOutputConfig = new MotorOutputConfigs().withNeutralMode(AAC.ALGAE_WHEEL_MOTOR_NEUTRAL_MODE)
-                                                    .withInverted(AAC.ALGAE_WHEEL_MOTOR_INVERT)
-                                                    .withPeakForwardDutyCycle(AAC.ALGAE_WHEEL_OUTPUT_LIMIT_FACTOR)
-                                                    .withPeakReverseDutyCycle(-AAC.ALGAE_WHEEL_OUTPUT_LIMIT_FACTOR);
-                                                    //.withDutyCycleNeutralDeadband(.001);
-    var currentLimitConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(AAC.ALGAE_WHEEL_CONT_CURRENT_LIMIT)
-                                                       .withSupplyCurrentLowerLimit(AAC.ALGAE_WHEEL_PEAK_CURRENT_LIMIT)
-                                                       .withSupplyCurrentLowerTime(AAC.ALGAE_WHEEL_PEAK_CURRENT_DURATION)
-                                                       .withSupplyCurrentLimitEnable(AAC.ALGAE_WHEEL_ENABLE_CURRENT_LIMIT);
-    Slot0Configs pid0Config = new Slot0Configs().withKP(AAC.ALGAE_WHEEL_KP)
-                                                .withKI(AAC.ALGAE_WHEEL_KI)
-                                                .withKD(AAC.ALGAE_WHEEL_KD)
-                                                .withKS(AAC.ALGAE_WHEEL_KS)
-                                                .withKV(AAC.ALGAE_WHEEL_KV)
-                                                .withKA(AAC.ALGAE_WHEEL_KA)
-                                                .withKG(AAC.ALGAE_WHEEL_KG).withGravityType(GravityTypeValue.Arm_Cosine);
-    MotionMagicConfigs  motionMagicConfig = new MotionMagicConfigs().withMotionMagicCruiseVelocity(AAC.ALGAE_WHEEL_MOTION_MAGIC_VEL)
-                                                                    .withMotionMagicAcceleration(AAC.ALGAE_WHEEL_MOTION_MAGIC_ACCEL)
-                                                                    .withMotionMagicJerk(AAC.ALGAE_WHEEL_MOTION_MAGIC_JERK)
-                                                                    .withMotionMagicExpo_kA(AAC.ALGAE_WHEEL_MOTION_MAGIC_kA)
-                                                                    .withMotionMagicExpo_kA(AAC.ALGAE_WHEEL_MOTION_MAGIC_kV);
-    var algaeWheelConfig = new TalonFXConfiguration().withFeedback(feedbackConfig)
-                                                   .withMotorOutput(motorOutputConfig)
-                                                   .withCurrentLimits(currentLimitConfig)
-                                                   .withClosedLoopRamps(closedLoopConfig)
-                                                   .withSlot0(pid0Config)
-                                                   .withMotionMagic(motionMagicConfig);
-    StatusCode status = m_algaeArmMotor.getConfigurator().apply(algaeWheelConfig);
-
-    if (! status.isOK() ) {
-      System.out.println("Failed to apply ALGAE_WHEEL_MOTOR configs. Error code: "+status.toString());
-    }
+    m_algaeWheelMotor.configFactoryDefault();
+    m_algaeWheelMotor.configSupplyCurrentLimit(AAC.ALGAE_WHEEL_CURRENT_LIMIT);
+    m_algaeWheelMotor.setInverted(true);
+    m_algaeWheelMotor.setNeutralMode(NeutralMode.Brake);
+    m_algaeWheelMotor.config_kP(0, AAC.ALGAE_WHEEL_KP);
+    m_algaeWheelMotor.config_kI(0, AAC.ALGAE_WHEEL_KI);
+    m_algaeWheelMotor.config_kD(0, AAC.ALGAE_WHEEL_KD);
+    m_algaeWheelMotor.config_kF(0, AAC.ALGAE_WHEEL_KF);
+    m_algaeWheelMotor.configPeakOutputForward(AAC.ALGAE_WHEEL_OUTPUT_LIMIT_FACTOR);
+    m_algaeWheelMotor.configPeakOutputReverse(-AAC.ALGAE_WHEEL_OUTPUT_LIMIT_FACTOR);
   }
 
   private void configAlgaeArmMotor() {
