@@ -42,7 +42,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     configElevatorCANCoder();
     configElevatorMotor();
   }
-
+  
   public void GoToPosition(double position) {
     m_elevatorSetpoint = position;
     m_elevatorMotor.setControl(m_elevatorMagicCtrl.withPosition(m_elevatorSetpoint));

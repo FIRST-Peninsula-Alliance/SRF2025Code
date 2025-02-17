@@ -40,9 +40,9 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public ClimberSubsystem() {
     m_winchMotor = new TalonFX(CSC.WINCH_MOTOR_CAN_ID);
-    m_hingeLinearServoMotor = new Servo(CSC.LINEAR_SERVO_CAN_ID);
-    m_hookServoMotor = new Servo(CSC.HOOK_SERVO_CAN_ID);
-    m_springServoMotor = new Servo(CSC.SPRING_SERVO_CAN_ID);
+    m_hingeLinearServoMotor = new Servo(CSC.LINEAR_SERVO_PWM_CHANNEL);
+    m_hookServoMotor = new Servo(CSC.HOOK_SERVO_PWM_CHANNEL);
+    m_springServoMotor = new Servo(CSC.SPRING_SERVO_PWM_CANNEL);
     m_climberLimitSwitch = new DigitalInput(1);
 
     configLinearServoMotor(m_hingeLinearServoMotor, "Hinge Pin Servo");

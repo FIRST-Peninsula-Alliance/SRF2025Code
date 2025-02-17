@@ -472,9 +472,10 @@ public final class Constants {
      * Coral Arm Constants 
      ***********************************************************/
     public static final class CAC {
+        //TODO: add value for servo PWM channel
         public static final int CORAL_MOTOR_CAN_ID = 11;
         public static final int CORAL_CANCODER_ID = 11;
-        public static final int CORAL_ARM_SERVO_CAN_ID = 12;
+        public static final int CORAL_ARM_SERVO_PWM_CHANNEL = 0;
 
         public static final int CORAL_ARM_CANCODER_RANGE = 1;
         public static final double CORAL_ARM_CLOSED_LOOP_RAMP_PERIOD = 0.5;
@@ -511,13 +512,10 @@ public final class Constants {
         public static final long CORAL_ARM_SCORE_POSITION = 0;
         public static final long PIN_SERVO_POSITION = 0;
 
-        public static final double PIN_SERVO_MAX = 2.2;
+        public static final double PIN_SERVO_MAX = 2.0;
         public static final double PIN_SERVO_CENTER = 1.5;
         public static final double PIN_SERVO_DEADBAND = 0.002;
         public static final double PIN_SERVO_MIN = 0.8;
-
-            //placeholder value
-        public static final int CORAL_ARM_SERVO_PWM_CHANNEL = 1;
 
     }
 
@@ -655,10 +653,12 @@ public final class Constants {
      * Climb Subsystem Constants
      ***********************************************************/
     public static final class CSC {
+        //TODO: set value for servo PWM channels
         public static final int WINCH_MOTOR_CAN_ID = 15;
-        public static final int LINEAR_SERVO_CAN_ID = 16;
-        public static final int HOOK_SERVO_CAN_ID = 17;
-        public static final int SPRING_SERVO_CAN_ID = 18;
+        public static final int LINEAR_SERVO_PWM_CHANNEL = 0;
+        public static final int HOOK_SERVO_PWM_CHANNEL = 0;
+        public static final int SPRING_SERVO_PWM_CANNEL = 0;
+        
 
         public static final double WINCH_CLOSED_LOOP_RAMP_PERIOD = 0.5;
         public static final double WINCH_CANCODER_TO_AXLE_RATIO = 20/18;

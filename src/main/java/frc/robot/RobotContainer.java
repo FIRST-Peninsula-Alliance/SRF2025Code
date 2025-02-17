@@ -11,14 +11,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 //import frc.robot.NotableConstants.SC;
 //import frc.robot.autos.*;
 import frc.robot.commands.*;
-// import frc.robot.subsystems.MasterArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 import frc.robot.subsystems.CoralArmSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
-// import frc.robot.subsystems.ClimbSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
