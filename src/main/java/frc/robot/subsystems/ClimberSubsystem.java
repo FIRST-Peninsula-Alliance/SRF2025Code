@@ -11,12 +11,10 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PWM.PeriodMultiplier;
@@ -107,13 +105,6 @@ public class ClimberSubsystem extends SubsystemBase {
                                                        .withSupplyCurrentLowerLimit(CSC.WINCH_PEAK_CURRENT_LIMIT)
                                                        .withSupplyCurrentLowerTime(CSC.WINCH_PEAK_CURRENT_DURATION)
                                                        .withSupplyCurrentLimitEnable(CSC.WINCH_ENABLE_CURRENT_LIMIT);
-    Slot0Configs pid0Config = new Slot0Configs().withKP(CSC.WINCH_KP)
-                                                .withKI(CSC.WINCH_KI)
-                                                .withKD(CSC.WINCH_KD)
-                                                .withKS(CSC.WINCH_KS)
-                                                .withKV(CSC.WINCH_KV)
-                                                .withKA(CSC.WINCH_KA)
-                                                .withKG(CSC.WINCH_KG).withGravityType(GravityTypeValue.Arm_Cosine);
     MotionMagicConfigs  motionMagicConfig = new MotionMagicConfigs().withMotionMagicCruiseVelocity(CSC.WINCH_MOTION_MAGIC_VEL)
                                                                     .withMotionMagicAcceleration(CSC.WINCH_MOTION_MAGIC_ACCEL)
                                                                     .withMotionMagicJerk(CSC.WINCH_MOTION_MAGIC_JERK)
@@ -123,7 +114,6 @@ public class ClimberSubsystem extends SubsystemBase {
                                                    .withMotorOutput(motorOutputConfig)
                                                    .withCurrentLimits(currentLimitConfig)
                                                    .withClosedLoopRamps(closedLoopConfig)
-                                                   .withSlot0(pid0Config)
                                                    .withMotionMagic(motionMagicConfig);
     StatusCode status = m_winchMotor.getConfigurator().apply(coralArmConfig);
 
@@ -148,6 +138,14 @@ public class ClimberSubsystem extends SubsystemBase {
     m_hookServoMotor.set(CSC.HOOK_SERVO_OPEN_POSITION);
   }
 
+  public void DisengageSpringServo() {
+    m_springServoMotor.set(CSC.SPRING_SERVO_DISENGAGED_POSITION);
+  }
+
+  public void EngageSpringServo() {
+    m_springServoMotor.set(CSC.SPRING_SERVO_ENGAGED_POSITION);
+  }
+
   public void runWinch() {
     m_climbMotorFactor = 1.0;
     m_climbStartTime = System.currentTimeMillis();
@@ -161,7 +159,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     m_winchMotor.setControl(m_climbRequest.withOutput(CC.CLIMBER_DUTY_CYCLE * 
-                                                      m_climbMotorFactor )
+                                                      m_climbMotorFactor)
                                                       .withEnableFOC(true)
                                                       .withUpdateFreqHz(50));
 
