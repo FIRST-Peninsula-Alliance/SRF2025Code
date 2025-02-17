@@ -516,6 +516,9 @@ public final class Constants {
         public static final double PIN_SERVO_DEADBAND = 0.002;
         public static final double PIN_SERVO_MIN = 0.8;
 
+            //placeholder value
+        public static final int CORAL_ARM_SERVO_PWM_CHANNEL = 1;
+
     }
 
     /***********************************************************

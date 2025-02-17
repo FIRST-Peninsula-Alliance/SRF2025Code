@@ -13,6 +13,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 // import frc.robot.subsystems.MasterArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.AlgaeArmSubsystem;
+import frc.robot.subsystems.CoralArmSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 // import frc.robot.subsystems.ClimbSubsystem;
 
 /**
@@ -26,6 +31,11 @@ public class RobotContainer {
     private SwerveSubsystem          m_swerveSubsystem;
     // private MasterArmSubsystem       m_masterArmSubsystem;
     // private ClimbSubsystem           m_climbSubsystem;
+    private ElevatorSubsystem       m_elevatorSubsytem;
+    private ClimberSubsystem        m_climberSubsystem;
+    private CoralArmSubsystem       m_coralArmSubsystem;
+    private AlgaeArmSubsystem       m_algaeArmSubsystem;
+    private VisionSubsystem         m_visionSubsystem;
 
     private SwerveParkCmd            m_parkCmd;
 
