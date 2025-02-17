@@ -48,8 +48,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevatorMotor.setControl(m_elevatorMagicCtrl.withPosition(m_elevatorSetpoint));
   }
 
-  public double getAbsCoralArmPos() {
-    return(m_elevatorCANCoder.getAbsolutePosition().getValueAsDouble());
+  public double getCoralArmPos() {
+    return(m_elevatorCANCoder.getPosition().getValueAsDouble());
   }
 
   private void configElevatorCANCoder() {

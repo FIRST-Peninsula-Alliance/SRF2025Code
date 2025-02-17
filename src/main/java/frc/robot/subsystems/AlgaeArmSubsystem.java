@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.StatusCode;
@@ -49,10 +50,6 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     m_algaeWheelMotor.configSupplyCurrentLimit(AAC.ALGAE_WHEEL_CURRENT_LIMIT);
     m_algaeWheelMotor.setInverted(true);
     m_algaeWheelMotor.setNeutralMode(NeutralMode.Brake);
-    m_algaeWheelMotor.config_kP(0, AAC.ALGAE_WHEEL_KP);
-    m_algaeWheelMotor.config_kI(0, AAC.ALGAE_WHEEL_KI);
-    m_algaeWheelMotor.config_kD(0, AAC.ALGAE_WHEEL_KD);
-    m_algaeWheelMotor.config_kF(0, AAC.ALGAE_WHEEL_KF);
     m_algaeWheelMotor.configPeakOutputForward(AAC.ALGAE_WHEEL_OUTPUT_LIMIT_FACTOR);
     m_algaeWheelMotor.configPeakOutputReverse(-AAC.ALGAE_WHEEL_OUTPUT_LIMIT_FACTOR);
   }
@@ -109,6 +106,14 @@ public class AlgaeArmSubsystem extends SubsystemBase {
 
   public void GoToPickupPosition() {
     GoToPosition(AAC.ALGAE_ARM_PICKUP_POSITION);
+  }
+
+  public void RunAlgaeWheels() {
+    m_algaeWheelMotor.set(ControlMode.PercentOutput, .5);
+  }
+
+  public void StopWheels() {
+    m_algaeWheelMotor.set(ControlMode.PercentOutput, 0);
   }
 
   @Override

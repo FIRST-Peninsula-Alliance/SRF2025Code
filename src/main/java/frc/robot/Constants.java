@@ -653,9 +653,9 @@ public final class Constants {
      ***********************************************************/
     public static final class CSC {
         public static final int WINCH_MOTOR_CAN_ID = 15;
-        public static final int LINEAR_SERVO_CAN_ID = 16;
-        public static final int HOOK_SERVO_CAN_ID = 17;
-        public static final int SPRING_SERVO_CAN_ID = 18;
+        public static final int LINEAR_SERVO_PWM_PORT = 1;
+        public static final int HOOK_SERVO_PWM_PORT = 2;
+        public static final int SPRING_SERVO_PWM_PORT = 3;
 
         public static final double WINCH_CLOSED_LOOP_RAMP_PERIOD = 0.5;
         public static final double WINCH_CANCODER_TO_AXLE_RATIO = 20/18;
@@ -687,6 +687,8 @@ public final class Constants {
         public static final double HINGE_SERVO_CLOSED_POSITION = 0.0;
         public static final double HOOK_SERVO_CLOSED_POSITION = 0.0;
         public static final double HOOK_SERVO_OPEN_POSITION = 0.0;
+        public static final double SPRING_SERVO_DISENGAGED_POSITION = 0.0;
+        public static final double SPRING_SERVO_ENGAGED_POSITION = 0.0;
 
         public static final double CLIMB_WINCH_TIMEOUT = 0.0;
     }

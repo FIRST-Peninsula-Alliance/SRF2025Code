@@ -205,17 +205,17 @@ public class SwerveModule {
         return new Rotation2d(Math.toRadians(angleInDegrees));
     }
 
-    // setNeoPosDeg is called from resetToAbsolute. The NEO encoder is now configured to 
+    // setFalconPosDeg is called from resetToAbsolute. The Falcon encoder is now configured to 
     // use native units (deg), so the angle argument must be in units of degrees (range 0-360)
     // reflecting the actual module direction (relative to the robot) upon initialization.
     // With the module aimed straight ahead, bevel gear to the left, the angle should be 0.0
-    public void setNeoPosDeg(double angle) {
+    public void setFalconPosDeg(double angle) {
         m_steerMotor.setPosition((angle/360)*2048); // add to constants
     }
 
-    // getNeoPosDeg returns the current value of the Neo's integrated encoder (initialized 
+    // getFalconPosDeg returns the current value of the Falcon's integrated encoder (initialized 
     // at startup to the module's correct absolute direction) in degrees, in the range 0 to 360.
-    public double getNeoPosDeg() {
+    public double getFalconPosDeg() {
         return normalizeAngle0To360(m_steerMotor.getPosition().getValueAsDouble()); // TODO: looks here for steering issues
     }
 
@@ -236,7 +236,7 @@ public class SwerveModule {
         return ((angle % 360) + 360) % 360;
     }
 
-    public double getRawNeoPos() {
+    public double getRawFalconPos() {
         return m_steerMotor.getPosition().getValueAsDouble();
     }
 
@@ -276,7 +276,7 @@ public class SwerveModule {
         double CANcoderOnReset = getCANcoderDeg();
         double absModuleDegOnReset = CANcoderOnReset - m_absAngleOffset2d.getDegrees();
         //SmartDashboard.putString("Mod"+m_modNum+" CANcoder on Reset", F.df2.format(CANcoderOnReset));
-        setNeoPosDeg(absModuleDegOnReset);
+        setFalconPosDeg(absModuleDegOnReset);
     }
 
     private void configAbsWheelAngleCANcoder(){ 
@@ -449,7 +449,7 @@ public class SwerveModule {
         // CANcoder direction
         absCANcoderDegEntry.setString(F.df1.format(getCANcoderDeg()));
         // Current wheel direction
-        steerEncoderDegEntry.setString(F.df1.format(getNeoPosDeg())); 
+        steerEncoderDegEntry.setString(F.df1.format(getFalconPosDeg())); 
         // Wheel direction (steer) setpoint
         steerSetpointDegEntry.setString(F.df1.format(normalizeAngle0To360(m_lastAngle)));
         //steerSetpointDegEntry.setString(F.df1.format(m_lastAngle));
