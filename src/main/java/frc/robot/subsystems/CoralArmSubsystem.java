@@ -43,7 +43,7 @@ public class CoralArmSubsystem extends SubsystemBase {
     m_coralArmMotor = new TalonFX(CAC.CORAL_MOTOR_CAN_ID);
     m_coralArmCANcoder = new CANcoder(CAC.CORAL_CANCODER_ID, Constants.CANIVORE_BUS_NAME);
     m_pinServoMotor = new Servo(CAC.CORAL_ARM_SERVO_PWM_CHANNEL);
-    //TODO: Set proper value for CORAL_ARM_SERVO_PWM_CHANNEL
+    
     configPinServoMotor(m_pinServoMotor, "Collector Pin Servo");
     configCoralArmCANcoder();
     configCoralArmMotor();

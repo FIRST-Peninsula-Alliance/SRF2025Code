@@ -474,7 +474,7 @@ public final class Constants {
     public static final class CAC {
         public static final int CORAL_MOTOR_CAN_ID = 11;
         public static final int CORAL_CANCODER_ID = 11;
-        public static final int CORAL_ARM_SERVO_CAN_ID = 12;
+        public static final int CORAL_ARM_SERVO_PWM_CHANNEL = 1;
 
         public static final int CORAL_ARM_CANCODER_RANGE = 1;
         public static final double CORAL_ARM_CLOSED_LOOP_RAMP_PERIOD = 0.5;
@@ -516,8 +516,6 @@ public final class Constants {
         public static final double PIN_SERVO_DEADBAND = 0.002;
         public static final double PIN_SERVO_MIN = 0.8;
 
-            //placeholder value
-        public static final int CORAL_ARM_SERVO_PWM_CHANNEL = 1;
 
     }
 
