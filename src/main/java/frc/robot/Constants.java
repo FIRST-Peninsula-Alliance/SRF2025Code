@@ -510,7 +510,9 @@ public final class Constants {
 
         public static final long CORAL_ARM_SOURCE_POSITION = 0;
         public static final long CORAL_ARM_SCORE_POSITION = 0;
-        public static final long PIN_SERVO_POSITION = 0;
+        public static final long CORAL_ARM_SCORE_L1_POSITION = 0;
+        public static final long PIN_SERVO_OPEN_POSITION = 0;
+        public static final long PIN_SERVO_CLOSED_POSITION = 0;
 
         public static final double PIN_SERVO_MAX = 2.0;
         public static final double PIN_SERVO_CENTER = 1.5;
@@ -658,12 +660,10 @@ public final class Constants {
     public static final class CSC {
         //TODO: set value for servo PWM channels
         public static final int WINCH_MOTOR_CAN_ID = 15;
-        public static final int LINEAR_SERVO_PWM_CHANNEL = 0;
-        public static final int HOOK_SERVO_PWM_CHANNEL = 0;
-        public static final int SPRING_SERVO_PWM_CHANNEL = 0;
+        public static final int LINEAR_SERVO_PWM_CHANNEL = 1;
+        public static final int HOOK_SERVO_PWM_CHANNEL = 2;
+        public static final int SPRING_SERVO_PWM_CHANNEL = 3;
         
-
-
         public static final double WINCH_CLOSED_LOOP_RAMP_PERIOD = 0.5;
         public static final double WINCH_CANCODER_TO_AXLE_RATIO = 20/18;
         public static final double WINCH_ROTOR_TO_CANCODER_RATIO = 30.0;

@@ -43,7 +43,7 @@ public class CoralArmSubsystem extends SubsystemBase {
     m_coralArmMotor = new TalonFX(CAC.CORAL_MOTOR_CAN_ID);
     m_coralArmCANcoder = new CANcoder(CAC.CORAL_CANCODER_ID, Constants.CANIVORE_BUS_NAME);
     m_pinServoMotor = new Servo(CAC.CORAL_ARM_SERVO_PWM_CHANNEL);
-    
+
     configPinServoMotor(m_pinServoMotor, "Collector Pin Servo");
     configCoralArmCANcoder();
     configCoralArmMotor();
@@ -133,8 +133,16 @@ public class CoralArmSubsystem extends SubsystemBase {
   }
 
   public void ScoreCoral() {
-    m_pinServoMotor.setPosition(CAC.PIN_SERVO_POSITION);
+    m_pinServoMotor.setPosition(CAC.PIN_SERVO_OPEN_POSITION);
   } 
+
+  public void ResetPin() {
+    m_pinServoMotor.setPosition(CAC.PIN_SERVO_CLOSED_POSITION);
+  }
+
+  public void ScoreCoralL1() {
+    GoToPosition(CAC.CORAL_ARM_SCORE_L1_POSITION);
+  }
 
   @Override
   public void periodic() {

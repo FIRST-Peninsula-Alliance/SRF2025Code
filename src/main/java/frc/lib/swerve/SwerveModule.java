@@ -349,7 +349,7 @@ public class SwerveModule {
                                                           .withOpenLoopRamps(openLoopConfig)
                                                           .withClosedLoopRamps(closedLoopConfig)
                                                           .withSlot0(pid0Configs);
-        StatusCode status = m_driveMotor.getConfigurator().apply(swerveDriveConfig);
+        StatusCode status = m_steerMotor.getConfigurator().apply(swerveDriveConfig);
 
         if (! status.isOK() ) {
             SmartDashboard.putString("Failed to apply Steer configs in Mod "+m_modNum, " Error code: "+status.toString());
