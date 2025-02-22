@@ -1,4 +1,5 @@
 package frc.lib.swerve;
+//import frc.robot.Constants;
 import frc.robot.Constants.*;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -44,7 +45,7 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 */
-// TODO: Functions may still be named Neo, but they are updated for the TalonFX library.
+
 
 public class SwerveModule {
     public  int m_modNum;
@@ -111,9 +112,9 @@ public class SwerveModule {
         m_absAngleOffset2d = moduleConstants.ABS_ANG_OFFSET2D;
         
         /* Angle Encoder Config */
-        m_absWheelAngleCANcoder = new CANcoder(m_moduleConstants.ENCODER_ID);
+        //m_absWheelAngleCANcoder = new CANcoder(m_moduleConstants.ENCODER_ID);
         // Use the following for use with CANivore
-        // m_absWheelAngleCANcoder = new CANcoder(ID, canbus);
+        m_absWheelAngleCANcoder = new CANcoder(m_moduleConstants.ENCODER_ID);
         // where canbus is a string identifying which canbus to use
         configAbsWheelAngleCANcoder();
 
@@ -128,8 +129,6 @@ public class SwerveModule {
         /* Drive Motor Config */
         m_driveMotor = new TalonFX(m_moduleConstants.DRIVE_MOTOR_ID);
         configDriveMotor();
-
-        m_lastAngle = getState().angle.getDegrees();
 
         setupModulePublishing();
     }

@@ -59,7 +59,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private GenericEntry        m_odometryHeadingEntry;
 
     public SwerveSubsystem() {
-        m_gyro = new Pigeon2(GC.PIGEON_2_CANID, Constants.CANIVORE_BUS_NAME);
+        m_gyro = new Pigeon2(GC.PIGEON_2_CANID);
         Pigeon2Configuration p2Config = new Pigeon2Configuration();
         m_gyro.getConfigurator().apply(p2Config);
         zeroGyro();
