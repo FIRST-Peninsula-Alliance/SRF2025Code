@@ -78,6 +78,9 @@ public final class Constants {
         public static final double COLSON_WHEEL_DIA_INCHES = 3.96;
         public static final double PARADE_WHEEL_DIA_INCHES = 3.75;
 
+        // The 2025 chassis (Crush) measures 28" x 32", and uses Mk4i-L2 modules.
+        // The wheel to wheel distances for Crush are: Width = 22.75", and length = 26.75"
+        // (wheels are inset just 2-5/8" from frame sides).
         // The 2024 chassis (Tsunami) measures 28" x 30", and uses Mk4i-L2 modules. 
         // The wheel to wheel disances for Tsunami are: Width = 22.75", and length = 24.75" 
         // (wheels are inset just 2-5/8" from frame sides).
@@ -94,6 +97,11 @@ public final class Constants {
         public static final double HALF_TTW = TSUNAMI_TRACK_WIDTH / 2.0;
         public static final double HALF_TWB = TSUNAMI_WHEEL_BASE / 2.0;
 
+        public static final double CRUSH_TRACK_WIDTH = Units.inchesToMeters(22.75); 
+        public static final double CRUSH_WHEEL_BASE = Units.inchesToMeters(26.75); 
+        public static final double HALF_CTW = TSUNAMI_TRACK_WIDTH / 2.0;
+        public static final double HALF_CWB = TSUNAMI_WHEEL_BASE / 2.0;
+
         public static final Translation2d BK_FL = new Translation2d(HALF_BKWB, HALF_BKTW);                                    
         public static final Translation2d BK_FR = new Translation2d(HALF_BKWB, -HALF_BKTW);
         public static final Translation2d BK_BL = new Translation2d(-HALF_BKWB, HALF_BKTW);
@@ -103,6 +111,11 @@ public final class Constants {
         public static final Translation2d T_FR = new Translation2d(HALF_TWB, -HALF_TTW);
         public static final Translation2d T_BL = new Translation2d(-HALF_TWB, HALF_TTW);
         public static final Translation2d T_BR = new Translation2d(-HALF_TWB, -HALF_TTW);
+
+        public static final Translation2d C_FL = new Translation2d(HALF_CWB, HALF_CTW);                                    
+        public static final Translation2d C_FR = new Translation2d(HALF_CWB, -HALF_CTW);
+        public static final Translation2d C_BL = new Translation2d(-HALF_CWB, HALF_CTW);
+        public static final Translation2d C_BR = new Translation2d(-HALF_CWB, -HALF_CTW);
 
         // Offsets for changing the center of rotation, if needed, are the same as the
         // Translation2d coordinates of each corner, plus the center of the robot.
@@ -120,6 +133,10 @@ public final class Constants {
         // Wheel angles for Tsunami "park"
         public static final double T_PARK_ANGLE_LEFT_DEG = 45.0;
         public static final double T_PARK_ANGLE_RIGHT_DEG = -45.0;
+
+        // Wheel angles for Crush "park"
+        public static final double C_PARK_ANGLE_LEFT_DEG = 45.0;
+        public static final double C_PARK_ANGLE_RIGHT_DEG = -45.0;
 
         // Differentiate SDS module types MK4 and MK4i
         // which are used with the Black Knight and Tsunami chassis, respectively
@@ -218,6 +235,53 @@ public final class Constants {
                                             steerMotorInvert, 
                                             canCoderDir);
         }
+
+        public static SDS_SwerveUnitParams SDSMK4i_CRUSH(double wheelDiaInches){
+            double wheelDiaM = Units.inchesToMeters(wheelDiaInches);
+            Translation2d relPos2D_FL = C_FL;
+            Translation2d relPos2D_FR = C_FR;
+            Translation2d relPos2D_BL = C_BL;
+            Translation2d relPos2D_BR = C_BR;
+            // TODO: measure and enter Crush absolute wheel angle offsets, in degrees, here
+            Rotation2d absOffsetFL = Rotation2d.fromDegrees(72.2);
+            Rotation2d absOffsetFR = Rotation2d.fromDegrees(219.5);
+            Rotation2d absOffsetBL = Rotation2d.fromDegrees(278.0);
+            Rotation2d absOffsetBR = Rotation2d.fromDegrees(313.8);
+            double parkAngleLeftDeg = C_PARK_ANGLE_LEFT_DEG;
+            double parkAngleRightDeg = C_PARK_ANGLE_RIGHT_DEG;
+            double steerGearRatio = ((150.0 / 7.0) / 1.0);
+            // L2 Drive Gear Ratio for both the MK4 and MK4i module is 6.75 
+            // and SRF only uses the L2 ratio.
+            double driveL2GearRatio = (6.75 / 1.0);
+            double steerKP = 75;             // was .3 for angles in radians
+            double steerKI = 0.0;
+            double steerKD = 0.0;
+            double steerKF = 0.0;
+            InvertedValue driveMotorInvert = InvertedValue.Clockwise_Positive;   // Tsunami is inverted from Black Knight
+            InvertedValue steerMotorInvert = InvertedValue.Clockwise_Positive; //TODO: Look here if steering is inverted
+            SensorDirectionValue canCoderDir = SensorDirectionValue.CounterClockwise_Positive;
+            
+            return new SDS_SwerveUnitParams(wheelDiaM,
+                                            relPos2D_FL,
+                                            relPos2D_FR,
+                                            relPos2D_BL,
+                                            relPos2D_BR,
+                                            absOffsetFL,
+                                            absOffsetFR,
+                                            absOffsetBL,
+                                            absOffsetBR,
+                                            parkAngleLeftDeg,
+                                            parkAngleRightDeg,
+                                            steerGearRatio, 
+                                            driveL2GearRatio, 
+                                            steerKP, 
+                                            steerKI, 
+                                            steerKD, 
+                                            steerKF, 
+                                            driveMotorInvert, 
+                                            steerMotorInvert, 
+                                            canCoderDir);
+        }
         
         // Set CHOOSEN_MODULE to either the SDSMK4 or SDSMK4I static method
          public static final SDS_SwerveUnitParams CHOOSEN_MODULE =  
@@ -225,7 +289,7 @@ public final class Constants {
                                                     // and pass the installed wheel
                                                     // diameter as an argument
                                                     // SDSMK4_BLACK_KNIGHT(PARADE_WHEEL_DIA_INCHES);
-                                                    SDSMK4i_TSUNAMI(COLSON_WHEEL_DIA_INCHES);
+                                                    SDSMK4i_CRUSH(COLSON_WHEEL_DIA_INCHES);
 
         // Now use CHOOSEN_MODULE to initialize generically named (and usable)
         // constants but which are specific to a given module type. 
@@ -276,6 +340,8 @@ public final class Constants {
         public static final double M_TO_TALONFX_ROT_FACTOR = 1.0 / WHEEL_CIRCUMFERENCE_M;
         public static final double TALONFX_RPS_TO_MPS_FACTOR = WHEEL_CIRCUMFERENCE_M;
         public static final double MPS_TO_TALONFX_RPS_FACTOR = 1.0 / WHEEL_CIRCUMFERENCE_M;
+        public static final double ANGLE_TO_ROTATION_FACTOR = 1.0 / 360.0;
+        public static final double FALCON_GEAR_RATIO = 150.0 / 7.0;
 
         // Current Limiting motor protection - same for both module types
         public static final double  DRIVE_SUPPLY_CURRENT_LIMIT          = 40.0;
@@ -520,7 +586,7 @@ public final class Constants {
         public static final double PIN_SERVO_MIN = 0.8;
 
             //placeholder value
-        public static final int CORAL_ARM_SERVO_PWM_CHANNEL = 1;
+        public static final int CORAL_ARM_SERVO_PWM_CHANNEL = 0;
 
     }
 
