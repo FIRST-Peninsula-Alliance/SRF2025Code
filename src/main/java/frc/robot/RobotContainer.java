@@ -165,6 +165,15 @@ public class RobotContainer {
         m_xbox.rightBumper().onTrue(new InstantCommand(()-> m_swerveSubsystem.setBRCenOfRotation()));
         m_xbox.rightBumper().onFalse(new InstantCommand(()-> m_swerveSubsystem.resetCenOfRotation()));
         */
+
+        // left and right trigger set coral arm positions 
+        // alt-right trigger score coral
+        m_xbox.leftTrigger().onTrue(new InstantCommand(() -> m_coralArmSubsystem.GoToSourcePosition()));
+        m_xbox.rightTrigger().onTrue(new InstantCommand(() -> m_coralArmSubsystem.GoToScorePosition()));
+        m_xbox.rightTrigger().and(ALT).onTrue(new InstantCommand(() -> m_coralArmSubsystem.ScoreCoral()));
+        // center coral arm position
+        m_xbox.leftTrigger().and(ALT).onTrue(new InstantCommand(() -> m_coralArmSubsystem.GoToCenterPosition()));
+
         // Left and right joystick buttons determine field oriented or robot oriented driving
         m_xbox.leftStick().and(ALT.negate()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setFieldOriented(true)));
         m_xbox.rightStick().and(ALT.negate()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setFieldOriented(false)));

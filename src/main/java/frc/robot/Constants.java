@@ -508,8 +508,10 @@ public final class Constants {
         public static final double CORAL_ARM_MOTION_MAGIC_kA = 0.0;
         public static final double CORAL_ARM_MOTION_MAGIC_kV = 0.0;
 
-        public static final long CORAL_ARM_SOURCE_POSITION = 0;
-        public static final long CORAL_ARM_SCORE_POSITION = 0;
+        public static final double CORAL_ARM_SOURCE_POSITION = -.125;
+        public static final double CORAL_ARM_SCORE_POSITION = .125;
+        public static final double CORAL_ARM_CENTER_POSITION = 0;
+
         public static final long PIN_SERVO_POSITION = 0;
 
         public static final double PIN_SERVO_MAX = 2.0;
