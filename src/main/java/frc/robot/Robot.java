@@ -37,9 +37,9 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     // Start outputting a camera feed to the dashboard.
-    UsbCamera camera = CameraServer.startAutomaticCapture();
-        camera.setResolution(320, 240);
-        camera.setFPS(15);
+    //UsbCamera camera = CameraServer.startAutomaticCapture();
+    //    camera.setResolution(320, 240);
+    //    camera.setFPS(15);
   }
 
   public static void startCtreSignalLogger() {

@@ -21,6 +21,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.CAC;
 import frc.robot.Constants.EC;
 //import frc.robot.NotableConstants.IAC;
@@ -48,7 +49,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevatorMotor.setControl(m_elevatorMagicCtrl.withPosition(m_elevatorSetpoint));
   }
 
-  public double getCoralArmPos() {
+  public double getElevatorPos() {
     return(m_elevatorCANCoder.getPosition().getValueAsDouble());
   }
 

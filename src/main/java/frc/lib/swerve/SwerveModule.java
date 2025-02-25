@@ -1,4 +1,5 @@
 package frc.lib.swerve;
+//import frc.robot.Constants;
 import frc.robot.Constants.*;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -30,6 +31,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.StatusCode;
 //import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 
 /*import com.revrobotics.spark.SparkMax;
@@ -44,7 +46,7 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 */
-// TODO: Functions may still be named Neo, but they are updated for the TalonFX library.
+
 
 public class SwerveModule {
     public  int m_modNum;
@@ -111,19 +113,15 @@ public class SwerveModule {
         m_absAngleOffset2d = moduleConstants.ABS_ANG_OFFSET2D;
         
         /* Angle Encoder Config */
-        m_absWheelAngleCANcoder = new CANcoder(m_moduleConstants.ENCODER_ID);
+        //m_absWheelAngleCANcoder = new CANcoder(m_moduleConstants.ENCODER_ID);
         // Use the following for use with CANivore
-        // m_absWheelAngleCANcoder = new CANcoder(ID, canbus);
+        m_absWheelAngleCANcoder = new CANcoder(m_moduleConstants.ENCODER_ID);
         // where canbus is a string identifying which canbus to use
         configAbsWheelAngleCANcoder();
 
         /* Angle Motor Config */
         m_steerMotor = new TalonFX(m_moduleConstants.STEER_MOTOR_ID);
         configSteerMotor();
-
-        m_lastAngle = getState().angle.getDegrees();
-
-        setupModulePublishing();
 
         /* Drive Motor Config */
         m_driveMotor = new TalonFX(m_moduleConstants.DRIVE_MOTOR_ID);
@@ -170,13 +168,8 @@ public class SwerveModule {
     }
 
     public void setAngle(double desiredAngle) {
-        // We can now setReference in native units (deg) since Neo encoder is
-        // configured to operate in degrees. No need to convert to NEO rev units
-        // When this is called by module angle test routines, there is no "optimized" turn limit
-        // Drive using VelocityVoltage PID, using Falcon encoder units and default Slot0
-        m_steerClosedLoop.Position = desiredAngle * SDC.MPS_TO_TALONFX_RPS_FACTOR;
-        m_positionFeedForward = feedforward.calculate(desiredAngle);
-        m_steerMotor.setControl(m_steerClosedLoop.withFeedForward(m_positionFeedForward));
+        m_steerClosedLoop.Position = desiredAngle * SDC.ANGLE_TO_ROTATION_FACTOR;
+        m_steerMotor.setControl(m_steerClosedLoop);
     }
 
     public void testDriveMotorRotation() {
@@ -316,6 +309,7 @@ public class SwerveModule {
         var closedLoopConfig = new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(0)
                                                            .withVoltageClosedLoopRampPeriod(SDC.CLOSED_LOOP_RAMP_PERIOD)
                                                            .withTorqueClosedLoopRampPeriod(0);
+        var closedLoopGeneralConfig = new ClosedLoopGeneralConfigs().withContinuousWrap(true);
         var feedbackConfig = new FeedbackConfigs().withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
                                                   .withSensorToMechanismRatio(SDC.STEER_GEAR_RATIO)
                                                   .withRotorToSensorRatio(1.0);
@@ -333,11 +327,11 @@ public class SwerveModule {
                                                         .withStatorCurrentLimitEnable(SDC.STEER_ENABLE_STATOR_CURRENT_LIMIT );
         Slot0Configs pid0Configs = new Slot0Configs().withKP(SDC.STEER_KP)
                                                      .withKI(SDC.STEER_KI)
-                                                     .withKD(SDC.STEER_KD)
-                                                     .withKS(SDC.STEER_KS)
-                                                     .withKV(SDC.STEER_KV)
-                                                     .withKA(SDC.STEER_KA)
-                                                     .withKG(SDC.STEER_KG);
+                                                     .withKD(SDC.STEER_KD);
+                                                    // .withKS(SDC.STEER_KS)
+                                                    // .withKV(SDC.STEER_KV)
+                                                    // .withKA(SDC.STEER_KA)
+                                                    // .withKG(SDC.STEER_KG);
                                                     // .withGravityType(   );
                                                     //    Elevator_Static if constant
                                                     //    Arm_Cosign if variable. Sensor must be 0 when mechanism
@@ -348,8 +342,9 @@ public class SwerveModule {
                                                           .withCurrentLimits(currentLimitConfig)
                                                           .withOpenLoopRamps(openLoopConfig)
                                                           .withClosedLoopRamps(closedLoopConfig)
+                                                          .withClosedLoopGeneral(closedLoopGeneralConfig)
                                                           .withSlot0(pid0Configs);
-        StatusCode status = m_driveMotor.getConfigurator().apply(swerveDriveConfig);
+        StatusCode status = m_steerMotor.getConfigurator().apply(swerveDriveConfig);
 
         if (! status.isOK() ) {
             SmartDashboard.putString("Failed to apply Steer configs in Mod "+m_modNum, " Error code: "+status.toString());
@@ -454,7 +449,7 @@ public class SwerveModule {
         steerSetpointDegEntry.setString(F.df1.format(normalizeAngle0To360(m_lastAngle)));
         //steerSetpointDegEntry.setString(F.df1.format(m_lastAngle));
         // SteerMotor PID applied ouutput    
-        steerPIDOutputEntry.setString(F.df2.format(m_steerMotor.getMotorOutputStatus()));
+        steerPIDOutputEntry.setString(F.df2.format(m_steerMotor.getMotorOutputStatus().getValueAsDouble()));
         // Wheel Speed
         wheelCurrSpeedEntry.setString(F.df1.format(getVelocityMPS()));
         // Wheel position, meters

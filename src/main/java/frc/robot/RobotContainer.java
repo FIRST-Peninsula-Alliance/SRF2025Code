@@ -53,6 +53,11 @@ public class RobotContainer {
         m_swerveSubsystem = new SwerveSubsystem();
         // m_masterArmSubsystem = new MasterArmSubsystem();
         // m_climbSubsystem = new ClimbSubsystem();
+        m_elevatorSubsytem = new ElevatorSubsystem();
+        m_climberSubsystem = new ClimberSubsystem();
+        m_coralArmSubsystem = new CoralArmSubsystem();
+        m_algaeArmSubsystem = new AlgaeArmSubsystem();
+        // m_visionSubsystem = new VisionSubsystem();
 
         m_swerveSubsystem.setDefaultCommand(
                 new DefaultDriveCmd(m_swerveSubsystem,
@@ -185,6 +190,12 @@ public class RobotContainer {
         m_xbox.rightBumper().and(ALT.negate()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(.5)));
         ALT.and(m_xbox.rightBumper()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(.2)));
         m_xbox.rightBumper().onFalse(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(1.0)));
+        m_xbox.a().and(ALT.negate()).onTrue(new InstantCommand(()-> m_coralArmSubsystem.GoToScorePosition()));
+        m_xbox.a().and(ALT.negate()).onTrue(new InstantCommand(()-> m_elevatorSubsytem.GoToL1CoralPosition()));
+        m_xbox.b().and(ALT.negate()).onTrue(new InstantCommand(()-> m_coralArmSubsystem.GoToScorePosition()));
+        m_xbox.b().and(ALT.negate()).onTrue(new InstantCommand(()-> m_elevatorSubsytem.GoToL2CoralPosition()));
+        m_xbox.y().and(ALT.negate()).onTrue(new InstantCommand(()-> m_coralArmSubsystem.GoToScorePosition()));
+        m_xbox.y().and(ALT.negate()).onTrue(new InstantCommand(()-> m_elevatorSubsytem.GoToL3CoralPosition()));
 
         // m_xbox.x().and(ALT.negate()).onTrue(new InstantCommand(()->m_masterArmSubsystem.cancelNoteAction()));
         // Swerve park 
