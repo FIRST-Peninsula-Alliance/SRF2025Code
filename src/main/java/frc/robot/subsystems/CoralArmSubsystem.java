@@ -116,6 +116,7 @@ public class CoralArmSubsystem extends SubsystemBase {
     if (! status.isOK() ) {
       System.out.println("Failed to apply CORAL_ARM configs. Error code: "+status.toString());
     }
+    SmartDashboard.putNumber("Coral Arm Motor Angle ROT", m_coralArmCANcoder.getAbsolutePosition().getValueAsDouble());
   }
 
   public void configPinServoMotor(Servo servo, String servoName) {
@@ -132,13 +133,18 @@ public class CoralArmSubsystem extends SubsystemBase {
   }
 
   public void GoToSourcePosition() {
+    ResetPin();
     GoToPosition(CAC.CORAL_ARM_SOURCE_POSITION);
   }
 
   public void GoToScorePosition() {
     GoToPosition(CAC.CORAL_ARM_SCORE_POSITION);
   }
-
+  public void GoToCenterPosition() { 
+    ResetPin();
+    GoToPosition(CAC.CORAL_ARM_CENTER_POSITION);
+  }
+  
   public void ScoreCoral() {
     m_pinServoMotor.setPosition(CAC.PIN_SERVO_OPEN_POSITION);
   } 
