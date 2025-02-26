@@ -35,7 +35,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
                                                                                 .withEnableFOC(true);
 
   public AlgaeArmSubsystem() {
-    m_algaeArmMotor = new TalonFX(AAC.ALGAE_MOTOR_CAN_ID);
+    m_algaeArmMotor = new TalonFX(AAC.ALGAE_MOTOR_CAN_ID, Constants.CAN_BUS_IN_USE);
     m_algaeWheelMotor = new TalonSRX(AAC.ALGAE_WHEEL_MOTOR_CAN_ID);
     configAlgaeWheelMotor();
     configAlgaeArmMotor();

@@ -30,7 +30,8 @@ public final class Constants {
      * Universal Constants
      ***************************************************/
     public static final String CANIVORE_BUS_NAME = "CANivore";
-    public static final String ROBO_RIO_BUS_NAME = "Rio";
+    public static final String ROBO_RIO_BUS_NAME = "rio";
+    public static final String CAN_BUS_IN_USE = "CANivore";
 
     public static final class F {
         // Formatters to control number of decimal places 
@@ -243,10 +244,10 @@ public final class Constants {
             Translation2d relPos2D_BL = C_BL;
             Translation2d relPos2D_BR = C_BR;
             // TODO: measure and enter Crush absolute wheel angle offsets, in degrees, here
-            Rotation2d absOffsetFL = Rotation2d.fromDegrees(72.2);
-            Rotation2d absOffsetFR = Rotation2d.fromDegrees(219.5);
-            Rotation2d absOffsetBL = Rotation2d.fromDegrees(278.0);
-            Rotation2d absOffsetBR = Rotation2d.fromDegrees(313.8);
+            Rotation2d absOffsetFL = Rotation2d.fromDegrees(287.8); //was 72.2 deg
+            Rotation2d absOffsetFR = Rotation2d.fromDegrees(140.5); //was 219.5 deg
+            Rotation2d absOffsetBL = Rotation2d.fromDegrees(82.0);  //was 278.0 deg
+            Rotation2d absOffsetBR = Rotation2d.fromDegrees(46.2);  //was 313.8 deg
             double parkAngleLeftDeg = C_PARK_ANGLE_LEFT_DEG;
             double parkAngleRightDeg = C_PARK_ANGLE_RIGHT_DEG;
             double steerGearRatio = ((150.0 / 7.0) / 1.0);
@@ -257,7 +258,7 @@ public final class Constants {
             double steerKI = 0.0;
             double steerKD = 0.0;
             double steerKF = 0.0;
-            InvertedValue driveMotorInvert = InvertedValue.Clockwise_Positive;   // Tsunami is inverted from Black Knight
+            InvertedValue driveMotorInvert = InvertedValue.Clockwise_Positive;   // Crush is inverted from Black Knight
             InvertedValue steerMotorInvert = InvertedValue.Clockwise_Positive; //TODO: Look here if steering is inverted
             SensorDirectionValue canCoderDir = SensorDirectionValue.CounterClockwise_Positive;
             
@@ -543,7 +544,7 @@ public final class Constants {
         public static final int CORAL_CANCODER_ID = 11;
         public static final int CORAL_ARM_SERVO_CAN_ID = 12;
 
-        public static final int CORAL_ARM_CANCODER_RANGE = 1;
+        public static final double CORAL_ARM_CANCODER_RANGE = .1;
         public static final double CORAL_ARM_CLOSED_LOOP_RAMP_PERIOD = 0.5;
         public static final double CORAL_ARM_CANCODER_MAGNET_OFFSET = 0.21096;
 
@@ -560,13 +561,13 @@ public final class Constants {
         public static final double CORAL_ARM_PEAK_CURRENT_DURATION = 0.1;
         public static final boolean CORAL_ARM_ENABLE_CURRENT_LIMIT = true;
 
-        public static final double CORAL_ARM_KP = 40.0;
-        public static final double CORAL_ARM_KI = 0.5;
-        public static final double CORAL_ARM_KD = 0.1;
-        public static final double CORAL_ARM_KS = 0.3;
+        public static final double CORAL_ARM_KP = 1.0;
+        public static final double CORAL_ARM_KI = 0.0;
+        public static final double CORAL_ARM_KD = 0.0;
+        public static final double CORAL_ARM_KS = 0.0175;
         public static final double CORAL_ARM_KV = 4.0;
         public static final double CORAL_ARM_KA = 0.1;
-        public static final double CORAL_ARM_KG = 0.5;
+        public static final double CORAL_ARM_KG = 0.04;
 
         public static final double CORAL_ARM_MOTION_MAGIC_VEL = 5.0;
         public static final double CORAL_ARM_MOTION_MAGIC_ACCEL = 8.0;
@@ -574,10 +575,11 @@ public final class Constants {
         public static final double CORAL_ARM_MOTION_MAGIC_kA = 0.0;
         public static final double CORAL_ARM_MOTION_MAGIC_kV = 0.0;
 
-        public static final double CORAL_ARM_SOURCE_POSITION = -.125;
-        public static final double CORAL_ARM_SCORE_POSITION = .125;
-        public static final double CORAL_ARM_CENTER_POSITION = 0;
-        public static final double PIN_SERVO_OPEN_POSITION = .5;
+        public static final double CORAL_ARM_SOURCE_POSITION = 0.25; //zero has to change to horizontal
+        public static final double CORAL_ARM_SCORE_POSITION = 0.41;  //zero has to change to horizontal
+        public static final double CORAL_ARM_SCORE_L1_POSITION = 0.5;//zero has to change to horizontal
+        public static final double CORAL_ARM_CENTER_POSITION = 0.33;
+        public static final double PIN_SERVO_OPEN_POSITION = 0;
         public static final double PIN_SERVO_CLOSED_POSITION = 0;
 
         public static final double PIN_SERVO_MAX = 2.0;

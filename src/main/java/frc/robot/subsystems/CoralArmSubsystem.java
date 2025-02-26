@@ -7,18 +7,24 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
+import com.ctre.phoenix6.configs.CommutationConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.ExternalFeedbackConfigs;
+//import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
+//import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+//import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.TalonFXS;
+import com.ctre.phoenix6.signals.AdvancedHallSupportValue;
+//import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.MotorArrangementValue;
 
 import edu.wpi.first.wpilibj.PWM.PeriodMultiplier;
 import edu.wpi.first.wpilibj.Servo;
@@ -30,7 +36,7 @@ import frc.robot.Constants.CAC;
 
 public class CoralArmSubsystem extends SubsystemBase {
   /** Creates a new CoralArmSubsystem. */
-  public final TalonFX m_coralArmMotor;
+  public final TalonFXS m_coralArmMotor;
   public final CANcoder m_coralArmCANcoder; 
   public final Servo m_pinServoMotor;
   private double m_coralArmSetpoint;
@@ -40,8 +46,8 @@ public class CoralArmSubsystem extends SubsystemBase {
   private double m_magnetOffset = CAC.CORAL_ARM_CANCODER_MAGNET_OFFSET;
 
   public CoralArmSubsystem() {
-    m_coralArmMotor = new TalonFX(CAC.CORAL_MOTOR_CAN_ID);
-    m_coralArmCANcoder = new CANcoder(CAC.CORAL_CANCODER_ID);
+    m_coralArmMotor = new TalonFXS(CAC.CORAL_MOTOR_CAN_ID, Constants.CAN_BUS_IN_USE);
+    m_coralArmCANcoder = new CANcoder(CAC.CORAL_CANCODER_ID, Constants.CAN_BUS_IN_USE);
     m_pinServoMotor = new Servo(CAC.CORAL_ARM_SERVO_PWM_CHANNEL);
 
     configPinServoMotor(m_pinServoMotor, "Collector Pin Servo");
@@ -73,10 +79,10 @@ public class CoralArmSubsystem extends SubsystemBase {
     var closedLoopConfig = new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(0)
                                                         .withVoltageClosedLoopRampPeriod(CAC.CORAL_ARM_CLOSED_LOOP_RAMP_PERIOD)
                                                         .withTorqueClosedLoopRampPeriod(0);
-    var feedbackConfig = new FeedbackConfigs().withFeedbackSensorSource(FeedbackSensorSourceValue.FusedCANcoder)
-                                              .withFeedbackRemoteSensorID(CAC.CORAL_MOTOR_CAN_ID)
-                                              .withSensorToMechanismRatio(CAC.CORAL_ARM_CANCODER_TO_AXLE_RATIO)
-                                              .withRotorToSensorRatio(CAC.CORAL_ARM_ROTOR_TO_CANCODER_RATIO);
+    var commutationConfig = new CommutationConfigs().withAdvancedHallSupport(AdvancedHallSupportValue.Enabled)
+                                                    .withMotorArrangement(MotorArrangementValue.NEO_JST);
+    var externalFeedbackConfig = new ExternalFeedbackConfigs().withFusedCANcoder(m_coralArmCANcoder)
+                                                              .withSensorToMechanismRatio(1); //TODO: add to constants
     var motorOutputConfig = new MotorOutputConfigs().withNeutralMode(CAC.CORAL_ARM_MOTOR_NEUTRAL_MODE)
                                                     .withInverted(CAC.CORAL_ARM_MOTOR_INVERT)
                                                     .withPeakForwardDutyCycle(CAC.CORAL_ARM_OUTPUT_LIMIT_FACTOR)
@@ -98,12 +104,13 @@ public class CoralArmSubsystem extends SubsystemBase {
                                                                     .withMotionMagicJerk(CAC.CORAL_ARM_MOTION_MAGIC_JERK)
                                                                     .withMotionMagicExpo_kA(CAC.CORAL_ARM_MOTION_MAGIC_kA)
                                                                     .withMotionMagicExpo_kA(CAC.CORAL_ARM_MOTION_MAGIC_kV);
-    var coralArmConfig = new TalonFXConfiguration().withFeedback(feedbackConfig)
-                                                   .withMotorOutput(motorOutputConfig)
+    var coralArmConfig = new TalonFXSConfiguration().withMotorOutput(motorOutputConfig)
                                                    .withCurrentLimits(currentLimitConfig)
                                                    .withClosedLoopRamps(closedLoopConfig)
                                                    .withSlot0(pid0Config)
-                                                   .withMotionMagic(motionMagicConfig);
+                                                   .withMotionMagic(motionMagicConfig)
+                                                   .withCommutation(commutationConfig)
+                                                   .withExternalFeedback(externalFeedbackConfig);
     StatusCode status = m_coralArmMotor.getConfigurator().apply(coralArmConfig);
 
     if (! status.isOK() ) {
@@ -146,9 +153,14 @@ public class CoralArmSubsystem extends SubsystemBase {
     m_pinServoMotor.setPosition(CAC.PIN_SERVO_CLOSED_POSITION);
   }
 
+  public void ScoreL1Position() {
+    GoToPosition(CAC.CORAL_ARM_SCORE_L1_POSITION);
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Coral Arm CANcoder position", m_coralArmCANcoder.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("Coral Arm Servo Position", m_pinServoMotor.getPosition());
   }
 }
