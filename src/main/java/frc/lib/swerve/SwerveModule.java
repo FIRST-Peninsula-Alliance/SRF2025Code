@@ -1,4 +1,5 @@
 package frc.lib.swerve;
+import frc.robot.Constants;
 //import frc.robot.Constants;
 import frc.robot.Constants.*;
 
@@ -82,7 +83,7 @@ public class SwerveModule {
                                                                             SDC.DRIVE_KV,
                                                                             SDC.DRIVE_KA);
     private double m_velocityFeedForward;
-    private double m_positionFeedForward;
+    //private double m_positionFeedForward;
 
 
     // Entries for publishing module data.
@@ -111,21 +112,21 @@ public class SwerveModule {
         m_modNum = moduleNumber;
         m_moduleConstants = moduleConstants;
         m_absAngleOffset2d = moduleConstants.ABS_ANG_OFFSET2D;
-        
-        /* Angle Encoder Config */
-        //m_absWheelAngleCANcoder = new CANcoder(m_moduleConstants.ENCODER_ID);
-        // Use the following for use with CANivore
-        m_absWheelAngleCANcoder = new CANcoder(m_moduleConstants.ENCODER_ID);
-        // where canbus is a string identifying which canbus to use
-        configAbsWheelAngleCANcoder();
 
         /* Angle Motor Config */
-        m_steerMotor = new TalonFX(m_moduleConstants.STEER_MOTOR_ID);
+        m_steerMotor = new TalonFX(m_moduleConstants.STEER_MOTOR_ID, Constants.CAN_BUS_IN_USE);
         configSteerMotor();
 
         /* Drive Motor Config */
-        m_driveMotor = new TalonFX(m_moduleConstants.DRIVE_MOTOR_ID);
+        m_driveMotor = new TalonFX(m_moduleConstants.DRIVE_MOTOR_ID, Constants.CAN_BUS_IN_USE);
         configDriveMotor();
+
+        /* Angle Encoder Config */
+        //m_absWheelAngleCANcoder = new CANcoder(m_moduleConstants.ENCODER_ID);
+        // Use the following for use with CANivore
+        m_absWheelAngleCANcoder = new CANcoder(m_moduleConstants.ENCODER_ID, Constants.CAN_BUS_IN_USE);
+        // where canbus is a string identifying which canbus to use
+        configAbsWheelAngleCANcoder();
 
         m_lastAngle = getState().angle.getDegrees();
 
@@ -170,6 +171,7 @@ public class SwerveModule {
     public void setAngle(double desiredAngle) {
         m_steerClosedLoop.Position = desiredAngle * SDC.ANGLE_TO_ROTATION_FACTOR;
         m_steerMotor.setControl(m_steerClosedLoop);
+        m_lastAngle = desiredAngle;
     }
 
     public void testDriveMotorRotation() {
@@ -203,7 +205,7 @@ public class SwerveModule {
     // reflecting the actual module direction (relative to the robot) upon initialization.
     // With the module aimed straight ahead, bevel gear to the left, the angle should be 0.0
     public void setFalconPosDeg(double angle) {
-        m_steerMotor.setPosition((angle/360)*2048); // add to constants
+        m_steerMotor.setPosition(angle * SDC.ANGLE_TO_ROTATION_FACTOR);
     }
 
     // getFalconPosDeg returns the current value of the Falcon's integrated encoder (initialized 
@@ -267,15 +269,15 @@ public class SwerveModule {
     public void resetToAbsolute(){
         waitForCANcoder();
         double CANcoderOnReset = getCANcoderDeg();
-        double absModuleDegOnReset = CANcoderOnReset - m_absAngleOffset2d.getDegrees();
+        //double absModuleDegOnReset = CANcoderOnReset - m_absAngleOffset2d.getDegrees();
         //SmartDashboard.putString("Mod"+m_modNum+" CANcoder on Reset", F.df2.format(CANcoderOnReset));
-        setFalconPosDeg(absModuleDegOnReset);
+        setFalconPosDeg(CANcoderOnReset);
     }
 
     private void configAbsWheelAngleCANcoder(){ 
         var magnetSensorConfigs = new MagnetSensorConfigs().withAbsoluteSensorDiscontinuityPoint(SDC.CANCODER_RANGE)
                                                            .withSensorDirection(SDC.CANCODER_DIR)
-                                                           .withMagnetOffset(0.0);
+                                                           .withMagnetOffset(m_absAngleOffset2d.getRotations());
         var ccConfig = new CANcoderConfiguration().withMagnetSensor(magnetSensorConfigs);
         m_absWheelAngleCANcoder.getConfigurator().apply(ccConfig);
     }

@@ -37,8 +37,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
-    m_elevatorMotor = new TalonFX(EC.ELEVATOR_MOTOR_CAN_ID);
-    m_elevatorCANCoder = new CANcoder(EC.ELEVATOR_CANCODER_ID);
+    m_elevatorMotor = new TalonFX(EC.ELEVATOR_MOTOR_CAN_ID, Constants.CAN_BUS_IN_USE);
+    m_elevatorCANCoder = new CANcoder(EC.ELEVATOR_CANCODER_ID, Constants.CAN_BUS_IN_USE);
 
     configElevatorCANCoder();
     configElevatorMotor();
