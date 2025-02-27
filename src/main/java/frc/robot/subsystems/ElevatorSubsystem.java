@@ -15,11 +15,13 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CAC;
@@ -31,6 +33,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double m_elevatorSetpoint;
   private final CANcoder m_elevatorCANCoder;
   private final double m_magnetOffset = EC.ELEVATOR_CANCODER_MAGNET_OFFSET;
+  private final PositionVoltage m_positionReqest = new PositionVoltage(0.0)
+                                                                      .withSlot(0)
+                                                                      .withEnableFOC(true);
   private final MotionMagicVoltage m_elevatorMagicCtrl = new MotionMagicVoltage(0.0)
                                                                                 .withSlot(0)
                                                                                 .withEnableFOC(true);
@@ -46,7 +51,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   
   public void GoToPosition(double position) {
     m_elevatorSetpoint = position;
-    m_elevatorMotor.setControl(m_elevatorMagicCtrl.withPosition(m_elevatorSetpoint));
+    m_elevatorMotor.setControl(m_positionReqest.withPosition(m_elevatorSetpoint));
   }
 
   public double getElevatorPos() {
@@ -87,7 +92,7 @@ public class ElevatorSubsystem extends SubsystemBase {
                                                 .withKS(EC.ELEVATOR_KS)
                                                 .withKV(EC.ELEVATOR_KV)
                                                 .withKA(EC.ELEVATOR_KA)
-                                                .withKG(EC.ELEVATOR_KG).withGravityType(GravityTypeValue.Arm_Cosine);
+                                                .withKG(EC.ELEVATOR_KG).withGravityType(GravityTypeValue.Elevator_Static);
     MotionMagicConfigs  motionMagicConfig = new MotionMagicConfigs().withMotionMagicCruiseVelocity(EC.ELEVATOR_MOTION_MAGIC_VEL)
                                                                     .withMotionMagicAcceleration(EC.ELEVATOR_MOTION_MAGIC_ACCEL)
                                                                     .withMotionMagicJerk(EC.ELEVATOR_MOTION_MAGIC_JERK)
@@ -137,5 +142,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("ElevatorPosRotations", m_elevatorMotor.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("ElevatorPosInches", m_elevatorMotor.getPosition().getValueAsDouble() * EC.INCHES_TO_ROTATION_FACTOR);
   }
 }

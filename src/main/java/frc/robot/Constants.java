@@ -544,9 +544,9 @@ public final class Constants {
         public static final int CORAL_CANCODER_ID = 11;
         public static final int CORAL_ARM_SERVO_CAN_ID = 12;
 
-        public static final double CORAL_ARM_CANCODER_RANGE = .1;
+        public static final double CORAL_ARM_CANCODER_RANGE = .275;
         public static final double CORAL_ARM_CLOSED_LOOP_RAMP_PERIOD = 0.5;
-        public static final double CORAL_ARM_CANCODER_MAGNET_OFFSET = 0.21096;
+        public static final double CORAL_ARM_CANCODER_MAGNET_OFFSET = -0.208984375;
 
         public static final SensorDirectionValue CORAL_ARM_CANCODER_DIR = SensorDirectionValue.CounterClockwise_Positive;
         public static final double CORAL_ARM_CANCODER_TO_AXLE_RATIO = 20.0/18.0;
@@ -561,13 +561,13 @@ public final class Constants {
         public static final double CORAL_ARM_PEAK_CURRENT_DURATION = 0.1;
         public static final boolean CORAL_ARM_ENABLE_CURRENT_LIMIT = true;
 
-        public static final double CORAL_ARM_KP = 1.0;
+        public static final double CORAL_ARM_KP = 40.0;
         public static final double CORAL_ARM_KI = 0.0;
         public static final double CORAL_ARM_KD = 0.0;
-        public static final double CORAL_ARM_KS = 0.0175;
-        public static final double CORAL_ARM_KV = 4.0;
-        public static final double CORAL_ARM_KA = 0.1;
-        public static final double CORAL_ARM_KG = 0.04;
+        public static final double CORAL_ARM_KS = 0.225;
+        public static final double CORAL_ARM_KV = 0.5;
+        public static final double CORAL_ARM_KA = 4.0;
+        public static final double CORAL_ARM_KG = 0.49;
 
         public static final double CORAL_ARM_MOTION_MAGIC_VEL = 5.0;
         public static final double CORAL_ARM_MOTION_MAGIC_ACCEL = 8.0;
@@ -575,10 +575,11 @@ public final class Constants {
         public static final double CORAL_ARM_MOTION_MAGIC_kA = 0.0;
         public static final double CORAL_ARM_MOTION_MAGIC_kV = 0.0;
 
-        public static final double CORAL_ARM_SOURCE_POSITION = 0.25; //zero has to change to horizontal
-        public static final double CORAL_ARM_SCORE_POSITION = 0.41;  //zero has to change to horizontal
-        public static final double CORAL_ARM_SCORE_L1_POSITION = 0.5;//zero has to change to horizontal
-        public static final double PIN_SERVO_OPEN_POSITION = 0;
+        public static final double CORAL_ARM_SOURCE_POSITION = -0.401; 
+        public static final double CORAL_ARM_SCORE_POSITION = -0.13;  
+        public static final double CORAL_ARM_SCORE_L1_POSITION = -0.13;
+        public static final double CORAL_ARM_CENTER_POSITION = -0.25;
+        public static final double PIN_SERVO_OPEN_POSITION = 0.15;
         public static final double PIN_SERVO_CLOSED_POSITION = 0;
 
         public static final double PIN_SERVO_MAX = 2.0;
@@ -617,13 +618,13 @@ public final class Constants {
         public static final double ALGAE_ARM_PEAK_CURRENT_DURATION = 0.1;
         public static final boolean ALGAE_ARM_ENABLE_CURRENT_LIMIT = true;
 
-        public static final double ALGAE_ARM_KP = 40.0;
-        public static final double ALGAE_ARM_KI = 0.5;
-        public static final double ALGAE_ARM_KD = 0.1;
-        public static final double ALGAE_ARM_KS = 0.3;
-        public static final double ALGAE_ARM_KV = 4.0;
-        public static final double ALGAE_ARM_KA = 0.1;
-        public static final double ALGAE_ARM_KG = 0.5;
+        public static final double ALGAE_ARM_KP = 2;
+        public static final double ALGAE_ARM_KI = 0.0;
+        public static final double ALGAE_ARM_KD = 0.0;
+        public static final double ALGAE_ARM_KS = 0.25;
+        public static final double ALGAE_ARM_KV = 0;
+        public static final double ALGAE_ARM_KA = 0;
+        public static final double ALGAE_ARM_KG = 0;
 
         public static final double ALGAE_ARM_MOTION_MAGIC_VEL = 5.0;
         public static final double ALGAE_ARM_MOTION_MAGIC_ACCEL = 8.0;
@@ -653,13 +654,13 @@ public final class Constants {
                 ALGAE_WHEEL_PEAK_CURRENT_LIMIT,       // launchPeakCurrentLimit, 
                 ALGAE_WHEEL_PEAK_CURRENT_DURATION);        // launchPeakCurrentDuration);
 
-        public static final double ALGAE_WHEEL_KP = 40.0;
-        public static final double ALGAE_WHEEL_KI = 0.5;
-        public static final double ALGAE_WHEEL_KD = 0.1;
-        public static final double ALGAE_WHEEL_KS = 0.3;
-        public static final double ALGAE_WHEEL_KV = 4.0;
-        public static final double ALGAE_WHEEL_KA = 0.1;
-        public static final double ALGAE_WHEEL_KG = 0.5;
+        public static final double ALGAE_WHEEL_KP = 10.0;
+        public static final double ALGAE_WHEEL_KI = 0.0;
+        public static final double ALGAE_WHEEL_KD = 0.0;
+        public static final double ALGAE_WHEEL_KS = 0.2;
+        public static final double ALGAE_WHEEL_KV = 0.0;
+        public static final double ALGAE_WHEEL_KA = 0.0;
+        public static final double ALGAE_WHEEL_KG = 0.2;
         public static final double ALGAE_WHEEL_KF = 0.0;
 
         public static final double ALGAE_WHEEL_MOTION_MAGIC_VEL = 5.0;
@@ -683,11 +684,13 @@ public final class Constants {
 
         public static final int ELEVATOR_CANCODER_RANGE = 1;
         public static final double ELEVATOR_CLOSED_LOOP_RAMP_PERIOD = 0.5;
-        public static final double ELEVATOR_CANCODER_MAGNET_OFFSET = 0.21096;
+        public static final double ELEVATOR_CANCODER_MAGNET_OFFSET = 0.89797;
 
         public static final SensorDirectionValue ELEVATOR_CANCODER_DIR = SensorDirectionValue.CounterClockwise_Positive;
         public static final double ELEVATOR_CANCODER_TO_AXLE_RATIO = 20.0/18.0;
         public static final double ELEVATOR_ROTOR_TO_CANCODER_RATIO = 30;
+
+        public static final double INCHES_TO_ROTATION_FACTOR = 3.375;
 
         public static final NeutralModeValue ELEVATOR_MOTOR_NEUTRAL_MODE = NeutralModeValue.Brake;
         public static final InvertedValue ELEVATOR_MOTOR_INVERT = InvertedValue.Clockwise_Positive;
@@ -698,13 +701,13 @@ public final class Constants {
         public static final double ELEVATOR_PEAK_CURRENT_DURATION = 0.1;
         public static final boolean ELEVATOR_ENABLE_CURRENT_LIMIT = true;
 
-        public static final double ELEVATOR_KP = 40.0;
-        public static final double ELEVATOR_KI = 0.5;
-        public static final double ELEVATOR_KD = 0.1;
-        public static final double ELEVATOR_KS = 0.3;
-        public static final double ELEVATOR_KV = 4.0;
-        public static final double ELEVATOR_KA = 0.1;
-        public static final double ELEVATOR_KG = 0.5;
+        public static final double ELEVATOR_KP = 8.0;
+        public static final double ELEVATOR_KI = 0.0;
+        public static final double ELEVATOR_KD = 0.25;
+        public static final double ELEVATOR_KS = 0.225;
+        public static final double ELEVATOR_KV = 0.0;
+        public static final double ELEVATOR_KA = 0.0;
+        public static final double ELEVATOR_KG = 0.2;
 
         public static final double ELEVATOR_MOTION_MAGIC_VEL = 5.0;
         public static final double ELEVATOR_MOTION_MAGIC_ACCEL = 8.0;
@@ -712,13 +715,14 @@ public final class Constants {
         public static final double ELEVATOR_MOTION_MAGIC_kA = 0.0;
         public static final double ELEVATOR_MOTION_MAGIC_kV = 0.0;
 
-        public static final long ELEVATOR_SOURCE_POSITION = 0;
-        public static final long ELEVATOR_L1_CORAL_POSITION = 0;
-        public static final long ELEVATOR_L2_CORAL_POSITION = 0;
-        public static final long ELEVATOR_L3_CORAL_POSITION = 0;
-        public static final long ELEVATOR_L2_ALGAE_POSITION = 0;
-        public static final long ELEVATOR_L3_ALGAE_POSITION = 0;
-        public static final long ELEVATOR_ALGAE_PICKUP_POSITION = 0;
+        public static final double ELEVATOR_SOURCE_POSITION = -1.6;
+        public static final double ELEVATOR_L2_SOURCE_POSITION = -1.6;
+        public static final double ELEVATOR_L1_CORAL_POSITION = 0;
+        public static final double ELEVATOR_L2_CORAL_POSITION = -1.6;
+        public static final double ELEVATOR_L3_CORAL_POSITION = -5.75;
+        public static final double ELEVATOR_L2_ALGAE_POSITION = 0;
+        public static final double ELEVATOR_L3_ALGAE_POSITION = 0;
+        public static final double ELEVATOR_ALGAE_PICKUP_POSITION = 0;
     }
 
     /***********************************************************

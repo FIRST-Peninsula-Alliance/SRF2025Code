@@ -174,7 +174,7 @@ public class RobotContainer {
         // left and right trigger set coral arm positions 
         // alt-right trigger score coral
         m_xbox.leftTrigger().onTrue(new InstantCommand(() -> m_coralArmSubsystem.GoToSourcePosition()));
-        m_xbox.rightTrigger().onTrue(new InstantCommand(() -> m_coralArmSubsystem.GoToScorePosition()));
+        m_xbox.rightTrigger().onTrue(new InstantCommand(() -> m_coralArmSubsystem.ScoreL1Position()));
         m_xbox.rightTrigger().and(ALT).onTrue(new InstantCommand(() -> m_coralArmSubsystem.ScoreCoral()));
         // center coral arm position
         m_xbox.leftTrigger().and(ALT).onTrue(new InstantCommand(() -> m_coralArmSubsystem.GoToCenterPosition()));
@@ -189,13 +189,17 @@ public class RobotContainer {
         // On Right bumper release (regardless of Left Bumper state), full speed.
         m_xbox.rightBumper().and(ALT.negate()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(.5)));
         ALT.and(m_xbox.rightBumper()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(.2)));
-        m_xbox.rightBumper().onFalse(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(1.0)));
-        m_xbox.a().and(ALT.negate()).onTrue(new InstantCommand(()-> m_coralArmSubsystem.GoToScorePosition()));
+        m_xbox.rightBumper().onFalse(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(1.0)));;
         m_xbox.a().and(ALT.negate()).onTrue(new InstantCommand(()-> m_elevatorSubsytem.GoToL1CoralPosition()));
-        m_xbox.b().and(ALT.negate()).onTrue(new InstantCommand(()-> m_coralArmSubsystem.GoToScorePosition()));
         m_xbox.b().and(ALT.negate()).onTrue(new InstantCommand(()-> m_elevatorSubsytem.GoToL2CoralPosition()));
-        m_xbox.y().and(ALT.negate()).onTrue(new InstantCommand(()-> m_coralArmSubsystem.GoToScorePosition()));
         m_xbox.y().and(ALT.negate()).onTrue(new InstantCommand(()-> m_elevatorSubsytem.GoToL3CoralPosition()));
+        m_xbox.a().and(ALT).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.RemoveAlgae()));
+        m_xbox.b().and(ALT).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.GoToL2RemovePosition()));
+        m_xbox.y().and(ALT).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.GoToL3RemovePosition()));
+        m_xbox.x().and(ALT.negate()).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.RemoveAlgae()));
+        m_xbox.povDown().and(ALT.negate()).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.PickupAlgae()));
+        m_xbox.povUp().and(ALT.negate()).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.ScoreAlgae()));
+        m_xbox.povUp().and(ALT.negate()).onFalse(new InstantCommand(()-> m_algaeArmSubsystem.StopWheels()));
 
         // m_xbox.x().and(ALT.negate()).onTrue(new InstantCommand(()->m_masterArmSubsystem.cancelNoteAction()));
         // Swerve park 

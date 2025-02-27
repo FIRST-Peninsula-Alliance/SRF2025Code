@@ -9,17 +9,24 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
+import com.ctre.phoenix6.configs.CommutationConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.ExternalFeedbackConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.TalonFXS;
+import com.ctre.phoenix6.signals.AdvancedHallSupportValue;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.MotorArrangementValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.AAC;
@@ -27,7 +34,7 @@ import frc.robot.Constants.AAC;
 
 public class AlgaeArmSubsystem extends SubsystemBase {
   /** Creates a new algaeArmSubsystem. */
-  public final TalonFX m_algaeArmMotor; 
+  public final TalonFXS m_algaeArmMotor; 
   public final TalonSRX m_algaeWheelMotor;
   private double m_algaeArmSetpoint;
   private final MotionMagicVoltage m_algaeArmMagicCtrl = new MotionMagicVoltage(0.0)
@@ -35,8 +42,8 @@ public class AlgaeArmSubsystem extends SubsystemBase {
                                                                                 .withEnableFOC(true);
 
   public AlgaeArmSubsystem() {
-    m_algaeArmMotor = new TalonFX(AAC.ALGAE_MOTOR_CAN_ID, Constants.CAN_BUS_IN_USE);
-    m_algaeWheelMotor = new TalonSRX(AAC.ALGAE_WHEEL_MOTOR_CAN_ID);
+    m_algaeArmMotor = new TalonFXS(AAC.ALGAE_MOTOR_CAN_ID, Constants.CAN_BUS_IN_USE);
+    m_algaeWheelMotor = new TalonSRX(AAC.ALGAE_WHEEL_MOTOR_CAN_ID); //rio bus
     configAlgaeWheelMotor();
     configAlgaeArmMotor();
   }
@@ -59,15 +66,14 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     var closedLoopConfig = new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(0)
                                                         .withVoltageClosedLoopRampPeriod(AAC.ALGAE_ARM_CLOSED_LOOP_RAMP_PERIOD)
                                                         .withTorqueClosedLoopRampPeriod(0);
-    var feedbackConfig = new FeedbackConfigs().withFeedbackSensorSource(FeedbackSensorSourceValue.FusedCANcoder)
-                                              .withFeedbackRemoteSensorID(AAC.ALGAE_MOTOR_CAN_ID)
-                                              .withSensorToMechanismRatio(AAC.ALGAE_ARM_CANCODER_TO_AXLE_RATIO)
-                                              .withRotorToSensorRatio(AAC.ALGAE_ARM_ROTOR_TO_CANCODER_RATIO);
     var motorOutputConfig = new MotorOutputConfigs().withNeutralMode(AAC.ALGAE_ARM_MOTOR_NEUTRAL_MODE)
                                                     .withInverted(AAC.ALGAE_ARM_MOTOR_INVERT)
                                                     .withPeakForwardDutyCycle(AAC.ALGAE_ARM_OUTPUT_LIMIT_FACTOR)
                                                     .withPeakReverseDutyCycle(-AAC.ALGAE_ARM_OUTPUT_LIMIT_FACTOR);
                                                     //.withDutyCycleNeutralDeadband(.001);
+    var feedbackconfigs = new ExternalFeedbackConfigs().withSensorToMechanismRatio(1/200);
+    var commutationConfig = new CommutationConfigs().withAdvancedHallSupport(AdvancedHallSupportValue.Enabled)
+                                                    .withMotorArrangement(MotorArrangementValue.NEO550_JST);
     var currentLimitConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(AAC.ALGAE_ARM_CONT_CURRENT_LIMIT)
                                                        .withSupplyCurrentLowerLimit(AAC.ALGAE_ARM_PEAK_CURRENT_LIMIT)
                                                        .withSupplyCurrentLowerTime(AAC.ALGAE_ARM_PEAK_CURRENT_DURATION)
@@ -84,7 +90,8 @@ public class AlgaeArmSubsystem extends SubsystemBase {
                                                                     .withMotionMagicJerk(AAC.ALGAE_ARM_MOTION_MAGIC_JERK)
                                                                     .withMotionMagicExpo_kA(AAC.ALGAE_ARM_MOTION_MAGIC_kA)
                                                                     .withMotionMagicExpo_kA(AAC.ALGAE_ARM_MOTION_MAGIC_kV);
-    var algaeArmConfig = new TalonFXConfiguration().withFeedback(feedbackConfig)
+    var algaeArmConfig = new TalonFXSConfiguration().withCommutation(commutationConfig)
+                                                   .withExternalFeedback(feedbackconfigs)
                                                    .withMotorOutput(motorOutputConfig)
                                                    .withCurrentLimits(currentLimitConfig)
                                                    .withClosedLoopRamps(closedLoopConfig)
@@ -109,8 +116,16 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     GoToPosition(AAC.ALGAE_ARM_PICKUP_POSITION);
   }
 
-  public void RunAlgaeWheels() {
-    m_algaeWheelMotor.set(ControlMode.PercentOutput, .5);
+  public void RemoveAlgae() {
+    m_algaeWheelMotor.set(ControlMode.PercentOutput, .4);
+  }
+
+  public void PickupAlgae() {
+    m_algaeWheelMotor.set(ControlMode.PercentOutput, -0.5);
+  }
+
+  public void ScoreAlgae() {
+    m_algaeWheelMotor.set(ControlMode.PercentOutput, 0.6);
   }
 
   public void StopWheels() {
@@ -120,5 +135,6 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("AlgaeArmPos", m_algaeArmMotor.getPosition().getValueAsDouble());
   }
 }

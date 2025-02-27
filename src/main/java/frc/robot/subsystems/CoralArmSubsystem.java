@@ -15,9 +15,11 @@ import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 //import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 //import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
@@ -33,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CAC;
 //import frc.robot.NotableConstants.IAC;
+import frc.robot.NotableConstants.IAC;
 
 public class CoralArmSubsystem extends SubsystemBase {
   /** Creates a new CoralArmSubsystem. */
@@ -40,6 +43,9 @@ public class CoralArmSubsystem extends SubsystemBase {
   public final CANcoder m_coralArmCANcoder; 
   public final Servo m_pinServoMotor;
   private double m_coralArmSetpoint;
+  private final PositionVoltage m_positionRequest = new PositionVoltage(0.0)
+                                                                        .withSlot(0)
+                                                                        .withEnableFOC(true);
   private final MotionMagicVoltage m_coralArmMagicCtrl = new MotionMagicVoltage(0.0)
                                                                                 .withSlot(0)
                                                                                 .withEnableFOC(true);
@@ -57,7 +63,7 @@ public class CoralArmSubsystem extends SubsystemBase {
 
   public void GoToPosition(double position) {
     m_coralArmSetpoint = position;
-    m_coralArmMotor.setControl(m_coralArmMagicCtrl.withPosition(m_coralArmSetpoint));
+    m_coralArmMotor.setControl(m_positionRequest.withPosition(m_coralArmSetpoint));
   }
 
   public double getAbsCoralArmPos() {
@@ -91,7 +97,12 @@ public class CoralArmSubsystem extends SubsystemBase {
     var currentLimitConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(CAC.CORAL_ARM_CONT_CURRENT_LIMIT)
                                                        .withSupplyCurrentLowerLimit(CAC.CORAL_ARM_PEAK_CURRENT_LIMIT)
                                                        .withSupplyCurrentLowerTime(CAC.CORAL_ARM_PEAK_CURRENT_DURATION)
-                                                       .withSupplyCurrentLimitEnable(CAC.CORAL_ARM_ENABLE_CURRENT_LIMIT);
+                                                       .withSupplyCurrentLimitEnable(CAC.CORAL_ARM_ENABLE_CURRENT_LIMIT)
+                                                       .withStatorCurrentLimit(14);
+    var softwareLimitSwitchConfig = new SoftwareLimitSwitchConfigs().withForwardSoftLimitThreshold(0) //TODO: add to constants
+                                                                    .withForwardSoftLimitEnable(true)
+                                                                    .withReverseSoftLimitThreshold(-0.4)
+                                                                    .withReverseSoftLimitEnable(true);
     Slot0Configs pid0Config = new Slot0Configs().withKP(CAC.CORAL_ARM_KP)
                                                 .withKI(CAC.CORAL_ARM_KI)
                                                 .withKD(CAC.CORAL_ARM_KD)
