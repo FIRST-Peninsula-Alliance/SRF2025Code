@@ -582,6 +582,8 @@ public final class Constants {
         public static final double PIN_SERVO_OPEN_POSITION = 0.15;
         public static final double PIN_SERVO_CLOSED_POSITION = 0;
 
+        public static final double CORAL_ARM_MECHANISM_RATIO = 1;
+
         public static final double PIN_SERVO_MAX = 2.0;
         public static final double PIN_SERVO_CENTER = 1.5;
         public static final double PIN_SERVO_DEADBAND = 0.002;
@@ -589,6 +591,7 @@ public final class Constants {
 
             //placeholder value
         public static final int CORAL_ARM_SERVO_PWM_CHANNEL = 0;
+
 
     }
 

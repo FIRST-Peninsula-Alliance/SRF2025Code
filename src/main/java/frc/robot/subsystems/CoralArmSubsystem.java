@@ -88,7 +88,7 @@ public class CoralArmSubsystem extends SubsystemBase {
     var commutationConfig = new CommutationConfigs().withAdvancedHallSupport(AdvancedHallSupportValue.Enabled)
                                                     .withMotorArrangement(MotorArrangementValue.NEO_JST);
     var externalFeedbackConfig = new ExternalFeedbackConfigs().withFusedCANcoder(m_coralArmCANcoder)
-                                                              .withSensorToMechanismRatio(1); //TODO: add to constants
+                                                              .withSensorToMechanismRatio(CAC.CORAL_ARM_MECHANISM_RATIO);
     var motorOutputConfig = new MotorOutputConfigs().withNeutralMode(CAC.CORAL_ARM_MOTOR_NEUTRAL_MODE)
                                                     .withInverted(CAC.CORAL_ARM_MOTOR_INVERT)
                                                     .withPeakForwardDutyCycle(CAC.CORAL_ARM_OUTPUT_LIMIT_FACTOR)
