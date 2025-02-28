@@ -2,21 +2,21 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 //import frc.robot.NotableConstants.SC;
-//import frc.robot.autos.*;
+import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 import frc.robot.subsystems.CoralArmSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
+//import frc.robot.subsystems.VisionSubsystem;
+//import frc.robot.subsystems.ClimberSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -30,10 +30,10 @@ public class RobotContainer {
     // private MasterArmSubsystem       m_masterArmSubsystem;
     // private ClimbSubsystem           m_climbSubsystem;
     private ElevatorSubsystem       m_elevatorSubsytem;
-    private ClimberSubsystem        m_climberSubsystem;
+    //private ClimberSubsystem        m_climberSubsystem;
     private CoralArmSubsystem       m_coralArmSubsystem;
     private AlgaeArmSubsystem       m_algaeArmSubsystem;
-    private VisionSubsystem         m_visionSubsystem;
+    //private VisionSubsystem         m_visionSubsystem;
 
     private SwerveParkCmd            m_parkCmd;
 
@@ -54,7 +54,7 @@ public class RobotContainer {
         // m_masterArmSubsystem = new MasterArmSubsystem();
         // m_climbSubsystem = new ClimbSubsystem();
         m_elevatorSubsytem = new ElevatorSubsystem();
-        m_climberSubsystem = new ClimberSubsystem();
+        //m_climberSubsystem = new ClimberSubsystem();
         m_coralArmSubsystem = new CoralArmSubsystem();
         m_algaeArmSubsystem = new AlgaeArmSubsystem();
         // m_visionSubsystem = new VisionSubsystem();
@@ -71,39 +71,11 @@ public class RobotContainer {
                                       () -> -m_xbox.getLeftX(),
                                       () -> -m_xbox.getRightX());
                     
-        /* m_scoreThenExitRedLeftAuto      = new ScoreThenExitRedLeftAuto(m_masterArmSubsystem,
-                                                                       m_swerveSubsystem);
-        m_scoreThenExitBlueLeftAuto     = new ScoreThenExitBlueLeftAuto(m_masterArmSubsystem,
-                                                                        m_swerveSubsystem);
-        m_scoreThenExitRedRightAuto     = new ScoreThenExitRedRightAuto(m_masterArmSubsystem,
-                                                                        m_swerveSubsystem);
-        m_scoreThenExitBlueRightAuto    = new ScoreThenExitBlueRightAuto(m_masterArmSubsystem,
-                                                                         m_swerveSubsystem);
-        m_score2NotesLeftAuto           = new Score2NotesLeftAuto(m_masterArmSubsystem, 
-                                                                  m_swerveSubsystem);
-        m_score2NotesCenterAuto         = new Score2NotesCenterAuto(m_masterArmSubsystem, 
-                                                                    m_swerveSubsystem);
-        m_score2NotesRightAuto          = new Score2NotesRightAuto(m_masterArmSubsystem, 
-                                                                   m_swerveSubsystem);
-        m_justScoreLeftAuto             = new JustScoreLeftAuto(m_masterArmSubsystem);
-        m_justScoreCenterAuto           = new JustScoreCenterAuto(m_masterArmSubsystem);
-        m_justScoreRightAuto            = new JustScoreRightAuto(m_masterArmSubsystem);
-        m_scoreMultipleNotesCenAuto     = new ScoreMultipleNotesCenterAuto(m_masterArmSubsystem,
-                                                                           m_swerveSubsystem);
+        ExitDoNothingCmd m_exitDoNothingAuto = new ExitDoNothingCmd(m_swerveSubsystem);
 
-        m_autoRoutineChooser.setDefaultOption("Score 2 Notes Center", m_score2NotesCenterAuto);
-        m_autoRoutineChooser.addOption("Score 2 Notes Left", m_score2NotesLeftAuto);
-        m_autoRoutineChooser.addOption("Score 2 Notes Right", m_score2NotesRightAuto);
-        m_autoRoutineChooser.addOption("Score Center, then idle", m_justScoreCenterAuto);
-        m_autoRoutineChooser.addOption("Score Left, then idle", m_justScoreLeftAuto);
-        m_autoRoutineChooser.addOption("Score Right, then idle", m_justScoreRightAuto);
-        m_autoRoutineChooser.addOption("Score Left, RED exit", m_scoreThenExitRedLeftAuto);
-        m_autoRoutineChooser.addOption("Score Left, BLUE exit", m_scoreThenExitBlueLeftAuto);
-        m_autoRoutineChooser.addOption("Score Right, RED exit", m_scoreThenExitRedRightAuto);
-        m_autoRoutineChooser.addOption("Score Right, BLUE exit", m_scoreThenExitBlueRightAuto);
-        m_autoRoutineChooser.addOption("Score Multiple Center", m_scoreMultipleNotesCenAuto);
+        m_autoRoutineChooser.setDefaultOption("ExitDoNothing", m_exitDoNothingAuto);
         SmartDashboard.putData("Autonomous Selection:", m_autoRoutineChooser);
-*/
+
         configureButtonBindings();
     }
     
@@ -190,6 +162,7 @@ public class RobotContainer {
         m_xbox.rightBumper().and(ALT.negate()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(.5)));
         ALT.and(m_xbox.rightBumper()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(.2)));
         m_xbox.rightBumper().onFalse(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(1.0)));;
+        
         m_xbox.a().and(ALT.negate()).onTrue(new InstantCommand(()-> m_elevatorSubsytem.GoToL1CoralPosition()));
         m_xbox.b().and(ALT.negate()).onTrue(new InstantCommand(()-> m_elevatorSubsytem.GoToL2CoralPosition()));
         m_xbox.y().and(ALT.negate()).onTrue(new InstantCommand(()-> m_elevatorSubsytem.GoToL3CoralPosition()));

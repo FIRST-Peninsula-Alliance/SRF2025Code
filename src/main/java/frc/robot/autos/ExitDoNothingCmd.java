@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.autos.TrajectoryPaths;
+package frc.robot.autos;
 
 import java.util.List;
 
@@ -26,12 +26,12 @@ import frc.robot.subsystems.SwerveSubsystem;
 // wall to avoid disturbing the pre-staged note, to clear the starting zone. 
 // This Autononmous move trajectory depends on absolute Y coordinates.
 
-public class ExitBlueSpkrLeftToLeftWallCmd extends SequentialCommandGroup {
-  Trajectory exitBlueSpkrLeftToLeftWall;
-  SwerveControllerCommand exitBlueSpkrLeftToLeftWallCmd;
+public class ExitDoNothingCmd extends SequentialCommandGroup {
+  Trajectory exitDoNothing;
+  SwerveControllerCommand exitDoNothingCmd;
 
   /* Constructor */
-  public ExitBlueSpkrLeftToLeftWallCmd(SwerveSubsystem swerveDrive) {
+  public ExitDoNothingCmd(SwerveSubsystem swerveDrive) {
     TrajectoryConfig exitConfig = new TrajectoryConfig((AutoC.AUTO_MAX_SPEED_M_PER_SEC *
                                                         AutoC.AUTO_SPEED_FACTOR_GENERIC),
                                                        (AutoC.AUTO_MAX_ACCEL_M_PER_SEC2 *
@@ -39,20 +39,16 @@ public class ExitBlueSpkrLeftToLeftWallCmd extends SequentialCommandGroup {
                                                        .setKinematics(SDC.SWERVE_KINEMATICS);
     exitConfig.setReversed(false);
 
-    exitBlueSpkrLeftToLeftWall = TrajectoryGenerator.generateTrajectory
+    exitDoNothing = TrajectoryGenerator.generateTrajectory
                                  (
-                                 new Pose2d(Units.inchesToMeters(41.0), 
-                                            Units.inchesToMeters(284.0), 
-                                            Rotation2d.fromDegrees(60.0)),
-                                  List.of(new Translation2d(Units.inchesToMeters(42.0), 
-                                                            Units.inchesToMeters(285.0)),
-                                          new Translation2d(Units.inchesToMeters(55.0), 
-                                                            Units.inchesToMeters(304.0)),
-                                          new Translation2d(Units.inchesToMeters(165.0), 
-                                                            Units.inchesToMeters(305.0))),
-                                  new Pose2d(Units.inchesToMeters(169.0),
-                                             Units.inchesToMeters(306.0),
-                                             Rotation2d.fromDegrees(0.0)),
+                                 new Pose2d(Units.inchesToMeters(0.0), 
+                                            Units.inchesToMeters(0.0), 
+                                            Rotation2d.fromDegrees(90.0)),
+                                  List.of(new Translation2d(Units.inchesToMeters(-24.0), 
+                                                            Units.inchesToMeters(0.0))),
+                                  new Pose2d(Units.inchesToMeters(-48.0),
+                                             Units.inchesToMeters(0.0),
+                                             Rotation2d.fromDegrees(90.0)),
                                   exitConfig
                                  );
   
@@ -62,7 +58,7 @@ public class ExitBlueSpkrLeftToLeftWallCmd extends SequentialCommandGroup {
                                                                       AutoC.K_THETA_CONTROLLER_CONSTRAINTS);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    exitBlueSpkrLeftToLeftWallCmd = new SwerveControllerCommand(exitBlueSpkrLeftToLeftWall,
+    exitDoNothingCmd = new SwerveControllerCommand(exitDoNothing,
                                                                 swerveDrive::getPose,
                                                                 SDC.SWERVE_KINEMATICS,
                                                                 new PIDController(AutoC.KP_X_CONTROLLER, 
@@ -75,8 +71,8 @@ public class ExitBlueSpkrLeftToLeftWallCmd extends SequentialCommandGroup {
                                                                 swerveDrive::setModuleStates,
                                                                 swerveDrive);
     addCommands(
-                new InstantCommand(()->swerveDrive.resetOdometry(exitBlueSpkrLeftToLeftWall.getInitialPose())),
-                exitBlueSpkrLeftToLeftWallCmd,
+                new InstantCommand(()->swerveDrive.resetOdometry(exitDoNothing.getInitialPose())),
+                exitDoNothingCmd,
                 new InstantCommand(()->swerveDrive.stop())
                );
   }
