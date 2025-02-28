@@ -72,8 +72,10 @@ public class RobotContainer {
                                       () -> -m_xbox.getRightX());
                     
         ExitDoNothingCmd m_exitDoNothingAuto = new ExitDoNothingCmd(m_swerveSubsystem);
+        ExitLeftBargeScoreCoralL1 m_exitLeftBargeScoreCoralL1 = new ExitLeftBargeScoreCoralL1(m_swerveSubsystem, m_coralArmSubsystem);
 
         m_autoRoutineChooser.setDefaultOption("ExitDoNothing", m_exitDoNothingAuto);
+        m_autoRoutineChooser.addOption("ExitLeftBargeScoreCoralL1", m_exitLeftBargeScoreCoralL1);
         SmartDashboard.putData("Autonomous Selection:", m_autoRoutineChooser);
 
         configureButtonBindings();

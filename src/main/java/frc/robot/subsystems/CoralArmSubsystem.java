@@ -59,6 +59,8 @@ public class CoralArmSubsystem extends SubsystemBase {
     configPinServoMotor(m_pinServoMotor, "Collector Pin Servo");
     configCoralArmCANcoder();
     configCoralArmMotor();
+
+    GoToCenterPosition();
   }
 
   public void GoToPosition(double position) {

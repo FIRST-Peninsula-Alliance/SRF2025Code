@@ -579,8 +579,8 @@ public final class Constants {
         public static final double CORAL_ARM_SCORE_POSITION = -0.13;  
         public static final double CORAL_ARM_SCORE_L1_POSITION = -0.13;
         public static final double CORAL_ARM_CENTER_POSITION = -0.25;
-        public static final double PIN_SERVO_OPEN_POSITION = 0.15;
-        public static final double PIN_SERVO_CLOSED_POSITION = 0;
+        public static final double PIN_SERVO_OPEN_POSITION = 0;
+        public static final double PIN_SERVO_CLOSED_POSITION = 0.25;
 
         public static final double CORAL_ARM_MECHANISM_RATIO = 1;
 
@@ -672,9 +672,9 @@ public final class Constants {
         public static final double ALGAE_WHEEL_MOTION_MAGIC_kA = 0.0;
         public static final double ALGAE_WHEEL_MOTION_MAGIC_kV = 0.0;
 
-        public static final long ALGAE_ARM_L2_POSITION = -30;
+        public static final long ALGAE_ARM_L2_POSITION = -25;
         public static final long ALGAE_ARM_L3_POSITION = 0;
-        public static final long ALGAE_ARM_PICKUP_POSITION = -50;
+        public static final long ALGAE_ARM_PICKUP_POSITION = -62;
         public static final long ALGAE_ARM_UP_POSITION = 0;
 
     }

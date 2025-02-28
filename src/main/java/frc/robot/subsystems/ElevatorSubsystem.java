@@ -47,6 +47,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     configElevatorCANCoder();
     configElevatorMotor();
+
+    GoToL1CoralPosition();
   }
   
   public void GoToPosition(double position) {

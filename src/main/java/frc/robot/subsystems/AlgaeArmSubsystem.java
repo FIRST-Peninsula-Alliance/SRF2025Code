@@ -20,6 +20,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.AdvancedHallSupportValue;
@@ -38,6 +39,9 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   public final TalonFXS m_algaeArmMotor; 
   public final TalonSRX m_algaeWheelMotor;
   private double m_algaeArmSetpoint;
+  private PositionVoltage m_positionVoltage = new PositionVoltage(0)
+                                                                  .withSlot(0)
+                                                                  .withEnableFOC(true);
   private final MotionMagicVoltage m_algaeArmMagicCtrl = new MotionMagicVoltage(0.0)
                                                                                 .withSlot(0)
                                                                                 .withEnableFOC(true);
@@ -47,11 +51,13 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     m_algaeWheelMotor = new TalonSRX(AAC.ALGAE_WHEEL_MOTOR_CAN_ID); //rio bus
     configAlgaeWheelMotor();
     configAlgaeArmMotor();
+
+    GoToUpPosition();
   }
 
   public void GoToPosition(double position) {
     m_algaeArmSetpoint = position;
-    m_algaeArmMotor.setControl(m_algaeArmMagicCtrl.withPosition(m_algaeArmSetpoint));
+    m_algaeArmMotor.setControl(m_positionVoltage.withPosition(m_algaeArmSetpoint));
   }
 
   private void configAlgaeWheelMotor() {
@@ -86,7 +92,6 @@ public class AlgaeArmSubsystem extends SubsystemBase {
                                                 .withKV(AAC.ALGAE_ARM_KV)
                                                 .withKA(AAC.ALGAE_ARM_KA)
                                                 .withKG(AAC.ALGAE_ARM_KG).withGravityType(GravityTypeValue.Arm_Cosine);
-    var closedLoopGeneralConfig = new ClosedLoopGeneralConfigs().withContinuousWrap(true);
     MotionMagicConfigs  motionMagicConfig = new MotionMagicConfigs().withMotionMagicCruiseVelocity(AAC.ALGAE_ARM_MOTION_MAGIC_VEL)
                                                                     .withMotionMagicAcceleration(AAC.ALGAE_ARM_MOTION_MAGIC_ACCEL)
                                                                     .withMotionMagicJerk(AAC.ALGAE_ARM_MOTION_MAGIC_JERK)
@@ -98,8 +103,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
                                                    .withCurrentLimits(currentLimitConfig)
                                                    .withClosedLoopRamps(closedLoopConfig)
                                                    .withSlot0(pid0Config)
-                                                   .withMotionMagic(motionMagicConfig)
-                                                   .withClosedLoopGeneral(closedLoopGeneralConfig);
+                                                   .withMotionMagic(motionMagicConfig);
     StatusCode status = m_algaeArmMotor.getConfigurator().apply(algaeArmConfig);
 
     if (! status.isOK() ) {
@@ -128,7 +132,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   }
 
   public void PickupAlgae() {
-    m_algaeWheelMotor.set(ControlMode.PercentOutput, -0.5);
+    m_algaeWheelMotor.set(ControlMode.PercentOutput, -0.65);
   }
 
   public void ScoreAlgae() {
