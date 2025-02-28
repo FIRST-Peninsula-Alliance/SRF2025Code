@@ -322,8 +322,8 @@ public class SwerveModule {
                                                         //.withDutyCycleNeutralDeadband(.001);
         CurrentLimitsConfigs currentLimitConfig = new CurrentLimitsConfigs()
                                                         .withSupplyCurrentLimit(SDC.STEER_SUPPLY_CURRENT_LIMIT)
-                                                        .withSupplyCurrentLowerLimit(SDC.STEER_SUPPLY_CURRENT_THRESHOLD) // TODO: Look here for unexpected behavior. Was .withSupplyCurrentThreshhold.
-                                                        .withSupplyCurrentLowerTime(SDC.STEER_SUPPLY_CURRENT_TIME_THRESHOLD) // TODO: Look here for unexpected behavior
+                                                        //.withSupplyCurrentLowerLimit(SDC.STEER_SUPPLY_CURRENT_THRESHOLD) // TODO: Look here for unexpected behavior. Was .withSupplyCurrentThreshhold.
+                                                        //.withSupplyCurrentLowerTime(SDC.STEER_SUPPLY_CURRENT_TIME_THRESHOLD) // TODO: Look here for unexpected behavior
                                                         .withSupplyCurrentLimitEnable(SDC.STEER_ENABLE_SUPPLY_CURRENT_LIMIT)
                                                         .withStatorCurrentLimit(SDC.STEER_STATOR_CURRENT_LIMIT)
                                                         .withStatorCurrentLimitEnable(SDC.STEER_ENABLE_STATOR_CURRENT_LIMIT );
@@ -370,8 +370,8 @@ public class SwerveModule {
                                                         //.withDutyCycleNeutralDeadband(.001);
         CurrentLimitsConfigs currentLimitConfig = new CurrentLimitsConfigs()
                                                         .withSupplyCurrentLimit(SDC.DRIVE_SUPPLY_CURRENT_LIMIT)
-                                                        .withSupplyCurrentLowerLimit(SDC.DRIVE_SUPPLY_CURRENT_THRESHOLD) // TODO: Look here for unexpected behavior. Was .withSupplyCurrentThreshhold.
-                                                        .withSupplyCurrentLowerTime(SDC.DRIVE_SUPPLY_CURRENT_TIME_THRESHOLD) // TODO: Look here for unexpected behavior
+                                                        //.withSupplyCurrentLowerLimit(SDC.DRIVE_SUPPLY_CURRENT_THRESHOLD) // TODO: Look here for unexpected behavior. Was .withSupplyCurrentThreshhold.
+                                                        //.withSupplyCurrentLowerTime(SDC.DRIVE_SUPPLY_CURRENT_TIME_THRESHOLD) // TODO: Look here for unexpected behavior
                                                         .withSupplyCurrentLimitEnable(SDC.DRIVE_ENABLE_SUPPLY_CURRENT_LIMIT)
                                                         .withStatorCurrentLimit(SDC.DRIVE_STATOR_CURRENT_LIMIT)
                                                         .withStatorCurrentLimitEnable(SDC.DRIVE_ENABLE_STATOR_CURRENT_LIMIT );

@@ -345,18 +345,18 @@ public final class Constants {
         public static final double FALCON_GEAR_RATIO = 150.0 / 7.0;
 
         // Current Limiting motor protection - same for both module types
-        public static final double  DRIVE_SUPPLY_CURRENT_LIMIT          = 40.0;
+        public static final double  DRIVE_SUPPLY_CURRENT_LIMIT          = 60.0;
         public static final double  DRIVE_SUPPLY_CURRENT_THRESHOLD      = 0.0;
         public static final double  DRIVE_SUPPLY_CURRENT_TIME_THRESHOLD = 0.1;
         public static final boolean DRIVE_ENABLE_SUPPLY_CURRENT_LIMIT   = true;
-        public static final double  DRIVE_STATOR_CURRENT_LIMIT          = 45.0;
+        public static final double  DRIVE_STATOR_CURRENT_LIMIT          = 100.0;
         public static final boolean DRIVE_ENABLE_STATOR_CURRENT_LIMIT   = true;
 
         public static final double STEER_SUPPLY_CURRENT_LIMIT = 40.0;
         public static final double STEER_SUPPLY_CURRENT_THRESHOLD = 0.0;
         public static final double STEER_SUPPLY_CURRENT_TIME_THRESHOLD = 0.1;
         public static final boolean STEER_ENABLE_SUPPLY_CURRENT_LIMIT = true;
-        public static final double STEER_STATOR_CURRENT_LIMIT = 45.0;
+        public static final double STEER_STATOR_CURRENT_LIMIT = 60.0;
         public static final boolean STEER_ENABLE_STATOR_CURRENT_LIMIT = true;
         
         // Voltage compensation
@@ -575,7 +575,7 @@ public final class Constants {
         public static final double CORAL_ARM_MOTION_MAGIC_kA = 0.0;
         public static final double CORAL_ARM_MOTION_MAGIC_kV = 0.0;
 
-        public static final double CORAL_ARM_SOURCE_POSITION = -0.401; 
+        public static final double CORAL_ARM_SOURCE_POSITION = -0.38; 
         public static final double CORAL_ARM_SCORE_POSITION = -0.13;  
         public static final double CORAL_ARM_SCORE_L1_POSITION = -0.13;
         public static final double CORAL_ARM_CENTER_POSITION = -0.25;
@@ -621,7 +621,7 @@ public final class Constants {
         public static final double ALGAE_ARM_PEAK_CURRENT_DURATION = 0.1;
         public static final boolean ALGAE_ARM_ENABLE_CURRENT_LIMIT = true;
 
-        public static final double ALGAE_ARM_KP = 2;
+        public static final double ALGAE_ARM_KP = 0.5;
         public static final double ALGAE_ARM_KI = 0.0;
         public static final double ALGAE_ARM_KD = 0.0;
         public static final double ALGAE_ARM_KS = 0.25;
@@ -672,9 +672,10 @@ public final class Constants {
         public static final double ALGAE_WHEEL_MOTION_MAGIC_kA = 0.0;
         public static final double ALGAE_WHEEL_MOTION_MAGIC_kV = 0.0;
 
-        public static final long ALGAE_ARM_L2_POSITION = 0;
+        public static final long ALGAE_ARM_L2_POSITION = -30;
         public static final long ALGAE_ARM_L3_POSITION = 0;
-        public static final long ALGAE_ARM_PICKUP_POSITION = 0;
+        public static final long ALGAE_ARM_PICKUP_POSITION = -50;
+        public static final long ALGAE_ARM_UP_POSITION = 0;
 
     }
 

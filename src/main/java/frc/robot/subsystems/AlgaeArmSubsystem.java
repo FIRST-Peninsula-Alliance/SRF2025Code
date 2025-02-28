@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CommutationConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -85,6 +86,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
                                                 .withKV(AAC.ALGAE_ARM_KV)
                                                 .withKA(AAC.ALGAE_ARM_KA)
                                                 .withKG(AAC.ALGAE_ARM_KG).withGravityType(GravityTypeValue.Arm_Cosine);
+    var closedLoopGeneralConfig = new ClosedLoopGeneralConfigs().withContinuousWrap(true);
     MotionMagicConfigs  motionMagicConfig = new MotionMagicConfigs().withMotionMagicCruiseVelocity(AAC.ALGAE_ARM_MOTION_MAGIC_VEL)
                                                                     .withMotionMagicAcceleration(AAC.ALGAE_ARM_MOTION_MAGIC_ACCEL)
                                                                     .withMotionMagicJerk(AAC.ALGAE_ARM_MOTION_MAGIC_JERK)
@@ -96,7 +98,8 @@ public class AlgaeArmSubsystem extends SubsystemBase {
                                                    .withCurrentLimits(currentLimitConfig)
                                                    .withClosedLoopRamps(closedLoopConfig)
                                                    .withSlot0(pid0Config)
-                                                   .withMotionMagic(motionMagicConfig);
+                                                   .withMotionMagic(motionMagicConfig)
+                                                   .withClosedLoopGeneral(closedLoopGeneralConfig);
     StatusCode status = m_algaeArmMotor.getConfigurator().apply(algaeArmConfig);
 
     if (! status.isOK() ) {
@@ -114,6 +117,10 @@ public class AlgaeArmSubsystem extends SubsystemBase {
 
   public void GoToPickupPosition() {
     GoToPosition(AAC.ALGAE_ARM_PICKUP_POSITION);
+  }
+
+  public void GoToUpPosition() {
+    GoToPosition(AAC.ALGAE_ARM_UP_POSITION);
   }
 
   public void RemoveAlgae() {

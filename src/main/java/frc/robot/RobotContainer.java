@@ -159,17 +159,19 @@ public class RobotContainer {
         // Right bumper alone = slow mode.
         // Alt + Right Bumper = very slow mode.
         // On Right bumper release (regardless of Left Bumper state), full speed.
-        m_xbox.rightBumper().and(ALT.negate()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(.5)));
-        ALT.and(m_xbox.rightBumper()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(.2)));
+        m_xbox.rightBumper().and(ALT.negate()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(.3)));
+        ALT.and(m_xbox.rightBumper()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(.1)));
         m_xbox.rightBumper().onFalse(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(1.0)));;
         
         m_xbox.a().and(ALT.negate()).onTrue(new InstantCommand(()-> m_elevatorSubsytem.GoToL1CoralPosition()));
         m_xbox.b().and(ALT.negate()).onTrue(new InstantCommand(()-> m_elevatorSubsytem.GoToL2CoralPosition()));
         m_xbox.y().and(ALT.negate()).onTrue(new InstantCommand(()-> m_elevatorSubsytem.GoToL3CoralPosition()));
-        m_xbox.a().and(ALT).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.RemoveAlgae()));
-        m_xbox.b().and(ALT).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.GoToL2RemovePosition()));
-        m_xbox.y().and(ALT).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.GoToL3RemovePosition()));
+        m_xbox.a().and(ALT).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.GoToUpPosition()));
+        //m_xbox.a().and(ALT).onFalse(new InstantCommand(()-> m_algaeArmSubsystem.StopWheels()));
+        m_xbox.b().and(ALT).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.GoToPickupPosition()));
+        m_xbox.y().and(ALT).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.GoToL2RemovePosition()));
         m_xbox.x().and(ALT.negate()).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.RemoveAlgae()));
+        m_xbox.x().and(ALT.negate()).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.StopWheels()));
         m_xbox.povDown().and(ALT.negate()).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.PickupAlgae()));
         m_xbox.povUp().and(ALT.negate()).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.ScoreAlgae()));
         m_xbox.povUp().and(ALT.negate()).onFalse(new InstantCommand(()-> m_algaeArmSubsystem.StopWheels()));
