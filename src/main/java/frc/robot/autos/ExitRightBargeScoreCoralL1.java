@@ -46,13 +46,13 @@ public class ExitRightBargeScoreCoralL1 extends SequentialCommandGroup {
                                  new Pose2d(Units.inchesToMeters(0.0), 
                                             Units.inchesToMeters(0.0), 
                                             Rotation2d.fromDegrees(0.0)),
-                                  List.of(new Translation2d(Units.inchesToMeters(-20.0), 
+                                  List.of(new Translation2d(Units.inchesToMeters(-29.0), 
                                                             Units.inchesToMeters(-1.5)),
-                                          new Translation2d(Units.inchesToMeters(-42.0),
+                                          new Translation2d(Units.inchesToMeters(-59.0),
                                                             Units.inchesToMeters(-3)),
-                                          new Translation2d(Units.inchesToMeters(-72.0),
+                                          new Translation2d(Units.inchesToMeters(-95.0),
                                                             Units.inchesToMeters(-4.5))),
-                                  new Pose2d(Units.inchesToMeters(-82.0),
+                                  new Pose2d(Units.inchesToMeters(-112.0),
                                              Units.inchesToMeters(-9.0),
                                              Rotation2d.fromDegrees(-150.0)),
                                   exitRightBargeConfig
@@ -85,4 +85,4 @@ public class ExitRightBargeScoreCoralL1 extends SequentialCommandGroup {
                 new InstantCommand(()->m_coralArmSubsystem.ScoreCoral())
                );
   }
-}
+} 

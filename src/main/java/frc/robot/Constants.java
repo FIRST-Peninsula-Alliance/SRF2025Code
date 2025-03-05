@@ -245,7 +245,7 @@ public final class Constants {
             Translation2d relPos2D_BR = C_BR;
             // TODO: measure and enter Crush absolute wheel angle offsets, in degrees, here
             Rotation2d absOffsetFL = Rotation2d.fromDegrees(287.8); //was 72.2 deg
-            Rotation2d absOffsetFR = Rotation2d.fromDegrees(140.5); //was 219.5 deg
+            Rotation2d absOffsetFR = Rotation2d.fromDegrees(342.5); //was 219.5 deg
             Rotation2d absOffsetBL = Rotation2d.fromDegrees(82.0);  //was 278.0 deg
             Rotation2d absOffsetBR = Rotation2d.fromDegrees(46.2);  //was 313.8 deg
             double parkAngleLeftDeg = C_PARK_ANGLE_LEFT_DEG;
@@ -400,8 +400,8 @@ public final class Constants {
         // (In Auto, tuning should set speeds to reasonable values, no need
         // to reduce them - in fact, just the opposite, want fastest possible
         // movements in Auto mode, consistent with safety).
-        public static final double OUTPUT_DRIVE_LIMIT_FACTOR = 1.00;
-        public static final double OUTPUT_ROTATE_LIMIT_FACTOR = 1.00;
+        public static final double OUTPUT_DRIVE_LIMIT_FACTOR = .75;
+        public static final double OUTPUT_ROTATE_LIMIT_FACTOR = .75;
 
         // When monitored while set at -1 to 1, seemed like the Steering PID output 
         // did not generate percent outputs greater than about .4
@@ -546,7 +546,7 @@ public final class Constants {
 
         public static final double CORAL_ARM_CANCODER_RANGE = .275;
         public static final double CORAL_ARM_CLOSED_LOOP_RAMP_PERIOD = 0.5;
-        public static final double CORAL_ARM_CANCODER_MAGNET_OFFSET = -0.208984375;
+        public static final double CORAL_ARM_CANCODER_MAGNET_OFFSET = -0.2;
 
         public static final SensorDirectionValue CORAL_ARM_CANCODER_DIR = SensorDirectionValue.CounterClockwise_Positive;
         public static final double CORAL_ARM_CANCODER_TO_AXLE_RATIO = 20.0/18.0;
@@ -575,12 +575,12 @@ public final class Constants {
         public static final double CORAL_ARM_MOTION_MAGIC_kA = 0.0;
         public static final double CORAL_ARM_MOTION_MAGIC_kV = 0.0;
 
-        public static final double CORAL_ARM_SOURCE_POSITION = -0.38; 
+        public static final double CORAL_ARM_SOURCE_POSITION = -0.31; 
         public static final double CORAL_ARM_SCORE_POSITION = -0.13;  
         public static final double CORAL_ARM_SCORE_L1_POSITION = -0.13;
         public static final double CORAL_ARM_CENTER_POSITION = -0.25;
-        public static final double PIN_SERVO_OPEN_POSITION = 0;
-        public static final double PIN_SERVO_CLOSED_POSITION = 0.25;
+        public static final double PIN_SERVO_OPEN_POSITION = 0.11; // 0 for other servo orientation 
+        public static final double PIN_SERVO_CLOSED_POSITION = 0; // 0.25 for other servo orientation
 
         public static final double CORAL_ARM_MECHANISM_RATIO = 1;
 
@@ -672,7 +672,7 @@ public final class Constants {
         public static final double ALGAE_WHEEL_MOTION_MAGIC_kA = 0.0;
         public static final double ALGAE_WHEEL_MOTION_MAGIC_kV = 0.0;
 
-        public static final long ALGAE_ARM_L2_POSITION = -25;
+        public static final long ALGAE_ARM_L2_POSITION = -20;
         public static final long ALGAE_ARM_L3_POSITION = 0;
         public static final long ALGAE_ARM_PICKUP_POSITION = -62;
         public static final long ALGAE_ARM_UP_POSITION = 0;

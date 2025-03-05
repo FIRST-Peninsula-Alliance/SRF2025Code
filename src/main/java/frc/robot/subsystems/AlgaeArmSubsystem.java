@@ -132,7 +132,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   }
 
   public void PickupAlgae() {
-    m_algaeWheelMotor.set(ControlMode.PercentOutput, -0.65);
+    m_algaeWheelMotor.set(ControlMode.PercentOutput, -0.75);
   }
 
   public void ScoreAlgae() {

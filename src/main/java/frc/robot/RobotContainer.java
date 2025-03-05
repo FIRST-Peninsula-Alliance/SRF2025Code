@@ -55,7 +55,7 @@ public class RobotContainer {
         // m_climbSubsystem = new ClimbSubsystem();
         m_elevatorSubsytem = new ElevatorSubsystem();
         //m_climberSubsystem = new ClimberSubsystem();
-        m_coralArmSubsystem = new CoralArmSubsystem();
+        //m_coralArmSubsystem = new CoralArmSubsystem();
         m_algaeArmSubsystem = new AlgaeArmSubsystem();
         // m_visionSubsystem = new VisionSubsystem();
 
@@ -154,11 +154,11 @@ public class RobotContainer {
 
         // left and right trigger set coral arm positions 
         // alt-right trigger score coral
-        m_xbox.leftTrigger().onTrue(new InstantCommand(() -> m_coralArmSubsystem.GoToSourcePosition()));
-        m_xbox.rightTrigger().onTrue(new InstantCommand(() -> m_coralArmSubsystem.ScoreL1Position()));
-        m_xbox.rightTrigger().and(ALT).onTrue(new InstantCommand(() -> m_coralArmSubsystem.ScoreCoral()));
+        //m_xbox.leftTrigger().onTrue(new InstantCommand(() -> m_coralArmSubsystem.GoToSourcePosition()));
+        //m_xbox.rightTrigger().onTrue(new InstantCommand(() -> m_coralArmSubsystem.ScoreL1Position()));
+        //m_xbox.rightTrigger().and(ALT).onTrue(new InstantCommand(() -> m_coralArmSubsystem.ScoreCoral()));
         // center coral arm position
-        m_xbox.leftTrigger().and(ALT).onTrue(new InstantCommand(() -> m_coralArmSubsystem.GoToCenterPosition()));
+        //m_xbox.leftTrigger().and(ALT).onTrue(new InstantCommand(() -> m_coralArmSubsystem.GoToCenterPosition()));
 
         // Left and right joystick buttons determine field oriented or robot oriented driving
         m_xbox.leftStick().and(ALT.negate()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setFieldOriented(true)));
