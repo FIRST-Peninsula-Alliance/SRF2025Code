@@ -86,7 +86,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
                                                     .withMotorOutput(motorOutputConfig)
                                                     .withCurrentLimits(currentLimitConfig);
 
-    StatusCode status = m_algaeArmMotor.getConfigurator().apply(algaeArmConfig);
+    StatusCode status = m_algaeWheelMotor.getConfigurator().apply(algaeArmConfig);
 
     if (! status.isOK() ) {
       System.out.println("Failed to apply ALGAE_ARM configs. Error code: "+status.toString());
