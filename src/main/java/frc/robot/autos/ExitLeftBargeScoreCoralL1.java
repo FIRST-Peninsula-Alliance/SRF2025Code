@@ -1,7 +1,7 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
+/*
 package frc.robot.autos;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class ExitLeftBargeScoreCoralL1 extends SequentialCommandGroup {
   Trajectory exitLeftBargeScoreCoralL1;
   SwerveControllerCommand exitLeftBargeScoreCoralL1Cmd;
 
-  /* Constructor */
+  /* Constructor 
   public ExitLeftBargeScoreCoralL1(SwerveSubsystem swerveDrive, CoralArmSubsystem m_coralArmSubsystem) {
     TrajectoryConfig exitLeftBargeConfig = new TrajectoryConfig((AutoC.AUTO_MAX_SPEED_M_PER_SEC *
                                                         AutoC.AUTO_SPEED_FACTOR_GENERIC),
@@ -85,4 +85,4 @@ public class ExitLeftBargeScoreCoralL1 extends SequentialCommandGroup {
                 new InstantCommand(()->m_coralArmSubsystem.ScoreCoral())
                );
   }
-} 
+} */

@@ -30,10 +30,15 @@ public class ClimberSubsystem extends SubsystemBase {
   public final Servo m_hingeLinearServoMotor;
   public final Servo m_hookServoMotor;
   public final Servo m_springServoMotor;
-  private DigitalInput m_climberLimitSwitch; 
+  private DigitalInput m_cradleLimitSwitch; 
+  private DigitalInput m_winchLimitSwitch; 
   private DutyCycleOut m_climbRequest = new DutyCycleOut(CC.CLIMBER_DUTY_CYCLE)
                                                             .withEnableFOC(true)
                                                             .withUpdateFreqHz(50);
+  private DutyCycleOut m_testClimbRequest = new DutyCycleOut(0.4)
+                                                            .withEnableFOC(true);
+  private DutyCycleOut m_stopRequest = new DutyCycleOut(0)
+                                                            .withEnableFOC(true);
   private static double m_climbMotorFactor;
   private double m_climbStartTime;
 
@@ -42,7 +47,8 @@ public class ClimberSubsystem extends SubsystemBase {
     m_hingeLinearServoMotor = new Servo(CSC.LINEAR_SERVO_PWM_CHANNEL);
     m_hookServoMotor = new Servo(CSC.HOOK_SERVO_PWM_CHANNEL);
     m_springServoMotor = new Servo(CSC.SPRING_SERVO_PWM_CHANNEL);
-    m_climberLimitSwitch = new DigitalInput(1);
+    m_cradleLimitSwitch = new DigitalInput(0);
+    m_winchLimitSwitch = new DigitalInput(1);
 
     configLinearServoMotor(m_hingeLinearServoMotor, "Hinge Pin Servo");
     configHookServoMotor(m_hookServoMotor, "Climber Hook Servo");
@@ -152,6 +158,14 @@ public class ClimberSubsystem extends SubsystemBase {
     m_climbStartTime = System.currentTimeMillis();
   }
 
+  public void TestWinch() {
+    m_winchMotor.setControl(m_testClimbRequest);
+  }
+
+  public void StopWinch() {
+    m_winchMotor.setControl(m_stopRequest);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -164,8 +178,12 @@ public class ClimberSubsystem extends SubsystemBase {
                                                       .withEnableFOC(true)
                                                       .withUpdateFreqHz(50));
 
-    if (m_climberLimitSwitch.get()) {
+    if (m_cradleLimitSwitch.get()) {
       EngageHook();
+    }
+
+    if (m_winchLimitSwitch.get()) {
+      StopWinch();
     }
   }
 }

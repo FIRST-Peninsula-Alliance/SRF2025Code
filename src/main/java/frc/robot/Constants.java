@@ -3,7 +3,7 @@ package frc.robot;
 import java.text.DecimalFormat;
 import java.util.Map;
 
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+//import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 // import com.ctre.phoenix6.configs.MagnetSensorConfigs.AbsoluteSensorDiscontinuityPoint;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -650,12 +650,7 @@ public final class Constants {
         public static final double ALGAE_WHEEL_PEAK_CURRENT_LIMIT = 36.0;
         public static final double ALGAE_WHEEL_PEAK_CURRENT_DURATION = 0.1;
         public static final boolean ALGAE_WHEEL_ENABLE_CURRENT_LIMIT = true;
-            public static final SupplyCurrentLimitConfiguration ALGAE_WHEEL_CURRENT_LIMIT = 
-            new SupplyCurrentLimitConfiguration(
-                ALGAE_WHEEL_ENABLE_CURRENT_LIMIT,                      // launchEnableCurrentLimit, 
-                ALGAE_WHEEL_CONT_CURRENT_LIMIT,                  // launchContinuousCurrentLimit,
-                ALGAE_WHEEL_PEAK_CURRENT_LIMIT,       // launchPeakCurrentLimit, 
-                ALGAE_WHEEL_PEAK_CURRENT_DURATION);        // launchPeakCurrentDuration);
+           // launchPeakCurrentDuration);
 
         public static final double ALGAE_WHEEL_KP = 10.0;
         public static final double ALGAE_WHEEL_KI = 0.0;
@@ -672,10 +667,14 @@ public final class Constants {
         public static final double ALGAE_WHEEL_MOTION_MAGIC_kA = 0.0;
         public static final double ALGAE_WHEEL_MOTION_MAGIC_kV = 0.0;
 
-        public static final long ALGAE_ARM_L2_POSITION = -20;
-        public static final long ALGAE_ARM_L3_POSITION = 0;
-        public static final long ALGAE_ARM_PICKUP_POSITION = -62;
-        public static final long ALGAE_ARM_UP_POSITION = 0;
+        public static final double ALGAE_ARM_L2_POSITION = -20;
+        public static final double ALGAE_ARM_L3_POSITION = 0;
+        public static final double ALGAE_ARM_PICKUP_POSITION = -62;
+        public static final double ALGAE_ARM_UP_POSITION = 0;
+        public static final double ALGAE_WHEEL_REMOVE_SPEED = 0.6;
+        public static final double ALGAE_WHEEL_PICKUP_SPEED = -0.75;
+        public static final double ALGAE_WHEEL_SCORE_SPEED = 0.4;
+        public static final double ALGAE_WHEEL_STOP_SPEED = 0;
 
     }
 
@@ -735,9 +734,9 @@ public final class Constants {
     public static final class CSC {
         //TODO: set value for servo PWM channels
         public static final int WINCH_MOTOR_CAN_ID = 15;
-        public static final int LINEAR_SERVO_PWM_CHANNEL = 1;
-        public static final int HOOK_SERVO_PWM_CHANNEL = 2;
-        public static final int SPRING_SERVO_PWM_CHANNEL = 3;
+        public static final int LINEAR_SERVO_PWM_CHANNEL = 0;
+        public static final int HOOK_SERVO_PWM_CHANNEL = 1;
+        public static final int SPRING_SERVO_PWM_CHANNEL = 2;
         
         public static final double WINCH_CLOSED_LOOP_RAMP_PERIOD = 0.5;
         public static final double WINCH_CANCODER_TO_AXLE_RATIO = 20/18;

@@ -1,7 +1,7 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
+/*
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
@@ -38,7 +38,7 @@ import frc.robot.Constants.CAC;
 import frc.robot.NotableConstants.IAC;
 
 public class CoralArmSubsystem extends SubsystemBase {
-  /** Creates a new CoralArmSubsystem. */
+  /** Creates a new CoralArmSubsystem. 
   public final TalonFXS m_coralArmMotor;
   public final CANcoder m_coralArmCANcoder; 
   public final Servo m_pinServoMotor;
@@ -176,4 +176,4 @@ public class CoralArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Coral Arm CANcoder position", m_coralArmCANcoder.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("Coral Arm Servo Position", m_pinServoMotor.getPosition());
   }
-}
+} */

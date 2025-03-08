@@ -14,7 +14,7 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
+//import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -36,9 +36,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final PositionVoltage m_positionReqest = new PositionVoltage(0.0)
                                                                       .withSlot(0)
                                                                       .withEnableFOC(true);
-  private final MotionMagicVoltage m_elevatorMagicCtrl = new MotionMagicVoltage(0.0)
-                                                                                .withSlot(0)
-                                                                                .withEnableFOC(true);
+  //private final MotionMagicVoltage m_elevatorMagicCtrl = new MotionMagicVoltage(0.0)
+  //                                                                              .withSlot(0)
+  //                                                                              .withEnableFOC(true);
 
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
@@ -48,7 +48,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     configElevatorCANCoder();
     configElevatorMotor();
 
-    GoToL1CoralPosition();
+    GoToL2CoralPosition();
   }
   
   public void GoToPosition(double position) {

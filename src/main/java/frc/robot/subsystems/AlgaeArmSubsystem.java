@@ -4,27 +4,28 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+//import com.ctre.phoenix.motorcontrol.ControlMode;
+//import com.ctre.phoenix.motorcontrol.NeutralMode;
+//import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.StatusCode;
-import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
+//import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CommutationConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.ExternalFeedbackConfigs;
-import com.ctre.phoenix6.configs.FeedbackConfigs;
+//import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
+//import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+//import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.hardware.TalonFX;
+//import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.AdvancedHallSupportValue;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+//import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
 
@@ -37,18 +38,20 @@ import frc.robot.Constants.AAC;
 public class AlgaeArmSubsystem extends SubsystemBase {
   /** Creates a new algaeArmSubsystem. */
   public final TalonFXS m_algaeArmMotor; 
-  public final TalonSRX m_algaeWheelMotor;
+  public final TalonFXS m_algaeWheelMotor;
   private double m_algaeArmSetpoint;
   private PositionVoltage m_positionVoltage = new PositionVoltage(0)
                                                                   .withSlot(0)
                                                                   .withEnableFOC(true);
-  private final MotionMagicVoltage m_algaeArmMagicCtrl = new MotionMagicVoltage(0.0)
-                                                                                .withSlot(0)
-                                                                                .withEnableFOC(true);
+  private DutyCycleOut m_percentOutputRequest = new DutyCycleOut(0)
+                                                                 .withEnableFOC(true);
+  //private final MotionMagicVoltage m_algaeArmMagicCtrl = new MotionMagicVoltage(0.0)
+  //                                                                              .withSlot(0)
+  //                                                                              .withEnableFOC(true);
 
   public AlgaeArmSubsystem() {
     m_algaeArmMotor = new TalonFXS(AAC.ALGAE_MOTOR_CAN_ID, Constants.CAN_BUS_IN_USE);
-    m_algaeWheelMotor = new TalonSRX(AAC.ALGAE_WHEEL_MOTOR_CAN_ID); //rio bus
+    m_algaeWheelMotor = new TalonFXS(AAC.ALGAE_WHEEL_MOTOR_CAN_ID, Constants.CAN_BUS_IN_USE); 
     configAlgaeWheelMotor();
     configAlgaeArmMotor();
 
@@ -61,12 +64,33 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   }
 
   private void configAlgaeWheelMotor() {
-    m_algaeWheelMotor.configFactoryDefault();
-    m_algaeWheelMotor.configSupplyCurrentLimit(AAC.ALGAE_WHEEL_CURRENT_LIMIT);
-    m_algaeWheelMotor.setInverted(true);
-    m_algaeWheelMotor.setNeutralMode(NeutralMode.Brake);
-    m_algaeWheelMotor.configPeakOutputForward(AAC.ALGAE_WHEEL_OUTPUT_LIMIT_FACTOR);
-    m_algaeWheelMotor.configPeakOutputReverse(-AAC.ALGAE_WHEEL_OUTPUT_LIMIT_FACTOR);
+
+    var motorOutputConfig = new MotorOutputConfigs().withNeutralMode(AAC.ALGAE_ARM_MOTOR_NEUTRAL_MODE)
+                                                    .withInverted(AAC.ALGAE_ARM_MOTOR_INVERT)
+                                                    .withPeakForwardDutyCycle(AAC.ALGAE_ARM_OUTPUT_LIMIT_FACTOR)
+                                                    .withPeakReverseDutyCycle(-AAC.ALGAE_ARM_OUTPUT_LIMIT_FACTOR);
+                                                    //.withDutyCycleNeutralDeadband(.001);
+
+    var feedbackconfigs = new ExternalFeedbackConfigs().withSensorToMechanismRatio(18/15);
+
+    var commutationConfig = new CommutationConfigs().withAdvancedHallSupport(AdvancedHallSupportValue.Enabled)
+                                                    .withMotorArrangement(MotorArrangementValue.NEO550_JST);
+
+    var currentLimitConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(AAC.ALGAE_ARM_CONT_CURRENT_LIMIT)
+                                                       .withSupplyCurrentLowerLimit(AAC.ALGAE_ARM_PEAK_CURRENT_LIMIT)
+                                                       .withSupplyCurrentLowerTime(AAC.ALGAE_ARM_PEAK_CURRENT_DURATION)
+                                                       .withSupplyCurrentLimitEnable(AAC.ALGAE_ARM_ENABLE_CURRENT_LIMIT);
+
+    var algaeArmConfig = new TalonFXSConfiguration().withCommutation(commutationConfig)
+                                                    .withExternalFeedback(feedbackconfigs)
+                                                    .withMotorOutput(motorOutputConfig)
+                                                    .withCurrentLimits(currentLimitConfig);
+
+    StatusCode status = m_algaeArmMotor.getConfigurator().apply(algaeArmConfig);
+
+    if (! status.isOK() ) {
+      System.out.println("Failed to apply ALGAE_ARM configs. Error code: "+status.toString());
+    }
   }
 
   private void configAlgaeArmMotor() {
@@ -128,19 +152,23 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   }
 
   public void RemoveAlgae() {
-    m_algaeWheelMotor.set(ControlMode.PercentOutput, .4);
+    m_percentOutputRequest = new DutyCycleOut(AAC.ALGAE_WHEEL_REMOVE_SPEED);
+    m_algaeWheelMotor.setControl(m_percentOutputRequest);
   }
 
   public void PickupAlgae() {
-    m_algaeWheelMotor.set(ControlMode.PercentOutput, -0.75);
+    m_percentOutputRequest = new DutyCycleOut(AAC.ALGAE_WHEEL_PICKUP_SPEED);
+    m_algaeWheelMotor.setControl(m_percentOutputRequest);
   }
 
   public void ScoreAlgae() {
-    m_algaeWheelMotor.set(ControlMode.PercentOutput, 0.6);
+    m_percentOutputRequest = new DutyCycleOut(AAC.ALGAE_WHEEL_SCORE_SPEED);
+    m_algaeWheelMotor.setControl(m_percentOutputRequest);
   }
 
   public void StopWheels() {
-    m_algaeWheelMotor.set(ControlMode.PercentOutput, 0);
+    m_percentOutputRequest = new DutyCycleOut(AAC.ALGAE_WHEEL_STOP_SPEED);
+    m_algaeWheelMotor.setControl(m_percentOutputRequest);
   }
 
   @Override

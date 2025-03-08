@@ -14,9 +14,9 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.AlgaeArmSubsystem;
-import frc.robot.subsystems.CoralArmSubsystem;
+//import frc.robot.subsystems.CoralArmSubsystem;
 //import frc.robot.subsystems.VisionSubsystem;
-//import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -30,8 +30,8 @@ public class RobotContainer {
     // private MasterArmSubsystem       m_masterArmSubsystem;
     // private ClimbSubsystem           m_climbSubsystem;
     private ElevatorSubsystem       m_elevatorSubsytem;
-    //private ClimberSubsystem        m_climberSubsystem;
-    private CoralArmSubsystem       m_coralArmSubsystem;
+    private ClimberSubsystem        m_climberSubsystem;
+    //private CoralArmSubsystem       m_coralArmSubsystem;
     private AlgaeArmSubsystem       m_algaeArmSubsystem;
     //private VisionSubsystem         m_visionSubsystem;
 
@@ -54,7 +54,7 @@ public class RobotContainer {
         // m_masterArmSubsystem = new MasterArmSubsystem();
         // m_climbSubsystem = new ClimbSubsystem();
         m_elevatorSubsytem = new ElevatorSubsystem();
-        //m_climberSubsystem = new ClimberSubsystem();
+        m_climberSubsystem = new ClimberSubsystem();
         //m_coralArmSubsystem = new CoralArmSubsystem();
         m_algaeArmSubsystem = new AlgaeArmSubsystem();
         // m_visionSubsystem = new VisionSubsystem();
@@ -72,12 +72,12 @@ public class RobotContainer {
                                       () -> -m_xbox.getRightX());
                     
         ExitDoNothingCmd m_exitDoNothingAuto = new ExitDoNothingCmd(m_swerveSubsystem);
-        ExitLeftBargeScoreCoralL1 m_exitLeftBargeScoreCoralL1 = new ExitLeftBargeScoreCoralL1(m_swerveSubsystem, m_coralArmSubsystem);
-        ExitRightBargeScoreCoralL1 m_exitRightBargeScoreCoralL1 = new ExitRightBargeScoreCoralL1(m_swerveSubsystem, m_coralArmSubsystem);
+        //ExitLeftBargeScoreCoralL1 m_exitLeftBargeScoreCoralL1 = new ExitLeftBargeScoreCoralL1(m_swerveSubsystem, m_coralArmSubsystem);
+        //ExitRightBargeScoreCoralL1 m_exitRightBargeScoreCoralL1 = new ExitRightBargeScoreCoralL1(m_swerveSubsystem, m_coralArmSubsystem);
 
         m_autoRoutineChooser.setDefaultOption("ExitDoNothing", m_exitDoNothingAuto);
-        m_autoRoutineChooser.addOption("ExitLeftBargeScoreCoralL1", m_exitLeftBargeScoreCoralL1);
-        m_autoRoutineChooser.addOption("ExitRightBargeScoreCoralL1", m_exitRightBargeScoreCoralL1);
+        //m_autoRoutineChooser.addOption("ExitLeftBargeScoreCoralL1", m_exitLeftBargeScoreCoralL1);
+        //m_autoRoutineChooser.addOption("ExitRightBargeScoreCoralL1", m_exitRightBargeScoreCoralL1);
         SmartDashboard.putData("Autonomous Selection:", m_autoRoutineChooser);
 
         configureButtonBindings();
@@ -189,6 +189,12 @@ public class RobotContainer {
         m_xbox.povDown().and(ALT.negate()).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.PickupAlgae()));
         m_xbox.povUp().and(ALT.negate()).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.ScoreAlgae()));
         m_xbox.povUp().and(ALT.negate()).onFalse(new InstantCommand(()-> m_algaeArmSubsystem.StopWheels()));
+
+        // Climber Bindings
+        m_xbox.rightTrigger().onTrue(new InstantCommand(()-> m_climberSubsystem.runWinch()));
+        //m_xbox.rightTrigger().onFalse(new InstantCommand(()-> m_climberSubsystem.StopWinch()));
+        m_xbox.leftTrigger().onTrue(new InstantCommand(()-> m_climberSubsystem.DisengageSpringServo()));
+        m_xbox.leftTrigger().onTrue(new InstantCommand(()-> m_climberSubsystem.ReleaseClimberPin()));
 
         // m_xbox.x().and(ALT.negate()).onTrue(new InstantCommand(()->m_masterArmSubsystem.cancelNoteAction()));
         // Swerve park 
