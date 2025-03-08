@@ -37,8 +37,6 @@ public class ClimberSubsystem extends SubsystemBase {
                                                             .withUpdateFreqHz(50);
   private DutyCycleOut m_testClimbRequest = new DutyCycleOut(0.4)
                                                             .withEnableFOC(true);
-  private DutyCycleOut m_stopRequest = new DutyCycleOut(0)
-                                                            .withEnableFOC(true);
   private static double m_climbMotorFactor;
   private double m_climbStartTime;
 
@@ -163,14 +161,14 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void StopWinch() {
-    m_winchMotor.setControl(m_stopRequest);
+    m_climbMotorFactor = 0;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     if ((System.currentTimeMillis() - m_climbStartTime) > CSC.CLIMB_WINCH_TIMEOUT) {
-      m_climbMotorFactor = 0.0;
+      StopWinch();
     }
 
     m_winchMotor.setControl(m_climbRequest.withOutput(CC.CLIMBER_DUTY_CYCLE * 
