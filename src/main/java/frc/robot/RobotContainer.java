@@ -72,10 +72,12 @@ public class RobotContainer {
                                       () -> -m_xbox.getRightX());
                     
         ExitDoNothingCmd m_exitDoNothingAuto = new ExitDoNothingCmd(m_swerveSubsystem);
+        ExitScoreCoralAlgaeArmCmd m_ExitScoreCoralAlgaeArmCmd = new ExitScoreCoralAlgaeArmCmd(m_swerveSubsystem, m_algaeArmSubsystem, m_elevatorSubsytem);
         //ExitLeftBargeScoreCoralL1 m_exitLeftBargeScoreCoralL1 = new ExitLeftBargeScoreCoralL1(m_swerveSubsystem, m_coralArmSubsystem);
         //ExitRightBargeScoreCoralL1 m_exitRightBargeScoreCoralL1 = new ExitRightBargeScoreCoralL1(m_swerveSubsystem, m_coralArmSubsystem);
 
         m_autoRoutineChooser.setDefaultOption("ExitDoNothing", m_exitDoNothingAuto);
+        m_autoRoutineChooser.addOption("ExitScoreCoralAlgaeArm", m_ExitScoreCoralAlgaeArmCmd);
         //m_autoRoutineChooser.addOption("ExitLeftBargeScoreCoralL1", m_exitLeftBargeScoreCoralL1);
         //m_autoRoutineChooser.addOption("ExitRightBargeScoreCoralL1", m_exitRightBargeScoreCoralL1);
         SmartDashboard.putData("Autonomous Selection:", m_autoRoutineChooser);
@@ -191,10 +193,15 @@ public class RobotContainer {
         m_xbox.povUp().and(ALT.negate()).onFalse(new InstantCommand(()-> m_algaeArmSubsystem.StopWheels()));
 
         // Climber Bindings
-        m_xbox.rightTrigger().onTrue(new InstantCommand(()-> m_climberSubsystem.runWinch()));
-        //m_xbox.rightTrigger().onFalse(new InstantCommand(()-> m_climberSubsystem.StopWinch()));
+        m_xbox.rightTrigger().and(ALT.negate()).onTrue(new InstantCommand(()-> m_climberSubsystem.runWinch()));
+        m_xbox.rightTrigger().and(ALT).onTrue(new InstantCommand(()-> m_climberSubsystem.StopWinch()));
         m_xbox.leftTrigger().onTrue(new InstantCommand(()-> m_climberSubsystem.DisengageSpringServo()));
         m_xbox.leftTrigger().onTrue(new InstantCommand(()-> m_climberSubsystem.ReleaseClimberPin()));
+
+        m_xbox.povUp().and(ALT).onTrue(new InstantCommand(()-> m_climberSubsystem.IncrementSpringServo()));
+        m_xbox.povRight().and(ALT).onTrue(new InstantCommand(()-> m_climberSubsystem.IncrementLinearServo()));
+        m_xbox.povLeft().and(ALT).onTrue(new InstantCommand(()-> m_climberSubsystem.DecrementLinearServo()));
+        m_xbox.povDown().and(ALT).onTrue(new InstantCommand(()-> m_climberSubsystem.DecrementSpringServo()));
 
         // m_xbox.x().and(ALT.negate()).onTrue(new InstantCommand(()->m_masterArmSubsystem.cancelNoteAction()));
         // Swerve park 

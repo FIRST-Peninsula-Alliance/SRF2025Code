@@ -244,10 +244,10 @@ public final class Constants {
             Translation2d relPos2D_BL = C_BL;
             Translation2d relPos2D_BR = C_BR;
             // TODO: measure and enter Crush absolute wheel angle offsets, in degrees, here
-            Rotation2d absOffsetFL = Rotation2d.fromDegrees(287.8); //was 72.2 deg
-            Rotation2d absOffsetFR = Rotation2d.fromDegrees(342.5); //was 219.5 deg
-            Rotation2d absOffsetBL = Rotation2d.fromDegrees(82.0);  //was 278.0 deg
-            Rotation2d absOffsetBR = Rotation2d.fromDegrees(46.2);  //was 313.8 deg
+            Rotation2d absOffsetFL = Rotation2d.fromDegrees(283.8); //was 287.8 deg
+            Rotation2d absOffsetFR = Rotation2d.fromDegrees(343.3); //was 342.5 deg
+            Rotation2d absOffsetBL = Rotation2d.fromDegrees(15.9);  //was 17.0 deg
+            Rotation2d absOffsetBR = Rotation2d.fromDegrees(341.0); //was 340.7 deg
             double parkAngleLeftDeg = C_PARK_ANGLE_LEFT_DEG;
             double parkAngleRightDeg = C_PARK_ANGLE_RIGHT_DEG;
             double steerGearRatio = ((150.0 / 7.0) / 1.0);
@@ -621,9 +621,9 @@ public final class Constants {
         public static final double ALGAE_ARM_PEAK_CURRENT_DURATION = 0.1;
         public static final boolean ALGAE_ARM_ENABLE_CURRENT_LIMIT = true;
 
-        public static final double ALGAE_ARM_KP = 0.5;
+        public static final double ALGAE_ARM_KP = 0.32;
         public static final double ALGAE_ARM_KI = 0.0;
-        public static final double ALGAE_ARM_KD = 0.0;
+        public static final double ALGAE_ARM_KD = 0.01;
         public static final double ALGAE_ARM_KS = 0.25;
         public static final double ALGAE_ARM_KV = 0;
         public static final double ALGAE_ARM_KA = 0;
@@ -643,7 +643,7 @@ public final class Constants {
         public static final double ALGAE_WHEEL_ROTOR_TO_CANCODER_RATIO = 30;
 
         public static final NeutralModeValue ALGAE_WHEEL_MOTOR_NEUTRAL_MODE = NeutralModeValue.Brake;
-        public static final InvertedValue ALGAE_WHEEL_MOTOR_INVERT = InvertedValue.Clockwise_Positive;
+        public static final InvertedValue ALGAE_WHEEL_MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
 
         public static final double ALGAE_WHEEL_OUTPUT_LIMIT_FACTOR = 1.0;
         public static final double ALGAE_WHEEL_CONT_CURRENT_LIMIT = 16.0;
@@ -667,13 +667,16 @@ public final class Constants {
         public static final double ALGAE_WHEEL_MOTION_MAGIC_kA = 0.0;
         public static final double ALGAE_WHEEL_MOTION_MAGIC_kV = 0.0;
 
-        public static final double ALGAE_ARM_L2_POSITION = -20;
+        public static final double ALGAE_ARM_L2_POSITION = -27;
         public static final double ALGAE_ARM_L3_POSITION = 0;
         public static final double ALGAE_ARM_PICKUP_POSITION = -62;
         public static final double ALGAE_ARM_UP_POSITION = 0;
+        public static final double ALGAE_ARM_CRADLE_POSITION = -15;
+        public static final double ALGAE_ARM_SCORE_CORAL_POSITION = -72.8;
+
         public static final double ALGAE_WHEEL_REMOVE_SPEED = 0.6;
         public static final double ALGAE_WHEEL_PICKUP_SPEED = -0.75;
-        public static final double ALGAE_WHEEL_SCORE_SPEED = 0.4;
+        public static final double ALGAE_WHEEL_SCORE_SPEED = 0.6;
         public static final double ALGAE_WHEEL_STOP_SPEED = 0;
 
     }
@@ -704,13 +707,13 @@ public final class Constants {
         public static final double ELEVATOR_PEAK_CURRENT_DURATION = 0.1;
         public static final boolean ELEVATOR_ENABLE_CURRENT_LIMIT = true;
 
-        public static final double ELEVATOR_KP = 8.0;
+        public static final double ELEVATOR_KP = 5.5;
         public static final double ELEVATOR_KI = 0.0;
-        public static final double ELEVATOR_KD = 0.25;
-        public static final double ELEVATOR_KS = 0.225;
+        public static final double ELEVATOR_KD = 0.3;
+        public static final double ELEVATOR_KS = 0.15;
         public static final double ELEVATOR_KV = 0.0;
         public static final double ELEVATOR_KA = 0.0;
-        public static final double ELEVATOR_KG = 0.2;
+        public static final double ELEVATOR_KG = 0.265;
 
         public static final double ELEVATOR_MOTION_MAGIC_VEL = 5.0;
         public static final double ELEVATOR_MOTION_MAGIC_ACCEL = 8.0;
@@ -722,8 +725,8 @@ public final class Constants {
         public static final double ELEVATOR_L2_SOURCE_POSITION = -1.6;
         public static final double ELEVATOR_L1_CORAL_POSITION = 0;
         public static final double ELEVATOR_L2_CORAL_POSITION = -1.6;
-        public static final double ELEVATOR_L3_CORAL_POSITION = -5.75;
-        public static final double ELEVATOR_L2_ALGAE_POSITION = 0;
+        public static final double ELEVATOR_L3_CORAL_POSITION = -5.9;
+        public static final double ELEVATOR_AUTO_ALGAE_POSITION = -3.83;
         public static final double ELEVATOR_L3_ALGAE_POSITION = 0;
         public static final double ELEVATOR_ALGAE_PICKUP_POSITION = 0;
     }
@@ -740,7 +743,7 @@ public final class Constants {
         public static final int SPRING_SERVO_PWM_CHANNEL = 2;
         
         public static final double WINCH_CLOSED_LOOP_RAMP_PERIOD = 0.5;
-        public static final double WINCH_CANCODER_TO_AXLE_RATIO = 20/18;
+        public static final double WINCH_CANCODER_TO_AXLE_RATIO = 50;
         public static final double WINCH_ROTOR_TO_CANCODER_RATIO = 30.0;
         public static final NeutralModeValue WINCH_MOTOR_NEUTRAL_MODE = NeutralModeValue.Brake;
         public static final InvertedValue WINCH_MOTOR_INVERT = InvertedValue.Clockwise_Positive;
@@ -751,13 +754,13 @@ public final class Constants {
         public static final double WINCH_PEAK_CURRENT_DURATION = 0.1;
         public static final boolean WINCH_ENABLE_CURRENT_LIMIT = true;
 
-        public static final double WINCH_KP = 40.0;
-        public static final double WINCH_KI = 0.5; 
-        public static final double WINCH_KD = 0.1;
+        public static final double WINCH_KP = 5;
+        public static final double WINCH_KI = 0; 
+        public static final double WINCH_KD = 0;
         public static final double WINCH_KS = 0.3;
-        public static final double WINCH_KV = 4.0;
-        public static final double WINCH_KA = 0.1;
-        public static final double WINCH_KG = 0.5;
+        public static final double WINCH_KV = 0;
+        public static final double WINCH_KA = 0;
+        public static final double WINCH_KG = 0;
 
         public static final double WINCH_MOTION_MAGIC_VEL = 5.0;
         public static final double WINCH_MOTION_MAGIC_ACCEL = 8.0;
@@ -765,12 +768,13 @@ public final class Constants {
         public static final double WINCH_MOTION_MAGIC_kA = 0.0;
         public static final double WINCH_MOTION_MAGIC_kV = 0.0;
 
-        public static final double HINGE_SERVO_OPEN_POSITION = 0.0;
-        public static final double HINGE_SERVO_CLOSED_POSITION = 0.0;
-        public static final double HOOK_SERVO_CLOSED_POSITION = 0.0;
+        public static final double WINCH_SETPOINT = -0.0925;
+        public static final double HINGE_SERVO_OPEN_POSITION = 0.2;
+        public static final double HINGE_SERVO_CLOSED_POSITION = 0.4;
+        public static final double HOOK_SERVO_CLOSED_POSITION = 0.3;
         public static final double HOOK_SERVO_OPEN_POSITION = 0.0;
         public static final double SPRING_SERVO_DISENGAGED_POSITION = 0.0;
-        public static final double SPRING_SERVO_ENGAGED_POSITION = 0.0;
+        public static final double SPRING_SERVO_ENGAGED_POSITION = 0.8;
 
         public static final double CLIMB_WINCH_TIMEOUT = 0.0;
     }

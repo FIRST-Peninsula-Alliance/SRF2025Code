@@ -40,10 +40,12 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   public final TalonFXS m_algaeArmMotor; 
   public final TalonFXS m_algaeWheelMotor;
   private double m_algaeArmSetpoint;
+  private boolean m_isCollecting = false;
   private PositionVoltage m_positionVoltage = new PositionVoltage(0)
                                                                   .withSlot(0)
                                                                   .withEnableFOC(true);
-  private DutyCycleOut m_percentOutputRequest = new DutyCycleOut(0)
+  private double m_percentOutput = 0;
+  private DutyCycleOut m_percentOutputRequest = new DutyCycleOut(m_percentOutput)
                                                                  .withEnableFOC(true);
   //private final MotionMagicVoltage m_algaeArmMagicCtrl = new MotionMagicVoltage(0.0)
   //                                                                              .withSlot(0)
@@ -66,7 +68,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   private void configAlgaeWheelMotor() {
 
     var motorOutputConfig = new MotorOutputConfigs().withNeutralMode(AAC.ALGAE_ARM_MOTOR_NEUTRAL_MODE)
-                                                    .withInverted(AAC.ALGAE_ARM_MOTOR_INVERT)
+                                                    .withInverted(AAC.ALGAE_WHEEL_MOTOR_INVERT)
                                                     .withPeakForwardDutyCycle(AAC.ALGAE_ARM_OUTPUT_LIMIT_FACTOR)
                                                     .withPeakReverseDutyCycle(-AAC.ALGAE_ARM_OUTPUT_LIMIT_FACTOR);
                                                     //.withDutyCycleNeutralDeadband(.001);
@@ -79,7 +81,10 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     var currentLimitConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(AAC.ALGAE_ARM_CONT_CURRENT_LIMIT)
                                                        .withSupplyCurrentLowerLimit(AAC.ALGAE_ARM_PEAK_CURRENT_LIMIT)
                                                        .withSupplyCurrentLowerTime(AAC.ALGAE_ARM_PEAK_CURRENT_DURATION)
-                                                       .withSupplyCurrentLimitEnable(AAC.ALGAE_ARM_ENABLE_CURRENT_LIMIT);
+                                                       .withSupplyCurrentLimitEnable(AAC.ALGAE_ARM_ENABLE_CURRENT_LIMIT)
+                                                       .withStatorCurrentLimit(30)
+                                                       .withStatorCurrentLimitEnable(true)
+                                                       .withSupplyCurrentLimitEnable(true);
 
     var algaeArmConfig = new TalonFXSConfiguration().withCommutation(commutationConfig)
                                                     .withExternalFeedback(feedbackconfigs)
@@ -151,29 +156,48 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     GoToPosition(AAC.ALGAE_ARM_UP_POSITION);
   }
 
+  public void GoToCoralCradlePosition() {
+    GoToPosition(AAC.ALGAE_ARM_CRADLE_POSITION);
+  }
+
+  public void GoToScoreCoralPosition() {
+    GoToPosition(AAC.ALGAE_ARM_SCORE_CORAL_POSITION);
+  }
+
   public void RemoveAlgae() {
-    m_percentOutputRequest = new DutyCycleOut(AAC.ALGAE_WHEEL_REMOVE_SPEED);
-    m_algaeWheelMotor.setControl(m_percentOutputRequest);
+    m_isCollecting = false;
+    m_percentOutput = AAC.ALGAE_WHEEL_REMOVE_SPEED;
   }
 
   public void PickupAlgae() {
-    m_percentOutputRequest = new DutyCycleOut(AAC.ALGAE_WHEEL_PICKUP_SPEED);
-    m_algaeWheelMotor.setControl(m_percentOutputRequest);
+    m_isCollecting = true;
+    m_percentOutput = AAC.ALGAE_WHEEL_PICKUP_SPEED;
   }
 
   public void ScoreAlgae() {
-    m_percentOutputRequest = new DutyCycleOut(AAC.ALGAE_WHEEL_SCORE_SPEED);
-    m_algaeWheelMotor.setControl(m_percentOutputRequest);
+    m_isCollecting = false;
+    m_percentOutput = AAC.ALGAE_WHEEL_SCORE_SPEED;
   }
 
   public void StopWheels() {
-    m_percentOutputRequest = new DutyCycleOut(AAC.ALGAE_WHEEL_STOP_SPEED);
-    m_algaeWheelMotor.setControl(m_percentOutputRequest);
+    m_isCollecting = false;
+    m_percentOutput = AAC.ALGAE_WHEEL_STOP_SPEED;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("AlgaeArmPos", m_algaeArmMotor.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("AlgaeWheelStatorCurrent", m_algaeWheelMotor.getStatorCurrent().getValueAsDouble());
+
+    if (m_isCollecting) {
+      if (m_algaeWheelMotor.getStatorCurrent().getValueAsDouble() > 20) {
+        m_percentOutput = -0.2;
+      }  
+    }
+
+    m_percentOutputRequest = new DutyCycleOut(m_percentOutput);
+    m_algaeWheelMotor.setControl(m_percentOutputRequest);
+
   }
 }

@@ -11,10 +11,13 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+// import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PWM.PeriodMultiplier;
@@ -22,7 +25,6 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.CSC;
-import frc.robot.NotableConstants.CC;
 
 public class ClimberSubsystem extends SubsystemBase {
   /** Creates a new ClimberSubsystem. */
@@ -32,13 +34,14 @@ public class ClimberSubsystem extends SubsystemBase {
   public final Servo m_springServoMotor;
   private DigitalInput m_cradleLimitSwitch; 
   private DigitalInput m_winchLimitSwitch; 
-  private DutyCycleOut m_climbRequest = new DutyCycleOut(CC.CLIMBER_DUTY_CYCLE)
-                                                            .withEnableFOC(true)
-                                                            .withUpdateFreqHz(50);
+  private PositionVoltage m_climbRequest = new PositionVoltage(0)
+                                                               .withEnableFOC(true)
+                                                               .withSlot(0);
   private DutyCycleOut m_testClimbRequest = new DutyCycleOut(0.4)
                                                             .withEnableFOC(true);
-  private static double m_climbMotorFactor;
-  private double m_climbStartTime;
+  private double m_springReleaseServoIncrement;
+  private double m_linearServoIncrement;
+  private double m_hookServoIncrement;
 
   public ClimberSubsystem() {
     m_winchMotor = new TalonFX(CSC.WINCH_MOTOR_CAN_ID, Constants.CAN_BUS_IN_USE);
@@ -52,6 +55,10 @@ public class ClimberSubsystem extends SubsystemBase {
     configHookServoMotor(m_hookServoMotor, "Climber Hook Servo");
     configSpringServoMotor(m_springServoMotor, "Climber Gas Spring Servo");
     configWinchMotor();
+
+    m_springServoMotor.set(0.8);
+    m_hookServoMotor.set(0);
+    m_hingeLinearServoMotor.set(0.4);
   }
 
   public void configLinearServoMotor(Servo servo, String servoName) {
@@ -115,7 +122,14 @@ public class ClimberSubsystem extends SubsystemBase {
                                                                     .withMotionMagicJerk(CSC.WINCH_MOTION_MAGIC_JERK)
                                                                     .withMotionMagicExpo_kA(CSC.WINCH_MOTION_MAGIC_kA)
                                                                     .withMotionMagicExpo_kA(CSC.WINCH_MOTION_MAGIC_kV);
+    Slot0Configs pid0Config = new Slot0Configs().withKP(CSC.WINCH_KP)
+                                                .withKI(CSC.WINCH_KI)
+                                                .withKD(CSC.WINCH_KD)
+                                                .withKS(CSC.WINCH_KS)
+                                                .withKV(CSC.WINCH_KV)
+                                                .withKA(CSC.WINCH_KA);
     var coralArmConfig = new TalonFXConfiguration().withFeedback(feedbackConfig)
+                                                   .withSlot0(pid0Config)
                                                    .withMotorOutput(motorOutputConfig)
                                                    .withCurrentLimits(currentLimitConfig)
                                                    .withClosedLoopRamps(closedLoopConfig)
@@ -151,9 +165,38 @@ public class ClimberSubsystem extends SubsystemBase {
     m_springServoMotor.set(CSC.SPRING_SERVO_ENGAGED_POSITION);
   }
 
+  public void IncrementSpringServo() {
+    m_springReleaseServoIncrement = m_springReleaseServoIncrement + 0.1;
+    m_springServoMotor.set(m_springReleaseServoIncrement);
+  }
+
+  public void DecrementSpringServo() {
+    m_springReleaseServoIncrement = m_springReleaseServoIncrement - 0.1;
+    m_springServoMotor.set(m_springReleaseServoIncrement);
+  }
+
+  public void IncrementHookServo() {
+    m_hookServoIncrement = m_hookServoIncrement + 0.1;
+    m_hookServoMotor.set(m_hookServoIncrement);
+  }
+
+  public void DecrementHookServo() {
+    m_hookServoIncrement = m_hookServoIncrement - 0.1;
+    m_hookServoMotor.set(m_hookServoIncrement);
+  }
+
+  public void IncrementLinearServo() {
+    m_linearServoIncrement = m_linearServoIncrement + 0.1;
+    m_hingeLinearServoMotor.set(m_linearServoIncrement);
+  }
+
+  public void DecrementLinearServo() {
+    m_linearServoIncrement = m_linearServoIncrement - 0.1;
+    m_hingeLinearServoMotor.set(m_linearServoIncrement);
+  }
+
   public void runWinch() {
-    m_climbMotorFactor = 1.0;
-    m_climbStartTime = System.currentTimeMillis();
+    m_winchMotor.setControl(m_climbRequest.withPosition(CSC.WINCH_SETPOINT));
   }
 
   public void TestWinch() {
@@ -161,27 +204,26 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void StopWinch() {
-    m_climbMotorFactor = 0;
+    m_winchMotor.stopMotor();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if ((System.currentTimeMillis() - m_climbStartTime) > CSC.CLIMB_WINCH_TIMEOUT) {
-      StopWinch();
-    }
 
-    m_winchMotor.setControl(m_climbRequest.withOutput(CC.CLIMBER_DUTY_CYCLE * 
-                                                      m_climbMotorFactor)
-                                                      .withEnableFOC(true)
-                                                      .withUpdateFreqHz(50));
-
-    if (m_cradleLimitSwitch.get()) {
+    if (m_cradleLimitSwitch.get() == false) {
       EngageHook();
     }
 
-    if (m_winchLimitSwitch.get()) {
+    if (m_winchLimitSwitch.get() == false) {
       StopWinch();
     }
+
+    SmartDashboard.putBoolean("Hook Engaged", !m_cradleLimitSwitch.get());
+    SmartDashboard.putBoolean("Winch Stopped", !m_winchLimitSwitch.get());
+    SmartDashboard.putNumber("HookServoPosition", m_hookServoIncrement);
+    SmartDashboard.putNumber("LinearServoPosition", m_linearServoIncrement);
+    SmartDashboard.putNumber("SpringServoPosition", m_springReleaseServoIncrement);
+    SmartDashboard.putNumber("WinchMotorCounts", m_winchMotor.getPosition().getValueAsDouble());
   }
 }
