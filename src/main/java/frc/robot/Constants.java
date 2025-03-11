@@ -49,7 +49,7 @@ public final class Constants {
      * User Interface Constants
      ****************************************************/
     public static final class UIC {             // UIC = short for UserInterfaceConstants
-        public static final double JOYSTICK_DEADBAND = 0.18;
+        public static final double JOYSTICK_DEADBAND = 0.1;
     }
 
     /*****************************************************
@@ -743,15 +743,16 @@ public final class Constants {
         public static final int SPRING_SERVO_PWM_CHANNEL = 2;
         
         public static final double WINCH_CLOSED_LOOP_RAMP_PERIOD = 0.5;
-        public static final double WINCH_CANCODER_TO_AXLE_RATIO = 50;
-        public static final double WINCH_ROTOR_TO_CANCODER_RATIO = 30.0;
+        public static final double WINCH_MOTOR_TO_AXLE_RATIO = 50;
+        public static final double WINCH_ROTOR_TO_CANCODER_RATIO = 1;
         public static final NeutralModeValue WINCH_MOTOR_NEUTRAL_MODE = NeutralModeValue.Brake;
         public static final InvertedValue WINCH_MOTOR_INVERT = InvertedValue.Clockwise_Positive;
 
         public static final double WINCH_OUTPUT_LIMIT_FACTOR = 1.0;
-        public static final double WINCH_CONT_CURRENT_LIMIT = 16.0;
-        public static final double WINCH_PEAK_CURRENT_LIMIT = 36.0;
+        public static final double WINCH_CONT_CURRENT_LIMIT = 30;
+        public static final double WINCH_PEAK_CURRENT_LIMIT = 40;
         public static final double WINCH_PEAK_CURRENT_DURATION = 0.1;
+        public static final double WINCH_STATOR_CURRENT_LIMIT = 100;
         public static final boolean WINCH_ENABLE_CURRENT_LIMIT = true;
 
         public static final double WINCH_KP = 5;

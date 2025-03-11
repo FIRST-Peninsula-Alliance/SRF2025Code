@@ -164,7 +164,7 @@ public class RobotContainer {
 
         // Left and right joystick buttons determine field oriented or robot oriented driving
         m_xbox.leftStick().and(ALT.negate()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setFieldOriented(true)));
-        m_xbox.rightStick().and(ALT.negate()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setFieldOriented(false)));
+        //m_xbox.rightStick().and(ALT.negate()).onTrue(new InstantCommand(()-> m_swerveSubsystem.setFieldOriented(false)));
         // Zero Gyro
         m_xbox.back().and(ALT.negate()).onTrue(new InstantCommand(() -> m_swerveSubsystem.zeroGyro()));   // was resetModulesToAbsolute()));
 
@@ -176,7 +176,6 @@ public class RobotContainer {
         m_xbox.rightBumper().onFalse(new InstantCommand(()-> m_swerveSubsystem.setVarMaxOutputFactor(1.0)));;
         
         // Move Elevator Positions
-        m_xbox.a().and(ALT.negate()).onTrue(new InstantCommand(()-> m_elevatorSubsytem.GoToL1CoralPosition()));
         m_xbox.b().and(ALT.negate()).onTrue(new InstantCommand(()-> m_elevatorSubsytem.GoToL2CoralPosition()));
         m_xbox.y().and(ALT.negate()).onTrue(new InstantCommand(()-> m_elevatorSubsytem.GoToL3CoralPosition()));
 
@@ -186,11 +185,13 @@ public class RobotContainer {
         m_xbox.y().and(ALT).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.GoToL2RemovePosition()));
 
         // Algae Wheel Bindings
+        m_xbox.a().and(ALT.negate()).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.PickupAlgae()));
+        //m_xbox.a().and(ALT.negate()).onFalse(new InstantCommand(()-> m_algaeArmSubsystem.StopWheels()));
         m_xbox.x().and(ALT.negate()).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.RemoveAlgae()));
         m_xbox.x().and(ALT.negate()).onFalse(new InstantCommand(()-> m_algaeArmSubsystem.StopWheels()));
-        m_xbox.povDown().and(ALT.negate()).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.PickupAlgae()));
-        m_xbox.povUp().and(ALT.negate()).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.ScoreAlgae()));
-        m_xbox.povUp().and(ALT.negate()).onFalse(new InstantCommand(()-> m_algaeArmSubsystem.StopWheels()));
+        //m_xbox.povDown().and(ALT.negate()).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.PickupAlgae()));
+        //m_xbox.povUp().and(ALT.negate()).onTrue(new InstantCommand(()-> m_algaeArmSubsystem.ScoreAlgae()));
+
 
         // Climber Bindings
         m_xbox.rightTrigger().and(ALT.negate()).onTrue(new InstantCommand(()-> m_climberSubsystem.runWinch()));

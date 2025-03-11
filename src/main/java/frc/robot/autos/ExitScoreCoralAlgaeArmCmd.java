@@ -89,9 +89,8 @@ public class ExitScoreCoralAlgaeArmCmd extends SequentialCommandGroup {
                 new WaitCommand(0.5),
                 new InstantCommand(()->algaeArmSubsystem.GoToScoreCoralPosition()),
                 new WaitCommand(2),
+                new InstantCommand(()->elevatorSubsystem.GoToL2CoralPosition()),
                 new InstantCommand(()->algaeArmSubsystem.GoToL2RemovePosition()),
-                new WaitCommand(2),
-                new InstantCommand(()->elevatorSubsystem.GoToL3CoralPosition()),
                 new InstantCommand(()->algaeArmSubsystem.RemoveAlgae()),
                 new WaitCommand(1),
                 new InstantCommand(()->algaeArmSubsystem.StopWheels())
